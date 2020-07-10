@@ -2,7 +2,7 @@ from pentadClass import pentadStruct
 from LexicalAnalyser import spaceNormalizer
 import re
 
-def findS1(listOfEveryPentads = None, criterionVariable = a, criterionLine = 10):
+def findS1(listOfEveryPentads = None, criterionVariable = "a", criterionLine = 10):
     i = 0
     for i in range (len(listOfEveryPentads)):
         listOfEveryPentads[i].text = ' ' + listOfEveryPentads[i].text #for lines that start directly with "for"
