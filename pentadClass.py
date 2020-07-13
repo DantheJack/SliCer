@@ -8,6 +8,7 @@ class pentadStruct:
     - its significance"""
 
     def __init__(self, line, text): # Notre méthode constructeur
+        self.id = 0
         if (len(line) != 2):
             line.append(line[0])
         self.line = line

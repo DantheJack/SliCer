@@ -2,29 +2,24 @@ from pentadClass import pentadStruct
 from LexicalAnalyser import spaceNormalizer
 import re
 
-def findS1(listOfEveryPentads = None, criterionVariable = "a", criterionLine = 10):
+def findS1(listOfEveryPentads = None, criterionLine = 9):
+    S1 = 0
     i = 0
     for i in range (len(listOfEveryPentads)):
-        listOfEveryPentads[i].text = ' ' + listOfEveryPentads[i].text #for lines that start directly with "for"
-        pattern = re.compile(r'(?P<first>\W|\0|^)for\s*(?P<second>(\(|\\|\0|$))')
-        if(re.search(pattern, listOfEveryPentads[i].text)):
-            found = re.search(pattern, listOfEveryPentads[i].text)
-            #print("FOR printing --> ", "first = ", found.group('first'), " second = ", found.group('second'))
-            #print("FOR printing --> ", "before = ", listOfEveryPentads[i].text)
-            listOfEveryPentads[i].text = re.sub(pattern, found.group('first') + " " + found.group('second'), listOfEveryPentads[i].text)
-            #print("FOR printing --> ", "after = ", listOfEveryPentads[i].text)
-            condition = varDecChangedToInt(listOfEveryPentads[i].text) #because int i = 0 is possible in a for, surprisingly!
-            variables = findVariablesInThatMush(condition)
-            if "int" in variables:
-                variables.remove("int")
-            print("tab = ", variables)
-            listOfEveryPentads[i].addRole("loopCondition", None, variables)
-        if(re.search(r'\{', listOfEveryPentads[i].text)):
-            listOfEveryPentads[i].addRole("loopBeg", None, None)
-        if(re.search(r'\}', listOfEveryPentads[i].text)):
-            listOfEveryPentads[i].addRole("loopEnd", None, None)
-    #printAllLoopCondVariables(targetFileListOfPentads)
-    return spaceNormalizer(listOfEveryPentads)
+#        print("0.2 printing --> ", "st ", listOfEveryPentads[i].id, ": ", listOfEveryPentads[i].text, " \t---\t ", listOfEveryPentads[i].line[1], " - ", listOfEveryPentads[i].line[0])      
+        if(listOfEveryPentads[i].line[0] <= criterionLine):
+            S1 = i
+    return S1
+
+def addX1AndS1ToTargetList(listOfEveryPentads = None, criterionVariable = "a", criterionLine = 9):
+    S1 = findS1(listOfEveryPentads, criterionLine)
+    print("0.2 printing --> ", "S1 is st number", S1, ":", listOfEveryPentads[S1].text)
+    
+    
+    
+    
+    
+
 
 def findVariablesInThatMush(string = None):
     print("MUSH printing --> ", "received : ", string)

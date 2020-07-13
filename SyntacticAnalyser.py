@@ -17,7 +17,7 @@ def forLoopRoleAssignment(listOfEveryPentads = None):
             variables = findVariablesInThatMush(condition)
             if "int" in variables:
                 variables.remove("int")
-            print("tab = ", variables)
+            #print("tab = ", variables)
             listOfEveryPentads[i].addRole("loopCondition", None, variables)
         if(re.search(r'\{', listOfEveryPentads[i].text)):
             listOfEveryPentads[i].addRole("loopBeg", None, None)
@@ -27,7 +27,7 @@ def forLoopRoleAssignment(listOfEveryPentads = None):
     return spaceNormalizer(listOfEveryPentads)
 
 def findVariablesInThatMush(string = None):
-    print("MUSH printing --> ", "received : ", string)
+    #print("MUSH printing --> ", "received : ", string)
     pattern = re.compile(r"""
         (?:[a-zA-Z_][\w]*) # a variable name
     """, re.VERBOSE)
@@ -178,7 +178,7 @@ def varDefDetector(listOfEveryPentads = None):
             )                 # - - - - - - - - - - - - #
             (?:[\s]|[\\])*                                         # 0 or more spaces
             (?<!=)                                                 # anything but an equal
-            (?:=|\+=|\-=|\*=|\/=|%=|<<=|>>=|&=|\|=|\^=)            # an attribution operator
+            (?:=|\+=|\-=|\*=|\/=|%=|<<=|>>=|&=|\|=|\^=|\+\+|\-\-)  # an attribution operator (and ++ and --)
             (?!=)                                                  # anything but an equal
             (?:[\s]|[\\])*                                         # 0 or more spaces
             (?P<othervar>     # - - - - - - - - - - - - #
@@ -189,7 +189,7 @@ def varDefDetector(listOfEveryPentads = None):
             | [\.\d]+                                        #  #  # one or more digits (floats included)
             | \"\"                                      #    #  #  # a string
             )                                                #  #--------------
-            ){1}                                        #    #--------- 1x ---------
+            )?                                          #    #-------- 0 or 1 ------
             (?:                                              #----------------------
             (?:[\s]|[\\])*                              #    #     # 0 or more spaces
             (?:\+|\-|\*|\/|%|<<|>>|\+\+|\-\-)+               #     # 1 or more arithmetic operators

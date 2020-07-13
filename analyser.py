@@ -1,6 +1,7 @@
 from pentadClass import pentadStruct, printAll, printAllWithRoles, printAllLoopCondVariables, printAllVarDefVariables
 from LexicalAnalyser import *
 from SyntacticAnalyser import *
+from SemanticAnalyser import *
 import os
 import string
 #import platform    
@@ -8,10 +9,10 @@ import string
 #cls & pytest -rA -s -v
 
 
-print("MAIN printing --> ", "******** PRE-PROCESSING **********")
+print("MAIN printing --> ", "******** LEXICAL ANALYSIS **********")
 print("MAIN printing --> ", "*********** readlines ************")
 os.chdir(os.getcwd())                                       #####
-targetFile = open("./testfiles/ULTIMATE/testfileULTIMATE.c", "r") ###################################
+targetFile = open("./testfiles/testfileSlice1.c", "r") ###################################
 targetFileLines = targetFile.readlines()                    #####
 targetFile.close()
 targetFileListOfPentads = []
@@ -41,7 +42,7 @@ printAllWithRoles(targetFileListOfPentads)
 print("MAIN printing --> ", "********** multiLineManager *********")
 targetFileListOfPentads = multiLineManager(targetFileListOfPentads)
 printAllWithRoles(targetFileListOfPentads)
-print("MAIN printing --> ", "********** PSEUDO-LEXING ************")
+print("MAIN printing --> ", "********** SYNTACTIC ANALYSIS ************")
 print("MAIN printing --> ", "****** forLoopRoleAssignment *******")
 targetFileListOfPentads = forLoopRoleAssignment(targetFileListOfPentads)
 printAllWithRoles(targetFileListOfPentads)
@@ -53,6 +54,12 @@ print("MAIN printing --> ", "********** varDefDetector **********")
 targetFileListOfPentads = varDefDetector(targetFileListOfPentads)
 printAllWithRoles(targetFileListOfPentads)
 #printAllVarDefVariables(targetFileListOfPentads)
+print("MAIN printing --> ", "********** SEMANTICAL ANALYSIS ************")
+fullLines = True
+for o in range (len(targetFileListOfPentads)):
+    targetFileListOfPentads[o].id = o
+targetList = []
+addX1AndS1ToTargetList(targetFileListOfPentads)
 
 #print("MAIN printing --> ", "***************** PSEUDO-PARSING *********************")
 
