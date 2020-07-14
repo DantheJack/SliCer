@@ -64,6 +64,7 @@ def varDecDetector(listOfEveryPentads = None):
     sequenceStartLine = 0
     state = "Waiting for int"
     for i in range (len(listOfEveryPentads)):
+        listOfEveryPentads[i].text = spacerForLoopConditions(listOfEveryPentads[i].text)
         listOfEveryPentads[i].text = varDecChangedToInt(listOfEveryPentads[i].text)
         #print(listOfEveryPentads[i].text)
         for j in range (len(listOfEveryPentads[i].text)):
@@ -118,7 +119,14 @@ def varDecDetector(listOfEveryPentads = None):
                     state = "Thats a function"
                     #print(state)
 
-    return listOfEveryPentads
+    return spaceNormalizer(listOfEveryPentads)
+
+def spacerForLoopConditions(text = None):
+    text = " " + text
+    text = text.replace("(", " ( ")
+    text = text.replace(")", " ) ")
+    text = text.replace(";", " ; ")
+    return text
 
 def varDecChangedToInt(text = None):
     text = " " + text #to avoid variables named "integer123" or "myfloatvalue"
@@ -212,7 +220,7 @@ def varDefDetector(listOfEveryPentads = None):
             for h in found :
                 mainVar = h[0]
                 otherVars = findVariablesInThatMush(h[1])
-                print("tab = ", otherVars)
+                #print("varDEF printing --> ", "tab = ", otherVars)
                 listOfEveryPentads[i].addRole("varDefine", mainVar, otherVars)
 
     return listOfEveryPentads

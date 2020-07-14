@@ -55,13 +55,20 @@ targetFileListOfPentads = varDefDetector(targetFileListOfPentads)
 printAllWithRoles(targetFileListOfPentads)
 #printAllVarDefVariables(targetFileListOfPentads)
 print("MAIN printing --> ", "********** SEMANTICAL ANALYSIS ************")
-fullLines = True
-for o in range (len(targetFileListOfPentads)):
-    targetFileListOfPentads[o].id = o
-targetList = []
-addX1AndS1ToTargetList(targetFileListOfPentads)
 
-#print("MAIN printing --> ", "***************** PSEUDO-PARSING *********************")
+fullLines = True
+
+for o in range (len(targetFileListOfPentads)):
+    targetFileListOfPentads[o].id = o           #id of a PENTAD = order in the list
+
+
+criterionVariable = 'a'
+criterionLine = 9
+criterionStatement = findS1(targetFileListOfPentads, criterionLine)
+targetList = [criterionVariable, criterionStatement]
+
+finderSliceDeclar(targetFileListOfPentads, criterionVariable, criterionStatement)
+
 
 
 

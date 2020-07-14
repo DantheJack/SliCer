@@ -28,9 +28,9 @@ class pentadStruct:
 
     def printing(self):
         if self.line[0] == self.line[1] :
-            return str("  [  " + str(self.line[0]) + "  ]" + "  \t—   " + self.text)
+            return str("[  " + str(self.line[0]) + "  ]" + "  \t—   " + self.text)
         else :
-            return str("  " + str(self.line) + "  \t—   " + self.text) 
+            return str(str(self.line) + "  \t—   " + self.text) 
             
     def searchForRole(self, roleToSearch):
         for role in self.role:

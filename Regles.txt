@@ -13,11 +13,6 @@
     |     On appellera Sn-idA l'id de ce statement "variable declaration".
     |     |
     |     Ajouter ce statement à la slice.
-    |     |
-    |     ----> S'il y a d'autres variables :
-    |     |     |
-    |     |     ----> Ajouter toutes les autres variables à l'exception de Xn dans la Target List 
-    |     |     |     assorties de Sn-idA.
     |
  2. --->  Trouver le dernier statement qui comporte "variable definition" dans ses rôles et qui
     |     a Xn en variable principale en remontant le code à partir de Sn (non compris).
