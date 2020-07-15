@@ -68,12 +68,17 @@ criterionStatement = findS1(targetFileListOfPentads, criterionLine)
 targetList = [criterionVariable, criterionStatement]
 
 finderSliceDeclar(targetFileListOfPentads, criterionVariable, criterionStatement)
+finderSliceDefine(targetFileListOfPentads, criterionVariable, criterionStatement)
 
+print("—————————————————————————————————————————————————")
+print("———————————————————— RESULTS ————————————————————")
+print("—————————————————————————————————————————————————")
 
-
-
-#for o in targetFileListOfPentads:
-    #print(str(o.line) + ".   " + o.text)
+for o in targetFileListOfPentads:
+    if o.useful :
+        print("--> " + str(o.line) + ".   " + o.text)
+    else :
+        print("    " + str(o.line) + ".   " + o.text)
 
 #print("**************Affichage des roles*****************")
 

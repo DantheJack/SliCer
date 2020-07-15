@@ -177,21 +177,81 @@ def varDefDetector(listOfEveryPentads = None):
         new variable declared on the same line. """
     #https://regex101.com/r/rDvzLv/7
 
+    #To solve the problem of var++ and var-- we are going to replace every one of these cases by "var += var"
+    #To solve the problem of var1 += var2,  we are going to replace every one of these cases by "var1 = var1 +"
+
+
     i = 0
     for i in range (len(listOfEveryPentads)):
         listOfEveryPentads[i].text = ' ' + listOfEveryPentads[i].text #like always, it doesn't harm
-        pattern = re.compile(r"""
+###############################################################################################################
+        pattern01 = re.compile(r"""
+            (?:[\s]|[\\])*                                         # 0 or more spaces
             (?P<mainvar>      # - - - - - - - - - - - - #
             (?:[a-zA-Z_][\w]*)                          #          # a variable name
             )                 # - - - - - - - - - - - - #
             (?:[\s]|[\\])*                                         # 0 or more spaces
-            (?<!=)                                                 # anything but an equal
-            (?:=|\+=|\-=|\*=|\/=|%=|<<=|>>=|&=|\|=|\^=|\+\+|\-\-)  # an attribution operator (and ++ and --)
-            (?!=)                                                  # anything but an equal
+            (?:\+\+)                                               # an increment operator
+        """, re.VERBOSE)
+        if(re.search(pattern01, listOfEveryPentads[i].text)):
+            found = re.findall(pattern01, listOfEveryPentads[i].text)
+            for h in found :
+                mainVar = h[0]
+                listOfEveryPentads[i].text = re.sub(pattern01, mainVar + " = " + mainVar + " + 1 ", listOfEveryPentads[i].text)
+###############################################################################################################
+        pattern02 = re.compile(r"""
+            (?:[\s]|[\\])*                                         # 0 or more spaces
+            (?P<mainvar>      # - - - - - - - - - - - - #
+            (?:[a-zA-Z_][\w]*)                          #          # a variable name
+            )                 # - - - - - - - - - - - - #
+            (?:[\s]|[\\])*                                         # 0 or more spaces
+            (?:\-\-)                                               # a decrement operator
+        """, re.VERBOSE)
+        if(re.search(pattern02, listOfEveryPentads[i].text)):
+            found = re.findall(pattern02, listOfEveryPentads[i].text)
+            for h in found :
+                mainVar = h[0]
+                listOfEveryPentads[i].text = re.sub(pattern02, mainVar + " = " + mainVar + " - 1 ", listOfEveryPentads[i].text)
+###############################################################################################################
+        pattern03 = re.compile(r"""
+            (?:\+\+)                                               # an increment operator
+            (?:[\s]|[\\])*                                         # 0 or more spaces
+            (?P<mainvar>      # - - - - - - - - - - - - #
+            (?:[a-zA-Z_][\w]*)                          #          # a variable name
+            )                 # - - - - - - - - - - - - #
+            (?:[\s]|[\\])*                                         # 0 or more spaces
+        """, re.VERBOSE)
+        if(re.search(pattern03, listOfEveryPentads[i].text)):
+            found = re.findall(pattern03, listOfEveryPentads[i].text)
+            for h in found :
+                mainVar = h[0]
+                listOfEveryPentads[i].text = re.sub(pattern03, mainVar + " = " + mainVar + " + 1 ", listOfEveryPentads[i].text)
+###############################################################################################################
+        pattern04 = re.compile(r"""
+            (?:\-\-)                                               # a decrement operator
+            (?:[\s]|[\\])*                                         # 0 or more spaces
+            (?P<mainvar>      # - - - - - - - - - - - - #
+            (?:[a-zA-Z_][\w]*)                          #          # a variable name
+            )                 # - - - - - - - - - - - - #
+            (?:[\s]|[\\])*                                         # 0 or more spaces
+        """, re.VERBOSE)
+        if(re.search(pattern04, listOfEveryPentads[i].text)):
+            found = re.findall(pattern04, listOfEveryPentads[i].text)
+            for h in found :
+                mainVar = h[0]
+                listOfEveryPentads[i].text = re.sub(pattern04, mainVar + " = " + mainVar + " - 1 ", listOfEveryPentads[i].text)
+###############################################################################################################
+        pattern1 = re.compile(r"""
+            (?P<mainvar>      # - - - - - - - - - - - - #
+            (?:[a-zA-Z_][\w]*)                          #          # a variable name
+            )                 # - - - - - - - - - - - - #
+            (?:[\s]|[\\])*                                         # 0 or more spaces
+            (?P<affectop>\+|\-|\*|\/|%|<<|>>|&|\||\^)              # an affectation operator
+            (?:=)                                                  # an equal
             (?:[\s]|[\\])*                                         # 0 or more spaces
             (?P<othervar>     # - - - - - - - - - - - - #
             (?:                                              #-----------------------
-            -? (?:[\s]|[\\])*                           #    #     # symbol '-' or not then 0 or more spaces
+            (?:-|~)? (?:[\s]|[\\])*                           #    #     # symbol '-' or '~' or not, then 0 or more spaces
             (?:                                              #  #--- EITHER ---
             (?:[a-zA-Z_][\w]*)                          #    #  #  # a variable name or
             | [\.\d]+                                        #  #  # one or more digits (floats included)
@@ -200,9 +260,9 @@ def varDefDetector(listOfEveryPentads = None):
             )?                                          #    #-------- 0 or 1 ------
             (?:                                              #----------------------
             (?:[\s]|[\\])*                              #    #     # 0 or more spaces
-            (?:\+|\-|\*|\/|%|<<|>>|\+\+|\-\-)+               #     # 1 or more arithmetic operators
+            (?:\+|\-|\*|\/|%|<<|>>|&|\||\^)+                 #     # 1 or more arithmetic operators
             (?:[\s]|[\\])*                              #    #     # 0 or more spaces
-            -? (?:[\s]|[\\])*                                #     # symbol '-' followed by 0 or more spaces
+            (?:-|~)? (?:[\s]|[\\])*                                #     # symbol '-' or '~' or not, then 0 or more spaces
             (?:                                         #    #  #--- EITHER ---
             (?:[a-zA-Z_][\w]*)                               #  #  # a variable name or
             | [\.\d]+                                   #    #  #  # one or more digits (floats included)
@@ -211,11 +271,50 @@ def varDefDetector(listOfEveryPentads = None):
             )*                                               #------ 0 or more -----
             )                 # - - - - - - - - - - - - #
         """, re.VERBOSE)
-        if(re.search(pattern, listOfEveryPentads[i].text)):
-            found = re.findall(pattern, listOfEveryPentads[i].text)
+        if(re.search(pattern1, listOfEveryPentads[i].text)):
+            found = re.findall(pattern1, listOfEveryPentads[i].text)
+            for h in found :
+                mainVar = h[0]
+                affectop = h[1]
+                otherVars = h[2]
+                listOfEveryPentads[i].text = re.sub(pattern1, mainVar + " = " + mainVar + affectop + " ( " + otherVars + " ) ", listOfEveryPentads[i].text)
+###############################################################################################################
+        pattern2 = re.compile(r"""
+            (?P<mainvar>      # - - - - - - - - - - - - #
+            (?:[a-zA-Z_][\w]*)                          #          # a variable name
+            )                 # - - - - - - - - - - - - #
+            (?:[\s]|[\\])*                                         # 0 or more spaces
+            (?<!=)                                                 # anything but an equal
+            (?:=)                                                  # an equal
+            (?!=)                                                  # anything but an equal
+            (?:[\s]|[\\])*                                         # 0 or more spaces
+            (?P<othervar>     # - - - - - - - - - - - - #
+            (?:                                              #-----------------------
+            (?:-|~)? (?:[\s]|[\\])*                     #    #     # symbol '-' or '~' or not, then 0 or more spaces
+            (?:                                              #  #--- EITHER ---
+            (?:[a-zA-Z_][\w]*)                          #    #  #  # a variable name or
+            | [\.\d]+                                        #  #  # one or more digits (floats included)
+            | \"\"                                      #    #  #  # a string
+            )                                                #  #--------------
+            )?                                          #    #-------- 0 or 1 ------
+            (?:                                              #----------------------
+            (?:[\s]|[\\])*                              #    #     # 0 or more spaces
+            (?:\+|\-|\*|\/|%|<<|>>|&|\||\^)+                 #     # 1 or more arithmetic operators
+            (?:[\s]|[\\])*                              #    #     # 0 or more spaces
+            (?:-|~)? (?:[\s]|[\\])*                          #     # symbol '-' or '~' or not, then 0 or more spaces
+            (?:                                         #    #  #--- EITHER ---
+            (?:[a-zA-Z_][\w]*)                               #  #  # a variable name or
+            | [\.\d]+                                   #    #  #  # one or more digits (floats included)
+            | \"\"                                           #  #  # a string
+            )                                           #    #  #--------------
+            )*                                               #------ 0 or more -----
+            )                 # - - - - - - - - - - - - #
+        """, re.VERBOSE)
+        if(re.search(pattern2, listOfEveryPentads[i].text)):
+            found = re.findall(pattern2, listOfEveryPentads[i].text)
             #print("FOR printing --> ", "first = ", found.group('first'), " second = ", found.group('second'))
             #print("FOR printing --> ", "before = ", listOfEveryPentads[i].text)
-            #listOfEveryPentads[i].text = re.sub(pattern, found.group('first') + " " + found.group('second'), listOfEveryPentads[i].text)
+            #listOfEveryPentads[i].text = re.sub(pattern2, found.group('first') + " " + found.group('second'), listOfEveryPentads[i].text)
             #print("FOR printing --> ", "after = ", listOfEveryPentads[i].text)
             for h in found :
                 mainVar = h[0]
@@ -223,4 +322,4 @@ def varDefDetector(listOfEveryPentads = None):
                 #print("varDEF printing --> ", "tab = ", otherVars)
                 listOfEveryPentads[i].addRole("varDefine", mainVar, otherVars)
 
-    return listOfEveryPentads
+    return spaceNormalizer(listOfEveryPentads)

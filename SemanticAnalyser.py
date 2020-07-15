@@ -13,8 +13,20 @@ def findS1(listOfEveryPentads = None, criterionLine = 9):
 
 
 def finderSliceDeclar(listOfEveryPentads = None, criterionVariable = "a", criterionStatement = None):
-    for i in range (criterionStatement, 0, -1): #decremental for loop !
+    for i in range (criterionStatement, -1, -1): #decremental for loop so we need to read number 0 (that's why we count -1 until we reach -1)
         for h in listOfEveryPentads[i].role :
-            print("SL-DEC printing --> ", "st :", i, "| lines :", listOfEveryPentads[i].line, "| role :", h.type, "| mainVar :", h.mainVar)
-
-
+            #print("SL-DEC printing --> ", "st :", i, "| lines :", listOfEveryPentads[i].line, "| role :", h.type, "| mainVar :", h.mainVar)
+            if(h.type == "varDeclar" and h.mainVar == criterionVariable) :
+                #print("SL-DEC printing --> ", "here")
+                listOfEveryPentads[i].useful = True
+                return True
+    return False            
+    
+def finderSliceDefine(listOfEveryPentads = None, criterionVariable = "a", criterionStatement = None):
+    for i in range (criterionStatement, -1, -1): #decremental for loop so we need to read number 0 (that's why we count -1 until we reach -1)
+        for h in listOfEveryPentads[i].role :
+            print("SL-DEF printing --> ", "st :", i, "| lines :", listOfEveryPentads[i].line, "| role :", h.type, "| mainVar :", h.mainVar)
+            if(h.type == "varDefine" and h.mainVar == criterionVariable) :
+                print("SL-DEF printing --> ", "here")
+                listOfEveryPentads[i].useful = True
+                return True
