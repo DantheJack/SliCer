@@ -10,17 +10,17 @@
     |
  1. --->  Trouver le tout premier statement qui comporte "variable declaration" dans ses rôles
     |     et qui a Xn en variable principale en remontant le code à partir de Sn (non compris).
-    |     On appellera Sn-idA l'id de ce statement "variable declaration".
+    |     On appellera Sn_idA l'id de ce statement "variable declaration".
     |     |
     |     Ajouter ce statement à la slice.
     |
  2. --->  Trouver le dernier statement qui comporte "variable definition" dans ses rôles et qui
     |     a Xn en variable principale en remontant le code à partir de Sn (non compris).
-    |     On appellera Sn-idB l'id de ce statement "variable definition".
+    |     On appellera Sn_idB l'id de ce statement "variable definition".
     |     |
     |     Ajouter ce statement à la slice.
     |     |
-    |     Remonter la liste des statements à partir du statement Sn-idB en comptant à partir 
+    |     Remonter la liste des statements à partir du statement Sn_idB en comptant à partir 
     |     de 1, +1 à chaque fois qu'un LoopEnd est trouvé et -1 à chaque fois qu'un LoopBeg 
     |     est trouvé.
     |     |
@@ -30,28 +30,31 @@
     |     |     |
     |     |     ----> Trouver le statement ayant pour rôle "loop condition" en remontant le code à 
     |     |     |     partir du statement loopBeg.
-    |     |     |     On appellera Sn-idC l'id de ce statement "loop condition".
+    |     |     |     On appellera Sn_idC l'id de ce statement "loop condition".
     |     |     |     |
     |     |     |     Ajouter ce statement à la slice.
     |     |     |     |
-    |     |     |     Ajouter chaque autre variable de ce statement à la Target List assorties de Sn-idC.
+    |     |     |     Ajouter chaque autre variable de ce statement à la Target List assorties de Sn_idC.
     |     |     |
     |     |     ----> Trouver le statement ayant pour rôle "loopEnd" en descendant le code à partir
     |     |     |     du statement "variable definition"
     |     |     |     |
     |     |     |     Ajouter ce statement à la slice.
+    |     |     |
+    |     |     ----> Répeter l'opération cette fois-ci en remontant la liste des statements cette fois
+    |     |     |     à partir de Sn_idC.
     |     |
     |     ----> Si Xn n'est pas dans les autres variables :
     |     |     |
-    |     |     ----> Ajouter toutes les autres variables dans la Target List assorties de Sn-idB 
+    |     |     ----> Ajouter toutes les autres variables dans la Target List assorties de Sn_idB 
     |     |     |     l'id du statement "variable definition".
     |     |
     |     ----> Si Xn est aussi dans les autres variables :
     |     |     |
     |     |     ----> Ajouter toutes les autres variables à l'exception de Xn dans la Target List 
-    |     |     |     assorties de Sn-idB.
+    |     |     |     assorties de Sn_idB.
     |     |     |
-    |     |     ----> Répeter l'opération 2. cette fois en remontant le code à partir de Sn-idB.
+    |     |     ----> Répeter l'opération 2. cette fois en remontant le code à partir de Sn_idB.
     |     |
 ----------- ------------------------------------- -----------
 

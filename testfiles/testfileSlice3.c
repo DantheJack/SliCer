@@ -1,37 +1,9 @@
-#include <stdio.h>
-#include <stdlib.h>
-
-void main()
-{
-    int n = 0;
-    scanf("%d", &n);
-    int s = 0;
-    int p = 0;
-    while (n > 0)
-    {
-        s = s + n;
-        p = p*n;
-        n = n - 1;
-    }        
-    printf("somme = %d, produit = %d", s, p);
-}
-
-/*
-For < 16 , p>
-
-void main()
-{
-    int n = 0;
- -> scanf("%d", &n);
-    int s = 0;
- -> int p = 0;
- -> while (n > 0)
- -> {
-        s = s + n;
- -----> p = p*n;
- -----> n = n - 1;
- -> }        
- -> printf("somme = %d, produit = %d", s, p);
-}
-
-*/
+int a = 0 ;
+short b = 1, c = 0 ;
+do { c++ ;
+} while ( a < 0 ) ;
+while ( b > a ) { b++ ; }
+a = 20 ;
+a = b - 1 ;
+b = a * 2 ;
+return a ;

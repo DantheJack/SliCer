@@ -6,45 +6,45 @@
 ----------- For each tuple Xn - Pn of the list -----------
     |
  1. --->  Find the very first PENTAD that has "variable declaration" in its list of roles and which has Xn as the main variable by scrolling up the code from Pn (not included).
-    |     We will call the id of this PENTAD "variable declaration" Pn-idA.
+    |     We will call the id of this PENTAD "variable declaration" Pn_idA.
     |     |
     |     Add this PENTAD to the slice.
     |     |
     |     ----> If there are other variables:
-    |     |     |
-    |     |     ----> Add all other variables except Xn to the Target List with Pn-idA.
     |     |
  2. --->  Find the last PENTAD that has "variable definition" in its roles and that has Xn as main variable by scrolling up the code from Pn (not included).
-    |     We will call the id of this PENTAD "variable definition" Pn-idB.
+    |     We will call the id of this PENTAD "variable definition" Pn_idB.
     |     |
     |     Add this PENTAD to the slice.
     |     |
-    |     Scroll up the list of PENTADs from Pn-idB by counting from 1, +1 each time a LoopEnd is found and -1 each time a LoopBeg is found. 
+    |     Scroll up the list of PENTADs from Pn_idB by counting from 1, +1 each time a LoopEnd is found and -1 each time a LoopBeg is found. 
     |     |
     |     ----> If 0 is reached:
     |     |     |
     |     |     ----> Add the corresponding LoopBeg PENTAD to the slice.
     |     |     |
     |     |     ----> Find the PENTAD with the role "loop condition" by scrolling up the code from the loopBeg PENTAD.
-    |     |     |     We will call the id of this PENTAD "loop condition" Pn-idC.
+    |     |     |     We will call the id of this PENTAD "loop condition" Pn_idC.
     |     |     |     |
     |     |     |     Add this PENTAD to the slice.
     |     |     |     |
-    |     |     |     Add each other variable of this PENTAD to the Target List with Pn-idC.
+    |     |     |     Add each other variable of this PENTAD to the Target List with Pn_idC.
     |     |     |
     |     |     ----> Find the PENTAD having for role "loopEnd" by scrolling down the code from the PENTAD "variable definition".
     |     |     |     |
     |     |     |     Add this PENTAD to the slice.
+    |     |     |
+    |     |     ----> Repeat these steps, this time by scrolling up the list starting from Sn_idC.
     |     |
     |     ----> If Xn is not in the other variables :
     |     |     |
-    |     |     ----> Add all other variables in the Target List with Pn-idB the id of the PENTAD "variable definition".
+    |     |     ----> Add all other variables in the Target List with Pn_idB the id of the PENTAD "variable definition".
     |     |
     |     ----> If Xn is also in the other variables :
     |     |     |
-    |     |     ----> Add all other variables, except for X, in the Target List with Pn-idB the id of the PENTAD "variable definition".
+    |     |     ----> Add all other variables, except for X, in the Target List with Pn_idB the id of the PENTAD "variable definition".
     |     |     |
-    |     |     ----> Repeat operation 2. this time by scrolling up the code from Pn-idB.
+    |     |     ----> Repeat operation 2. this time by scrolling up the code from Pn_idB.
     |     |
 ----------- ---------------------------------- -----------
 

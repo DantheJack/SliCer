@@ -8,8 +8,9 @@ import string
 #print(platform.python_implementation()) --> CPython
 #cls & pytest -rA -s -v
 
-
-print("MAIN printing --> ", "******** LEXICAL ANALYSIS **********")
+print()
+print("———————————————————————————— LEXICAL ANALYSIS ———————————————————————————")
+print()
 print("MAIN printing --> ", "*********** readlines ************")
 os.chdir(os.getcwd())                                       #####
 targetFile = open("./testfiles/testfileSlice1.c", "r") ###################################
@@ -42,7 +43,9 @@ printAllWithRoles(targetFileListOfPentads)
 print("MAIN printing --> ", "********** multiLineManager *********")
 targetFileListOfPentads = multiLineManager(targetFileListOfPentads)
 printAllWithRoles(targetFileListOfPentads)
-print("MAIN printing --> ", "********** SYNTACTIC ANALYSIS ************")
+print()
+print("——————————————————————————— SYNTACTIF ANALYSIS ——————————————————————————")
+print()
 print("MAIN printing --> ", "****** forLoopRoleAssignment *******")
 targetFileListOfPentads = forLoopRoleAssignment(targetFileListOfPentads)
 printAllWithRoles(targetFileListOfPentads)
@@ -54,8 +57,9 @@ print("MAIN printing --> ", "********** varDefDetector **********")
 targetFileListOfPentads = varDefDetector(targetFileListOfPentads)
 printAllWithRoles(targetFileListOfPentads)
 #printAllVarDefVariables(targetFileListOfPentads)
-print("MAIN printing --> ", "********** SEMANTICAL ANALYSIS ************")
-
+print()
+print("——————————————————————————— SEMANTICAL ANALYSIS —————————————————————————")
+print()
 fullLines = True
 
 for o in range (len(targetFileListOfPentads)):
@@ -68,17 +72,40 @@ criterionStatement = findS1(targetFileListOfPentads, criterionLine)
 targetList = [criterionVariable, criterionStatement]
 
 finderSliceDeclar(targetFileListOfPentads, criterionVariable, criterionStatement)
-finderSliceDefine(targetFileListOfPentads, criterionVariable, criterionStatement)
+sn_idB = finderSliceDefine(targetFileListOfPentads, criterionVariable, criterionStatement)
+finderSliceLoop(targetFileListOfPentads, sn_idB)
 
-print("—————————————————————————————————————————————————")
-print("———————————————————— RESULTS ————————————————————")
-print("—————————————————————————————————————————————————")
 
-for o in targetFileListOfPentads:
-    if o.useful :
-        print("--> " + str(o.line) + ".   " + o.text)
+
+
+
+
+
+print()
+print("—————————————————————————————————————————————————————————————————————————")
+print("———————————————————————————————— RESULTS ————————————————————————————————")
+print("—————————————————————————————————————————————————————————————————————————")
+print()
+for o in range (len(targetFileListOfPentads)):
+    if targetFileListOfPentads[o].useful :
+        print(o, ".\t", "--> " + str(targetFileListOfPentads[o].line) + ".   " + targetFileListOfPentads[o].text)
     else :
-        print("    " + str(o.line) + ".   " + o.text)
+        print(o, ".\t", "    " + str(targetFileListOfPentads[o].line) + ".   " + targetFileListOfPentads[o].text)
+print()
+print("—————————————————————————————————————————————————————————————————————————")
+print()
+x = 0
+for line in targetFileLines:
+    x += 1
+    utility = 0
+    for o in range (len(targetFileListOfPentads)):
+        if (targetFileListOfPentads[o].useful and targetFileListOfPentads[o].line[0] <= x and x <= targetFileListOfPentads[o].line[1]):
+            utility = 1
+    if (utility == 1):
+        print(" --> " + "[ " + str(x) + " ]\t" + line)
+    else :
+        print("     " + "[ " + str(x) + " ]\t" + line)
+
 
 #print("**************Affichage des roles*****************")
 
