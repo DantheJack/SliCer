@@ -17,7 +17,7 @@ def spaceNormalizer(listOfEveryPentads = None):
     nextChar = 'a'
     stringStatement = "Nothing"
     for i in range (len(listOfEveryPentads)):
-        output.append(pentadStruct(listOfEveryPentads[i].line, ""))
+        output.append(pentadStruct(listOfEveryPentads[i].lines, ""))
         if (stringStatement == "Nothing") :
             listOfEveryPentads[i].text = listOfEveryPentads[i].text.lstrip() #remove every space before the first character
             #print("lstrip output[" + str(i) + "].text = |" + output[i].text + "|")
@@ -43,7 +43,7 @@ def spaceNormalizer(listOfEveryPentads = None):
         if (stringStatement == "Nothing") :
             output[i].text.rstrip() #remove every space after the last character
             #print("rstrip output[" + str(i) + "].text = |" + output[i].text + "|")
-            for role in listOfEveryPentads[i].role:
+            for role in listOfEveryPentads[i].roles:
                 output[i].addRole(role.type, role.mainVar, role.otherVars)
     return output
 
@@ -208,9 +208,9 @@ def semicolonBasedChopper(listOfEveryPentads = None):
                     notAddedYet = False
                     inLoopCondition = False
                     #print("semiBC printing --> ", "end of loop_cond detected.")
-                    newPentad = pentadStruct([listOfEveryPentads[startingLine].line[0], listOfEveryPentads[i].line[1]], currentStatement)  
+                    newPentad = pentadStruct([listOfEveryPentads[startingLine].lines[0], listOfEveryPentads[i].lines[1]], currentStatement)  
                     for valuableLine in range(startingLine, i):
-                        for existingRole in listOfEveryPentads[valuableLine].role:
+                        for existingRole in listOfEveryPentads[valuableLine].roles:
                             newPentad.addRole(existingRole.type, existingRole.mainVar, existingRole.otherVars)
                     output.append(newPentad)
                 currentStatement = ""
@@ -233,17 +233,17 @@ def semicolonBasedChopper(listOfEveryPentads = None):
             if(presentChar == '{'):
                 #print("semiBC printing --> ", "beg of loop detected.")
                 if(currentStatement != ""):
-                    newPentad = pentadStruct([listOfEveryPentads[startingLine].line[0], listOfEveryPentads[i].line[1]], currentStatement)  
+                    newPentad = pentadStruct([listOfEveryPentads[startingLine].lines[0], listOfEveryPentads[i].lines[1]], currentStatement)  
                     for valuableLine in range(startingLine, i):
-                        for existingRole in listOfEveryPentads[valuableLine].role:
+                        for existingRole in listOfEveryPentads[valuableLine].roles:
                             newPentad.addRole(existingRole.type, existingRole.mainVar, existingRole.otherVars)
                     output.append(newPentad)
                 currentStatement = "{"
                 #print("semiBC printing --> ", "specific char \'", presentChar, "\' added to", currentStatement)
                 notAddedYet = False
-                newPentad = pentadStruct([listOfEveryPentads[startingLine].line[0], listOfEveryPentads[i].line[1]], currentStatement)  
+                newPentad = pentadStruct([listOfEveryPentads[startingLine].lines[0], listOfEveryPentads[i].lines[1]], currentStatement)  
                 for valuableLine in range(startingLine, i):
-                    for existingRole in listOfEveryPentads[valuableLine].role:
+                    for existingRole in listOfEveryPentads[valuableLine].roles:
                         newPentad.addRole(existingRole.type, existingRole.mainVar, existingRole.otherVars)
                 output.append(newPentad)
                 currentStatement = ""
@@ -251,16 +251,16 @@ def semicolonBasedChopper(listOfEveryPentads = None):
             if(presentChar == '}'):
                 #print("semiBC printing --> ", "end of loop detected.")
                 if(currentStatement != ""):
-                    newPentad = pentadStruct([listOfEveryPentads[startingLine].line[0], listOfEveryPentads[i].line[1]], currentStatement)  
+                    newPentad = pentadStruct([listOfEveryPentads[startingLine].lines[0], listOfEveryPentads[i].lines[1]], currentStatement)  
                     for valuableLine in range(startingLine, i):
-                        for existingRole in listOfEveryPentads[valuableLine].role:
+                        for existingRole in listOfEveryPentads[valuableLine].roles:
                             newPentad.addRole(existingRole.type, existingRole.mainVar, existingRole.otherVars)
                     output.append(newPentad)
                 currentStatement = "}"
                 #print("semiBC printing --> ", "specific char \'", presentChar, "\' added to", currentStatement)
                 notAddedYet = False
-                newPentad = pentadStruct([listOfEveryPentads[startingLine].line[0], listOfEveryPentads[i].line[1]], currentStatement)  
-                for existingRole in listOfEveryPentads[i].role:
+                newPentad = pentadStruct([listOfEveryPentads[startingLine].lines[0], listOfEveryPentads[i].lines[1]], currentStatement)  
+                for existingRole in listOfEveryPentads[i].roles:
                     newPentad.addRole(existingRole.type, existingRole.mainVar, existingRole.otherVars)
                 output.append(newPentad)
                 currentStatement = ""
@@ -270,9 +270,9 @@ def semicolonBasedChopper(listOfEveryPentads = None):
                 currentStatement += presentChar
                 #print("semiBC printing --> ", "specific char \'", presentChar, "\' added to", currentStatement)
                 notAddedYet = False
-                newPentad = pentadStruct([listOfEveryPentads[startingLine].line[0], listOfEveryPentads[i].line[1]], currentStatement)  
+                newPentad = pentadStruct([listOfEveryPentads[startingLine].lines[0], listOfEveryPentads[i].lines[1]], currentStatement)  
                 for valuableLine in range(startingLine, i):
-                    for existingRole in listOfEveryPentads[valuableLine].role:
+                    for existingRole in listOfEveryPentads[valuableLine].roles:
                         newPentad.addRole(existingRole.type, existingRole.mainVar, existingRole.otherVars)
                 output.append(newPentad)
                 currentStatement = ""
@@ -282,9 +282,9 @@ def semicolonBasedChopper(listOfEveryPentads = None):
                 currentStatement += presentChar
                 #print("semiBC printing --> ", "specific char \'", presentChar, "\' added to", currentStatement)
                 notAddedYet = False
-                newPentad = pentadStruct([listOfEveryPentads[startingLine].line[0], listOfEveryPentads[i].line[1]], currentStatement)  
+                newPentad = pentadStruct([listOfEveryPentads[startingLine].lines[0], listOfEveryPentads[i].lines[1]], currentStatement)  
                 for valuableLine in range(startingLine, i):
-                    for existingRole in listOfEveryPentads[valuableLine].role:
+                    for existingRole in listOfEveryPentads[valuableLine].roles:
                         newPentad.addRole(existingRole.type, existingRole.mainVar, existingRole.otherVars)
                 output.append(newPentad)
                 currentStatement = ""
@@ -328,8 +328,8 @@ def multiLineManager(listOfEveryPentads = None):
                 #print("MultiLM printing --> ", "char ", presentChar, "\' detected and replaced by space.") #to avoid the case "unsigned\int" becoming "unsignedint" for eg.
             if(state == "Store and Restart"):
                 state = "Nothing"
-                newPentad = pentadStruct([listOfEveryPentads[startingLine].line[0], listOfEveryPentads[i].line[1]], currentStatement)
-                for roleOfPreviousLine in listOfEveryPentads[i].role:
+                newPentad = pentadStruct([listOfEveryPentads[startingLine].lines[0], listOfEveryPentads[i].lines[1]], currentStatement)
+                for roleOfPreviousLine in listOfEveryPentads[i].roles:
                     newPentad.addRole(roleOfPreviousLine.type, roleOfPreviousLine.mainVar, roleOfPreviousLine.otherVars)
                 output.append(newPentad)
                 currentStatement = ""

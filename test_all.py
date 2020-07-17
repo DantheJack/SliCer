@@ -200,19 +200,19 @@ def test_doWhileConverter():
        #print(testFileListOfPentads[i].text)
     #print("---")
     assert testFileListOfPentads[1].text == "for( x > 1 )"
-    assert testFileListOfPentads[1].line == [1, 1]
+    assert testFileListOfPentads[1].lines == [1, 1]
     assert testFileListOfPentads[2].text == "{"
-    assert testFileListOfPentads[2].line == [2, 2]
+    assert testFileListOfPentads[2].lines == [2, 2]
     assert testFileListOfPentads[3].text == "y = f( x );not"
     assert testFileListOfPentads[4].text == ";"
     assert testFileListOfPentads[5].text == "x--;"
     assert testFileListOfPentads[6].text == "}"
-    assert testFileListOfPentads[6].line == [6, 6]
-    assert testFileListOfPentads[6].role[0].type == "while of do from line"
-    assert testFileListOfPentads[6].role[0].mainVar == str(1)
+    assert testFileListOfPentads[6].lines == [6, 6]
+    assert testFileListOfPentads[6].roles[0].type == "while of do from line"
+    assert testFileListOfPentads[6].roles[0].mainVar == str(1)
     assert testFileListOfPentads[7].text == ""
     assert testFileListOfPentads[8].text == "int stupid=\"\";for (i=2; i <3.4 ; i++){"
-    assert testFileListOfPentads[8].line == [8, 8]
+    assert testFileListOfPentads[8].lines == [8, 8]
     assert testFileListOfPentads[9].text == "dosomething;"
     assert testFileListOfPentads[10].text == "formidable; }"
     assert testFileListOfPentads[11].text == ""
@@ -220,33 +220,33 @@ def test_doWhileConverter():
     assert testFileListOfPentads[13].text == ""
     assert testFileListOfPentads[14].text == "for(6; 7>8.9;10++){"
     assert testFileListOfPentads[15].text == "for(11){;}"
-    assert testFileListOfPentads[15].line == [15, 15]
-    assert testFileListOfPentads[15].role[0].type == "while of do from line"
-    assert testFileListOfPentads[15].role[0].mainVar == str(15)
+    assert testFileListOfPentads[15].lines == [15, 15]
+    assert testFileListOfPentads[15].roles[0].type == "while of do from line"
+    assert testFileListOfPentads[15].roles[0].mainVar == str(15)
     assert testFileListOfPentads[16].text == "}"
     assert testFileListOfPentads[17].text == "(12)"
     assert testFileListOfPentads[18].text == "(13)while(14){15}"
     assert testFileListOfPentads[19].text == "//"
     assert testFileListOfPentads[20].text == "for(nothinggood != !True || compteur< 19){"
-    assert testFileListOfPentads[20].line == [20, 20]
+    assert testFileListOfPentads[20].lines == [20, 20]
     assert testFileListOfPentads[21].text == "for(formidable === ++i++) \\"
-    assert testFileListOfPentads[21].line == [21, 21]
+    assert testFileListOfPentads[21].lines == [21, 21]
     assert testFileListOfPentads[22].text == "{ \\"
-    assert testFileListOfPentads[22].line == [22, 22]
+    assert testFileListOfPentads[22].lines == [22, 22]
     assert testFileListOfPentads[23].text == "compteur ++;for(dosomething!=17+18){nothinggood; 16;\\"
-    assert testFileListOfPentads[23].line == [23, 23]
+    assert testFileListOfPentads[23].lines == [23, 23]
     assert testFileListOfPentads[24].text == "}}"
-    assert testFileListOfPentads[24].line == [24, 24]
-    assert testFileListOfPentads[24].role[0].type == "while of do from line"
-    assert testFileListOfPentads[24].role[0].mainVar == str(21)
-    assert testFileListOfPentads[24].role[1].type == "while of do from line"
-    assert testFileListOfPentads[24].role[1].mainVar == str(23)
+    assert testFileListOfPentads[24].lines == [24, 24]
+    assert testFileListOfPentads[24].roles[0].type == "while of do from line"
+    assert testFileListOfPentads[24].roles[0].mainVar == str(21)
+    assert testFileListOfPentads[24].roles[1].type == "while of do from line"
+    assert testFileListOfPentads[24].roles[1].mainVar == str(23)
     assert testFileListOfPentads[25].text == ""
-    assert testFileListOfPentads[25].line == [25, 25]
+    assert testFileListOfPentads[25].lines == [25, 25]
     assert testFileListOfPentads[26].text == "}"
-    assert testFileListOfPentads[26].line == [26, 26]
-    assert testFileListOfPentads[26].role[0].type == "while of do from line"
-    assert testFileListOfPentads[26].role[0].mainVar == str(20)
+    assert testFileListOfPentads[26].lines == [26, 26]
+    assert testFileListOfPentads[26].roles[0].type == "while of do from line"
+    assert testFileListOfPentads[26].roles[0].mainVar == str(20)
     assert testFileListOfPentads[27].text == ""
     assert testFileListOfPentads[28].text == "for(smthg)\\"
     assert testFileListOfPentads[29].text == "{"
@@ -307,72 +307,72 @@ def test_MultiLineManager():
        #print(testFileListOfPentads[i].text)
     #print("---")
     assert testFileListOfPentads[1].text == "1;"
-    assert testFileListOfPentads[1].line == [1, 1]
+    assert testFileListOfPentads[1].lines == [1, 1]
     assert testFileListOfPentads[2].text == "2 ;"
-    assert testFileListOfPentads[2].line == [2, 2]
+    assert testFileListOfPentads[2].lines == [2, 2]
     assert testFileListOfPentads[3].text == "3 ;"
-    assert testFileListOfPentads[3].line == [3, 3]
+    assert testFileListOfPentads[3].lines == [3, 3]
     assert testFileListOfPentads[4].text == "4 ;"
-    assert testFileListOfPentads[4].line == [3, 3]
+    assert testFileListOfPentads[4].lines == [3, 3]
     assert testFileListOfPentads[5].text == "5 6;"
-    assert testFileListOfPentads[5].line == [4, 5]
+    assert testFileListOfPentads[5].lines == [4, 5]
     assert testFileListOfPentads[6].text == "7;"
-    assert testFileListOfPentads[6].line == [6, 6]
+    assert testFileListOfPentads[6].lines == [6, 6]
     assert testFileListOfPentads[7].text == "8 9;"
-    assert testFileListOfPentads[7].line == [6, 8]
+    assert testFileListOfPentads[7].lines == [6, 8]
     assert testFileListOfPentads[8].text == "10, 11;"
-    assert testFileListOfPentads[8].line == [9, 9]
+    assert testFileListOfPentads[8].lines == [9, 9]
     assert testFileListOfPentads[9].text == "12 13 14 15 ;"
-    assert testFileListOfPentads[9].line == [9, 13]
+    assert testFileListOfPentads[9].lines == [9, 13]
     assert testFileListOfPentads[10].text == "16;"
-    assert testFileListOfPentads[10].line == [13, 13]
+    assert testFileListOfPentads[10].lines == [13, 13]
     assert testFileListOfPentads[11].text == "17 ;"
-    assert testFileListOfPentads[11].line == [14, 15]
+    assert testFileListOfPentads[11].lines == [14, 15]
     assert testFileListOfPentads[12].text == ";"
-    assert testFileListOfPentads[12].line == [15, 15]
+    assert testFileListOfPentads[12].lines == [15, 15]
     assert testFileListOfPentads[13].text == "18"
-    assert testFileListOfPentads[13].line == [15, 15]
+    assert testFileListOfPentads[13].lines == [15, 15]
     assert testFileListOfPentads[14].text == "{"
-    assert testFileListOfPentads[14].line == [15, 15]
+    assert testFileListOfPentads[14].lines == [15, 15]
     assert testFileListOfPentads[15].text == "19;"
-    assert testFileListOfPentads[15].line == [16, 16]
+    assert testFileListOfPentads[15].lines == [16, 16]
     assert testFileListOfPentads[16].text == "20 ;"
-    assert testFileListOfPentads[16].line == [17, 18]
+    assert testFileListOfPentads[16].lines == [17, 18]
     assert testFileListOfPentads[17].text == ";"
-    assert testFileListOfPentads[17].line == [19, 19]
+    assert testFileListOfPentads[17].lines == [19, 19]
     assert testFileListOfPentads[18].text == "21"
-    assert testFileListOfPentads[18].line == [19, 19]
+    assert testFileListOfPentads[18].lines == [19, 19]
     assert testFileListOfPentads[19].text == "}"
-    assert testFileListOfPentads[19].line == [19, 19]
+    assert testFileListOfPentads[19].lines == [19, 19]
     assert testFileListOfPentads[20].text == "22;"
-    assert testFileListOfPentads[20].line == [20, 20]
+    assert testFileListOfPentads[20].lines == [20, 20]
     assert testFileListOfPentads[21].text == "\"\"23;"
-    assert testFileListOfPentads[21].line == [20, 20]
+    assert testFileListOfPentads[21].lines == [20, 20]
     assert testFileListOfPentads[22].text == "24 \"\" 25;"
-    assert testFileListOfPentads[22].line == [20, 22]
+    assert testFileListOfPentads[22].lines == [20, 22]
     assert testFileListOfPentads[23].text == "for (26; 27<28.29;30++)"
-    assert testFileListOfPentads[23].line == [23, 23]
+    assert testFileListOfPentads[23].lines == [23, 23]
     assert testFileListOfPentads[24].text == "{"
-    assert testFileListOfPentads[24].line == [24, 24]
+    assert testFileListOfPentads[24].lines == [24, 24]
     assert testFileListOfPentads[25].text == "for (2)"
-    assert testFileListOfPentads[25].line == [25, 25]
+    assert testFileListOfPentads[25].lines == [25, 25]
     assert testFileListOfPentads[26].text == "{"
-    assert testFileListOfPentads[26].line == [25, 25]
+    assert testFileListOfPentads[26].lines == [25, 25]
     assert testFileListOfPentads[27].text == ";"
-    assert testFileListOfPentads[27].line == [25, 25]
+    assert testFileListOfPentads[27].lines == [25, 25]
     assert testFileListOfPentads[28].text == "}"
-    assert testFileListOfPentads[28].line == [25, 25]
-    assert testFileListOfPentads[28].role[0].type == "while of do from line"
-    assert testFileListOfPentads[28].role[0].mainVar == str(25)
+    assert testFileListOfPentads[28].lines == [25, 25]
+    assert testFileListOfPentads[28].roles[0].type == "while of do from line"
+    assert testFileListOfPentads[28].roles[0].mainVar == str(25)
     assert testFileListOfPentads[29].text == "(31)int a32 = 33 ;"
-    assert testFileListOfPentads[29].line == [25, 27]
+    assert testFileListOfPentads[29].lines == [25, 27]
     assert testFileListOfPentads[30].text == "}"
-    assert testFileListOfPentads[30].role[0].type == "unknown"
-    assert testFileListOfPentads[30].line == [27, 27]
+    assert testFileListOfPentads[30].roles[0].type == "unknown"
+    assert testFileListOfPentads[30].lines == [27, 27]
     assert testFileListOfPentads[31].text == "float for1 = 2;"
-    assert testFileListOfPentads[31].line == [31, 31]
+    assert testFileListOfPentads[31].lines == [31, 31]
     assert testFileListOfPentads[32].text == "signed char unsignedint=\"\";"
-    assert testFileListOfPentads[32].line == [32, 32]
+    assert testFileListOfPentads[32].lines == [32, 32]
 
 #multiLineManager does not really handle multiline for, while or do-while loops.
 #It does not handle conditions () and executions statement {} ... yet.

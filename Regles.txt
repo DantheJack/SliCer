@@ -8,13 +8,13 @@
 
 ----------- Pour chaque tuple Xn - Sn de la liste -----------
     |
- 1. --->  3) Trouver le tout premier statement qui comporte "variable declaration" dans ses rôles
+    ----> 3) Trouver le tout premier statement qui comporte "variable declaration" dans ses rôles
     |     et qui a Xn en variable principale en remontant le code à partir de Sn (non compris).
     |     On appellera Sn_idA l'id de ce statement "variable declaration".
     |     |
     |     4) Ajouter ce statement à la slice.
     |
- 2. --->  5) Trouver le dernier statement qui comporte "variable definition" dans ses rôles et qui
+    ----> 5) Trouver le dernier statement qui comporte "variable definition" dans ses rôles et qui
     |     a Xn en variable principale en remontant le code à partir de Sn (non compris).
     |     On appellera Sn_idB l'id de ce statement "variable definition".
     |     |

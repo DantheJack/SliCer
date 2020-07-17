@@ -1,4 +1,4 @@
-int a = 0 ;
+int a = 103 ;
 short b = 1, c = 0 ;
 do { c++ ;
 } while ( a < 0 ) ;

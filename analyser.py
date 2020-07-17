@@ -64,19 +64,54 @@ fullLines = True
 
 for o in range (len(targetFileListOfPentads)):
     targetFileListOfPentads[o].id = o           #id of a PENTAD = order in the list
-
+print()
+for o in range (len(targetFileListOfPentads)):
+    if targetFileListOfPentads[o].useful :
+        print(o, ".\t", "--> " + str(targetFileListOfPentads[o].lines) + ".   " + targetFileListOfPentads[o].text)
+    else :
+        print(o, ".\t", "    " + str(targetFileListOfPentads[o].lines) + ".   " + targetFileListOfPentads[o].text)
+print()
 
 criterionVariable = 'a'
 criterionLine = 20
 criterionStatement = findS1(targetFileListOfPentads, criterionLine)
-targetList = [criterionVariable, criterionStatement]
+targetList = [[criterionVariable, criterionStatement]]
+i = 0
+while i < len(targetList):
+    print("\nWe progress through targetList (i =", i, ", len =", len(targetList), ")")
+    print("\ncouple = [var =", targetList[i][0], ", st =", targetList[i][1], "]")
+    idOfDeclaration = finderSliceDeclar(targetFileListOfPentads, targetList[i][0], targetList[i][1]-1)
+    targetFileListOfPentads[idOfDeclaration].useful = True
+    idOfDefinition = finderSliceDefine(targetFileListOfPentads, targetList[i][0], targetList[i][1]-1)
+    for role in targetFileListOfPentads[idOfDefinition].roles:
+        if(role.type == "varDefine"):
+            for othervariable in role.otherVars :
+                targetList += [[othervariable, idOfDefinition]]
+                print("\nAdded : ", othervariable, " to targetList w/ st ", idOfDefinition)
+    targetFileListOfPentads[idOfDefinition].useful = True
+    isThisStatementInALoop = idOfDefinition
+    begLoopStatement = -2
+    endLoopStatement = -2
+    loopCondStatement = -2
+    while(begLoopStatement != -1 and endLoopStatement != -1 and loopCondStatement != -1):
+        result = finderSliceLoop(targetList, targetFileListOfPentads, isThisStatementInALoop)
+        begLoopStatement = result[0]
+        endLoopStatement = result[1]
+        loopCondStatement = result[2]
+        if(begLoopStatement != -1):
+            targetFileListOfPentads[begLoopStatement].useful = True
+        if(endLoopStatement != -1):
+            targetFileListOfPentads[endLoopStatement].useful = True
+        if(loopCondStatement != -1):
+            targetFileListOfPentads[loopCondStatement].useful = True
+            for role in targetFileListOfPentads[loopCondStatement].roles:
+                if(role.type == "loopCondition"):
+                    for othervariable in role.otherVars :
+                        targetList += [[othervariable, loopCondStatement]]
+                        print("\nAdded : ", othervariable, " to targetList w/ st ", loopCondStatement)
+        isThisStatementInALoop = loopCondStatement
 
-finderSliceDeclar(targetFileListOfPentads, criterionVariable, criterionStatement)
-sn_idB = finderSliceDefine(targetFileListOfPentads, criterionVariable, criterionStatement)
-finderSliceLoop(targetFileListOfPentads, sn_idB)
-
-
-
+    i += 1
 
 
 
@@ -88,9 +123,9 @@ print("————————————————————————�
 print()
 for o in range (len(targetFileListOfPentads)):
     if targetFileListOfPentads[o].useful :
-        print(o, ".\t", "--> " + str(targetFileListOfPentads[o].line) + ".   " + targetFileListOfPentads[o].text)
+        print(o, ".\t", "--> " + str(targetFileListOfPentads[o].lines) + ".   " + targetFileListOfPentads[o].text)
     else :
-        print(o, ".\t", "    " + str(targetFileListOfPentads[o].line) + ".   " + targetFileListOfPentads[o].text)
+        print(o, ".\t", "    " + str(targetFileListOfPentads[o].lines) + ".   " + targetFileListOfPentads[o].text)
 print()
 print("—————————————————————————————————————————————————————————————————————————")
 print()
@@ -99,7 +134,7 @@ for line in targetFileLines:
     x += 1
     utility = 0
     for o in range (len(targetFileListOfPentads)):
-        if (targetFileListOfPentads[o].useful and targetFileListOfPentads[o].line[0] <= x and x <= targetFileListOfPentads[o].line[1]):
+        if (targetFileListOfPentads[o].useful and targetFileListOfPentads[o].lines[0] <= x and x <= targetFileListOfPentads[o].lines[1]):
             utility = 1
     if (utility == 1):
         print(" --> " + "[ " + str(x) + " ]\t" + line)
@@ -110,5 +145,5 @@ for line in targetFileLines:
 #print("**************Affichage des roles*****************")
 
 #for o in targetFileListOfPentads:
- #   for p in o.role:
- #      #print(str(o.line) , ".   " , o.text , " ---> " , p.type, " : ", p.var)
+ #   for p in o.roles:
+ #      #print(str(o.lines) , ".   " , o.text , " ---> " , p.type, " : ", p.var)
