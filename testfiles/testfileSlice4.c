@@ -1,34 +1,20 @@
-
-    int x = 1;          //
-    int y = 8;
-    int z = y + x;
-    int i = 0;
-    x = z * 2;          
-    z = 24;
-
-    do
-    {
-        x += x;
-        for (i = 0; i < y; ++i) { }
-    }
-
-    z = y + x;
-    print(x)
-
-
-
-/*
-For < ... , x >
-
-    int a = 1;
- -> int b = 2;
-    int c = a;
- -> if(b == 2)
- -> {
- -----> c  = 10;
- -> }
-    printf("a = %d\n", a);
-    printf("b = %d\n", b);
- -> printf("c = %d", c);
-
-*/
+int b = 1; int a = 5, c = 1;
+unsigned long d = 0; do {
+    b = b + 1;
+    b = 3;
+    d = d * 2;
+    while(a != 4) { c++; }
+} while (b!=4) ;
+a = b;
+a = 10;
+b = 0;
+for (int i = 0; i < c; i++){
+    a--;
+    do{ c = a + b + 4;
+    b--; } while( a < b );
+}
+b=-a+2;
+c =c  +4  ;
+a+= c;
+a = b ;
+return a ;

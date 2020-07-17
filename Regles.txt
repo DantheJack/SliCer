@@ -1,60 +1,60 @@
 
---> Trouver S1, le PENTAD incluant L1 (la ligne du slicing criterion donné par l'utilisateur
+--> 1) Trouver S1, le PENTAD incluant L1 (la ligne du slicing criterion donné par l'utilisateur
     au programme) dans son intervalle de ligne. Si plusieurs PENTAD correspondent, prendre
     celui doté de l'id le plus élevé.
 
---> Ajouter X1 et S1 (la variable du slicing criterion donné par l'utilisateur au programme)
+--> 2) Ajouter X1 et S1 (la variable du slicing criterion donné par l'utilisateur au programme)
     à la Target List.
 
 ----------- Pour chaque tuple Xn - Sn de la liste -----------
     |
- 1. --->  Trouver le tout premier statement qui comporte "variable declaration" dans ses rôles
+ 1. --->  3) Trouver le tout premier statement qui comporte "variable declaration" dans ses rôles
     |     et qui a Xn en variable principale en remontant le code à partir de Sn (non compris).
     |     On appellera Sn_idA l'id de ce statement "variable declaration".
     |     |
-    |     Ajouter ce statement à la slice.
+    |     4) Ajouter ce statement à la slice.
     |
- 2. --->  Trouver le dernier statement qui comporte "variable definition" dans ses rôles et qui
+ 2. --->  5) Trouver le dernier statement qui comporte "variable definition" dans ses rôles et qui
     |     a Xn en variable principale en remontant le code à partir de Sn (non compris).
     |     On appellera Sn_idB l'id de ce statement "variable definition".
     |     |
-    |     Ajouter ce statement à la slice.
+    |     6) Ajouter ce statement à la slice.
     |     |
-    |     Remonter la liste des statements à partir du statement Sn_idB en comptant à partir 
+    |     7) Remonter la liste des statements à partir du statement Sn_idB en comptant à partir 
     |     de 1, +1 à chaque fois qu'un LoopEnd est trouvé et -1 à chaque fois qu'un LoopBeg 
     |     est trouvé.
     |     |
-    |     ----> Si 0 est atteint :
+    |     ----> 8) Si 0 est atteint :
     |     |     |
-    |     |     ----> Ajouter le statement LoopBeg correspondant à la slice.
+    |     |     ----> 9) Ajouter le statement LoopBeg correspondant à la slice.
     |     |     |
-    |     |     ----> Trouver le statement ayant pour rôle "loop condition" en remontant le code à 
+    |     |     ----> 10) Trouver le statement ayant pour rôle "loop condition" en remontant le code à 
     |     |     |     partir du statement loopBeg.
     |     |     |     On appellera Sn_idC l'id de ce statement "loop condition".
     |     |     |     |
-    |     |     |     Ajouter ce statement à la slice.
+    |     |     |     11) Ajouter ce statement à la slice.
     |     |     |     |
-    |     |     |     Ajouter chaque autre variable de ce statement à la Target List assorties de Sn_idC.
+    |     |     |     12) Ajouter chaque autre variable de ce statement à la Target List assorties de Sn_idC.
     |     |     |
-    |     |     ----> Trouver le statement ayant pour rôle "loopEnd" en descendant le code à partir
+    |     |     ----> 13) Trouver le statement ayant pour rôle "loopEnd" en descendant le code à partir
     |     |     |     du statement "variable definition"
     |     |     |     |
-    |     |     |     Ajouter ce statement à la slice.
+    |     |     |     14) Ajouter ce statement à la slice.
     |     |     |
-    |     |     ----> Répeter l'opération cette fois-ci en remontant la liste des statements cette fois
+    |     |     ----> 15) Répeter l'opération cette fois-ci en remontant la liste des statements cette fois
     |     |     |     à partir de Sn_idC.
     |     |
-    |     ----> Si Xn n'est pas dans les autres variables :
+    |     ----> 16) Si Xn n'est pas dans les autres variables :
     |     |     |
-    |     |     ----> Ajouter toutes les autres variables dans la Target List assorties de Sn_idB 
+    |     |     ----> 17) Ajouter toutes les autres variables dans la Target List assorties de Sn_idB 
     |     |     |     l'id du statement "variable definition".
     |     |
-    |     ----> Si Xn est aussi dans les autres variables :
+    |     ----> 18) Si Xn est aussi dans les autres variables :
     |     |     |
-    |     |     ----> Ajouter toutes les autres variables à l'exception de Xn dans la Target List 
+    |     |     ----> 19) Ajouter toutes les autres variables à l'exception de Xn dans la Target List
     |     |     |     assorties de Sn_idB.
     |     |     |
-    |     |     ----> Répeter l'opération 2. cette fois en remontant le code à partir de Sn_idB.
+    |     |     ----> 20) Répeter l'opération 2. cette fois en remontant le code à partir de Sn_idB.
     |     |
 ----------- ------------------------------------- -----------
 

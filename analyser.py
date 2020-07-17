@@ -13,7 +13,7 @@ print("————————————————————————�
 print()
 print("MAIN printing --> ", "*********** readlines ************")
 os.chdir(os.getcwd())                                       #####
-targetFile = open("./testfiles/testfileSlice1.c", "r") ###################################
+targetFile = open("./testfiles/testfileSlice4.c", "r") ###################################
 targetFileLines = targetFile.readlines()                    #####
 targetFile.close()
 targetFileListOfPentads = []
@@ -67,7 +67,7 @@ for o in range (len(targetFileListOfPentads)):
 
 
 criterionVariable = 'a'
-criterionLine = 9
+criterionLine = 20
 criterionStatement = findS1(targetFileListOfPentads, criterionLine)
 targetList = [criterionVariable, criterionStatement]
 

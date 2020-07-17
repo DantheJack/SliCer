@@ -37,7 +37,7 @@ def finderSliceDefine(listOfEveryPentads = None, criterionVariable = "a", criter
                 return sn_idB
     
 
-def finderSliceLoop(listOfEveryPentads = None, sn_idB = 0):
+def finderSliceLoop(targetList = [], listOfEveryPentads = None, sn_idB = 0):
     print("SL-LOO printing --> ", "called w/ statement :", sn_idB)
     i = 0
     loopCount = 1
