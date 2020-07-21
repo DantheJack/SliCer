@@ -2,47 +2,119 @@ from pentadClass import pentadStruct
 from LexicalAnalyser import spaceNormalizer
 import re
 
-def findS1(listOfEveryPentads = None, criterionLine = 9):
+def mainSemanticalAnalyser(pentadList = [], criterionVariable = 'a', criterionLine = 20, debugMode = False):
+    """This function calls every other functions in charge of the semantical analyser and contains
+       the algo that handles the rules of this analysis. It takes as arguments the fully transformed
+       list of PENTADs as well as the original slicing criterion, and returns the PENTADs list with
+       usefulness of statements that belongs in the final slice changed to True."""
+    if(debugMode) : print()
+    if(debugMode) : print("——————————————————————————— SEMANTICAL ANALYSIS —————————————————————————")
+    if(debugMode) : print()
+    for o in range (len(pentadList)):
+        pentadList[o].id = o           #id of a PENTAD = order in the list
+    if(debugMode) : print()
+    for o in range (len(pentadList)):
+        if pentadList[o].useful :
+            if(debugMode) : print(o, ".\t", "--> " + str(pentadList[o].lines) + ".   " + pentadList[o].text)
+        else :
+            if(debugMode) : print(o, ".\t", "    " + str(pentadList[o].lines) + ".   " + pentadList[o].text)
+    if(debugMode) : print()
+
+    criterionStatement = findS1(pentadList, criterionLine)
+    pentadList[criterionStatement].useful = True
+    targetList = [[criterionVariable, criterionStatement]]
+    i = 0
+    while i < len(targetList):
+        if(debugMode) : print("\nWe progress through targetList (i =", i, ", len =", len(targetList), ")")
+        if(debugMode) : print("\ncouple = [var =", targetList[i][0], ", st =", targetList[i][1], "]")
+        idOfDeclaration = finderSliceDeclar(pentadList, targetList[i][0], targetList[i][1]-1)
+        pentadList[idOfDeclaration].useful = True
+        idOfDefinition = finderSliceDefine(pentadList, targetList[i][0], targetList[i][1]-1)
+        for role in pentadList[idOfDefinition].roles:
+            if(role.type == "varDefine"):
+                for othervariable in role.otherVars :
+                    targetList += [[othervariable, idOfDefinition]]
+                    if(debugMode) : print("\nAdded : ", othervariable, " to targetList w/ st ", idOfDefinition)
+        pentadList[idOfDefinition].useful = True
+        isThisStatementInALoop = idOfDefinition
+        begLoopStatement = -2
+        endLoopStatement = -2
+        loopCondStatement = -2
+        while(begLoopStatement != -1 and endLoopStatement != -1 and loopCondStatement != -1):
+            result = finderSliceLoop(targetList, pentadList, isThisStatementInALoop)
+            begLoopStatement = result[0]
+            endLoopStatement = result[1]
+            loopCondStatement = result[2]
+            if(begLoopStatement != -1):
+                pentadList[begLoopStatement].useful = True
+            if(endLoopStatement != -1):
+                pentadList[endLoopStatement].useful = True
+            if(loopCondStatement != -1):
+                pentadList[loopCondStatement].useful = True
+                for role1 in pentadList[loopCondStatement].roles:
+                    if(role1.type == "loopCondition"):
+                        for othervariable in role1.otherVars :
+                            varDeclarOfVarInLoopCond = False
+                            for role2 in pentadList[loopCondStatement].roles:
+                                if(role2.type == "varDeclar" and role2.mainVar == othervariable):
+                                    varDeclarOfVarInLoopCond = True
+                            if(not varDeclarOfVarInLoopCond):
+                                if(debugMode) : print("\nAdded : ", othervariable, " to targetList w/ st ", loopCondStatement)
+                                targetList += [[othervariable, loopCondStatement]]
+                            targetAlreadyHandled = False
+                            for oldTargets in targetList:
+                                if(oldTargets[0] == othervariable and oldTargets[1] == endLoopStatement):
+                                    targetAlreadyHandled = True
+                            if(not targetAlreadyHandled):
+                                if(debugMode) : print("\nAdded : ", othervariable, " to targetList w/ st ", endLoopStatement)
+                                targetList += [[othervariable, endLoopStatement]]
+            isThisStatementInALoop = loopCondStatement
+        i += 1
+    return pentadList
+
+
+
+def findS1(listOfEveryPentads = None, criterionLine = 9, debugMode = False):
     """Takes a line number and returns the id of the statement that covers this line.
     If several statements do so, returns the highest id among these."""
     S1 = 0
     i = 0
     for i in range (len(listOfEveryPentads)):
-#        print("SL-fS1 printing --> ", "st ", listOfEveryPentads[i].id, ": ", listOfEveryPentads[i].text, " \t---\t ", listOfEveryPentads[i].lines[1], " - ", listOfEveryPentads[i].lines[0])      
+        if(debugMode) : print("SL-fS1 printing --> ", "st ", listOfEveryPentads[i].id, ": ", listOfEveryPentads[i].text, " \t---\t ", listOfEveryPentads[i].lines[1], " - ", listOfEveryPentads[i].lines[0])      
         if(listOfEveryPentads[i].lines[0] <= criterionLine):
             S1 = i
     return S1
 
 
-def finderSliceDeclar(listOfEveryPentads = None, criterionVariable = "a", criterionStatement = None):
+def finderSliceDeclar(listOfEveryPentads = None, criterionVariable = "a", criterionStatement = None, debugMode = 0):
     """Takes an element of the targetList (var, line) and returns the last id of the statement that
     has the role of variable declaration for this element."""
     i = 0
     for i in range (criterionStatement, -1, -1): #decremental for loop so we need to read number 0 (that's why we count -1 until we reach -1)
         for h in listOfEveryPentads[i].roles :
-            #print("SL-DEC printing --> ", "st :", i, "| lines :", listOfEveryPentads[i].lines, "| role :", h.type, "| mainVar :", h.mainVar)
+            if(debugMode) : print("SL-DEC printing --> ", "st :", i, "| lines :", listOfEveryPentads[i].lines, "| role :", h.type, "| mainVar :", h.mainVar)
             if(h.type == "varDeclar" and h.mainVar == criterionVariable) :
-                #print("SL-DEC printing --> ", "here")
+                if(debugMode) : print("SL-DEC printing --> ", "here")
                 return i
     return False
     
-def finderSliceDefine(listOfEveryPentads = None, criterionVariable = "a", criterionStatement = None):
+def finderSliceDefine(listOfEveryPentads = None, criterionVariable = "a", criterionStatement = None, debugMode = False):
     """Takes an element of the targetList (var, line) and returns the last id of the statement that
     has the role of variable definition for this element."""
     i = 0
     for i in range (criterionStatement, -1, -1): #decremental for loop so we need to read number 0 (that's why we count -1 until we reach -1)
         for h in listOfEveryPentads[i].roles :
-            #print("SL-DEF printing --> ", "st :", i, "| lines :", listOfEveryPentads[i].lines, "| role :", h.type, "| mainVar :", h.mainVar)
+            if(debugMode) : print("SL-DEF printing --> ", "st :", i, "| lines :", listOfEveryPentads[i].lines, "| role :", h.type, "| mainVar :", h.mainVar)
             if(h.type == "varDefine" and h.mainVar == criterionVariable) :
-                #print("SL-DEF printing --> ", "here")
+                if(debugMode) : print("SL-DEF printing --> ", "here")
                 return i
     return False
 
-def finderSliceLoop(targetList = [], listOfEveryPentads = None, sn_idB = 0):
+def finderSliceLoop(targetList = [], listOfEveryPentads = None, sn_idB = 0, debugMode = False):
     """Takes the id of a statement and try to find a begLoop before this statement.
     If a begLoop is found, then search for the endLoop, then search for the loopCond,
     then return the three of them"""
-    print("\nSL-LOO printing --> ", "Searchin loop for statement :", sn_idB)
+    if(debugMode) : print("\nSL-LOO printing --> ", "Searchin loop for statement :", sn_idB)
     i = 0
     loopCount = 1
     begLoopStatement = -1
@@ -55,7 +127,7 @@ def finderSliceLoop(targetList = [], listOfEveryPentads = None, sn_idB = 0):
             if(loopCount == 0 and begLoopStatement == -1) :
                 listOfEveryPentads[i].useful = True
                 begLoopStatement = i
-                print("SL-LOO printing --> ", "begLoop found at statement :", begLoopStatement)
+                if(debugMode) : print("SL-LOO printing --> ", "begLoop found at statement :", begLoopStatement)
     if(begLoopStatement == -1):
         return [-1, -1, -1]
     else :
@@ -68,14 +140,14 @@ def finderSliceLoop(targetList = [], listOfEveryPentads = None, sn_idB = 0):
                 if(loopCount == 0 and endLoopStatement == -1) :
                     listOfEveryPentads[i].useful = True
                     endLoopStatement = i
-                    print("SL-LOO printing --> ", "endLoop found at statement :", endLoopStatement)
+                    if(debugMode) : print("SL-LOO printing --> ", "endLoop found at statement :", endLoopStatement)
         i = 0
         for i in range (begLoopStatement, -1, -1): #decremental for loop so we need to read number 0 (that's why we count -1 until we reach -1)
             for h in listOfEveryPentads[i].roles :
                 if(h.type == "loopCondition" and loopCondStatement == -1) :
                     listOfEveryPentads[i].useful = True
                     loopCondStatement = i
-                    print("SL-LOO printing --> ", "and here is the loop condition :", loopCondStatement)
+                    if(debugMode) : print("SL-LOO printing --> ", "and here is the loop condition :", loopCondStatement)
                     # then add other variables to target list I guess...
     return [begLoopStatement, endLoopStatement, loopCondStatement]
         

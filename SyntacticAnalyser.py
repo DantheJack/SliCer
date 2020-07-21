@@ -1,40 +1,62 @@
-from pentadClass import pentadStruct
+from pentadClass import pentadStruct, printAllWithRoles, printAllVarDefVariables, printAllLoopCondVariables
 from LexicalAnalyser import spaceNormalizer
 import re
 
-def forLoopRoleAssignment(listOfEveryPentads = None):
+def mainSyntacticAnalyser(pentadList = [], debugMode = False):
+    """This function calls every other functions in charge of the syntactic analyser and the syntactic
+       transformations. It takes as arguments the list of PENTADS with the lines chopped into statements
+       and returns the PENTADs list with roles updated. It also changes the text of the PENTADs in such a
+       way that some useless informations are deleted."""
+    if(debugMode) : print()
+    if(debugMode) : print("——————————————————————————— SYNTACTIC ANALYSIS ——————————————————————————")
+    if(debugMode) : print()
+    if(debugMode) : print("MAIN printing --> ", "****** forLoopRoleAssignment *******")
+    pentadList = forLoopRoleAssignment(pentadList, debugMode)
+    if(debugMode) : printAllWithRoles(pentadList)
+    #printAllLoopCondVariables(pentadList, debugMode)
+    if(debugMode) : print("MAIN printing --> ", "********** varDecDetector **********")
+    pentadList = varDecDetector(pentadList, debugMode)
+    if(debugMode) : printAllWithRoles(pentadList)
+    if(debugMode) : print("MAIN printing --> ", "********** varDefDetector **********")
+    pentadList = varDefDetector(pentadList, debugMode)
+    if(debugMode) : printAllWithRoles(pentadList)
+    #printAllVarDefVariables(pentadList, debugMode)
+    if(debugMode) : print()
+    return pentadList
+
+def forLoopRoleAssignment(listOfEveryPentads = None, debugMode = False):
     i = 0
     for i in range (len(listOfEveryPentads)):
         listOfEveryPentads[i].text = ' ' + listOfEveryPentads[i].text #for lines that start directly with "for"
         pattern = re.compile(r'(?P<first>\W|\0|^)for\s*(?P<second>(\(|\\|\0|$))')
         if(re.search(pattern, listOfEveryPentads[i].text)):
             found = re.search(pattern, listOfEveryPentads[i].text)
-            #print("FOR printing --> ", "first = ", found.group('first'), " second = ", found.group('second'))
-            #print("FOR printing --> ", "before = ", listOfEveryPentads[i].text)
+            if(debugMode) : print("FOR printing --> ", "first = ", found.group('first'), " second = ", found.group('second'))
+            if(debugMode) : print("FOR printing --> ", "before = ", listOfEveryPentads[i].text)
             listOfEveryPentads[i].text = re.sub(pattern, found.group('first') + " " + found.group('second'), listOfEveryPentads[i].text)
-            #print("FOR printing --> ", "after = ", listOfEveryPentads[i].text)
+            if(debugMode) : print("FOR printing --> ", "after = ", listOfEveryPentads[i].text)
             condition = varDecChangedToInt(listOfEveryPentads[i].text) #because int i = 0 is possible in a for, surprisingly!
             variables = findVariablesInThatMush(condition)
             if "int" in variables:
                 variables.remove("int")
-            #print("tab = ", variables)
+            if(debugMode) : print("tab = ", variables)
             listOfEveryPentads[i].addRole("loopCondition", None, variables)
         if(re.search(r'\{', listOfEveryPentads[i].text)):
             listOfEveryPentads[i].addRole("loopBeg", None, None)
         if(re.search(r'\}', listOfEveryPentads[i].text)):
             listOfEveryPentads[i].addRole("loopEnd", None, None)
-    #printAllLoopCondVariables(targetFileListOfPentads)
+    if(debugMode) : printAllLoopCondVariables(listOfEveryPentads)
     return spaceNormalizer(listOfEveryPentads)
 
-def findVariablesInThatMush(string = None):
-    #print("MUSH printing --> ", "received : ", string)
+def findVariablesInThatMush(string = None, debugMode = False):
+    if(debugMode) : print("MUSH printing --> ", "received : ", string)
     pattern = re.compile(r"""
         (?:[a-zA-Z_][\w]*) # a variable name
     """, re.VERBOSE)
     listOfVariables = list(set(re.findall(pattern, string))) #only unique elements
     return listOfVariables
 
-def varDecDetector(listOfEveryPentads = None):
+def varDecDetector(listOfEveryPentads = None, debugMode = False):
     """ Takes the entire pentad list, modifies all variable declarations and adds
         a role ("varDec", variable_name) to each line composing the declaration
         of a variable.
@@ -66,12 +88,12 @@ def varDecDetector(listOfEveryPentads = None):
     for i in range (len(listOfEveryPentads)):
         listOfEveryPentads[i].text = spacerForLoopConditions(listOfEveryPentads[i].text)
         listOfEveryPentads[i].text = varDecChangedToInt(listOfEveryPentads[i].text)
-        #print(listOfEveryPentads[i].text)
+        if(debugMode) : print(listOfEveryPentads[i].text)
         for j in range (len(listOfEveryPentads[i].text)):
             ######################################
             #line = listOfEveryPentads[i].text
             presentChar = listOfEveryPentads[i].text[j]
-            #print("read : ", presentChar)
+            if(debugMode) : print("read : ", presentChar)
             if (j < len(listOfEveryPentads[i].text)-1) : firstChar = listOfEveryPentads[i].text[j+1]
             else: firstChar = None
             if (j < len(listOfEveryPentads[i].text)-2) : secondChar = listOfEveryPentads[i].text[j+2]
@@ -88,47 +110,47 @@ def varDecDetector(listOfEveryPentads = None):
             ######################################
             if(state == "Waiting for variable name" and (presentChar == ' ' or presentChar == '\\')): # we need to keep it before "if(firstChar and secondChar...)"
                 state = "Next valid char is variableName"                                             # because the real else condition is against " int\" and we
-                #print(state)                                                                          # would need to repeat this twice as a elif (one against the " int\"
+                if(debugMode) : print(state)                                                                          # would need to repeat this twice as a elif (one against the " int\"
             elif(firstChar and secondChar and thirdChar and fourthChar):                              # and another time against the "if(firstChar and secondChar...)" !)
                 if(presentChar == ' ' and firstChar == 'i' and secondChar == 'n' and  thirdChar == 't' and (fourthChar == ' ' or fourthChar == '\\')):
                     state = "Waiting for variable name"
-                    #print(state)
+                    if(debugMode) : print(state)
                     sequenceStartLine = i
             if(state == "Next valid char is variableName" and presentChar != ' ' and presentChar != '\\'):
                 state = "In variableName"
-                #print(state)
+                if(debugMode) : print(state)
             ######################################
             if(state == "In variableName" and presentChar != ' ' and presentChar != '\\' and presentChar != '=' and presentChar != ';' and presentChar != ','):
                 variableName += listOfEveryPentads[i].text[j]
-                #print("That's a variable :", variableName)
+                if(debugMode) : print("That's a variable :", variableName)
             if(state == "In variableName" and (presentChar == ' ' or presentChar == '\\' or presentChar == '=' or presentChar == ';' or presentChar == ',')):
                 for k in range (sequenceStartLine, i+1):
                     listOfEveryPentads[k].addRole("varDeclar", variableName)
-                    #print("I want to add role to line", k, " : varDec for ", variableName)
+                    if(debugMode) : print("I want to add role to line", k, " : varDec for ", variableName)
                 variableName = ""
                 state = "Is there another one ?"
             if(state == "Is there another one ?" and presentChar == ','):
                 state = "Waiting for variable name"
-                #print(state)
+                if(debugMode) : print(state)
             if(state == "Is there another one ?" and presentChar == ';'):
                 state = "Waiting for int"
-                #print(state)
+                if(debugMode) : print(state)
             ######################################
             if(state == "In variableName" and firstChar): # /!\ "int (a) = b" is a variable but "int a(b)" is a function /!\
                 if(firstChar == '('):
                     state = "Thats a function"
-                    #print(state)
+                    if(debugMode) : print(state)
 
     return spaceNormalizer(listOfEveryPentads)
 
-def spacerForLoopConditions(text = None):
+def spacerForLoopConditions(text = None, debugMode = False):
     text = " " + text
     text = text.replace("(", " ( ")
     text = text.replace(")", " ) ")
     text = text.replace(";", " ; ")
     return text
 
-def varDecChangedToInt(text = None):
+def varDecChangedToInt(text = None, debugMode = False):
     text = " " + text #to avoid variables named "integer123" or "myfloatvalue"
     text = text.replace(" unsigned long long ", " int ")
     text = text.replace(" unsigned long long\\", " int\\")
@@ -165,7 +187,7 @@ def varDecChangedToInt(text = None):
     return text
 
 
-def varDefDetector(listOfEveryPentads = None):
+def varDefDetector(listOfEveryPentads = None, debugMode = False):
     """ Takes the entire pentad list, select every variable that has been initialized
         one by one and adds for this variable a role ("varDef", variable_name) to each
         line where this variable value is changed.
@@ -312,14 +334,13 @@ def varDefDetector(listOfEveryPentads = None):
         """, re.VERBOSE)
         if(re.search(pattern2, listOfEveryPentads[i].text)):
             found = re.findall(pattern2, listOfEveryPentads[i].text)
-            #print("FOR printing --> ", "first = ", found.group('first'), " second = ", found.group('second'))
-            #print("FOR printing --> ", "before = ", listOfEveryPentads[i].text)
+            if(debugMode) : print("FOR printing --> ", "before = ", listOfEveryPentads[i].text)
             #listOfEveryPentads[i].text = re.sub(pattern2, found.group('first') + " " + found.group('second'), listOfEveryPentads[i].text)
-            #print("FOR printing --> ", "after = ", listOfEveryPentads[i].text)
+            if(debugMode) : print("FOR printing --> ", "after = ", listOfEveryPentads[i].text)
             for h in found :
                 mainVar = h[0]
                 otherVars = findVariablesInThatMush(h[1])
-                #print("varDEF printing --> ", "tab = ", otherVars)
+                if(debugMode) : print("varDEF printing --> ", "tab = ", otherVars)
                 listOfEveryPentads[i].addRole("varDefine", mainVar, otherVars)
 
     return spaceNormalizer(listOfEveryPentads)

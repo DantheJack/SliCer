@@ -1,9 +1,9 @@
-int a = 103 ;
-short b = 1, c = 0 ;
-do { c++ ;
-} while ( a < 0 ) ;
-while ( b > a ) { b++ ; }
-a = 20 ;
-a = b - 1 ;
-b = a * 2 ;
+int b  =0,  a=103;
+do  {
+    while(a!= b){
+    a ++ ;
+    do{
+    b++;
+    }while(b <10); }
+} while (1);
 return a ;

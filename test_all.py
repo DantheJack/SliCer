@@ -1,6 +1,11 @@
 import os
+import pytest
 from pentadClass import pentadStruct
 from LexicalAnalyser import spaceNormalizer, commentsEraser, stringReducer, multiLineManager, semicolonBasedChopper, doWhileConverter, whileLoopConverter
+from SemanticAnalyser import *
+from LexicalAnalyser import mainLexicalAnalyser
+from SyntacticAnalyser import mainSyntacticAnalyser
+from SemanticAnalyser import mainSemanticalAnalyser
 
 def test_spaceNormalizer():
     os.chdir(os.getcwd())  
@@ -375,4 +380,236 @@ def test_MultiLineManager():
     assert testFileListOfPentads[32].lines == [32, 32]
 
 #multiLineManager does not really handle multiline for, while or do-while loops.
-#It does not handle conditions () and executions statement {} ... yet.
+#It does handle conditions () and executions statement {} ... probably.
+
+def test_slice1():
+    os.chdir(os.getcwd())                                       
+    targetFileCompletePath = "./testfiles/testfileSlice1.c"
+    criterionVariable = 'a'
+    criterionLine = 9
+    result = mainLexicalAnalyser(targetFileCompletePath)
+    testFileListOfPentads = result[0]
+    testFileListOfPentads = mainSyntacticAnalyser(testFileListOfPentads)
+    testFileListOfPentads = mainSemanticalAnalyser(testFileListOfPentads, criterionVariable, criterionLine)
+    assert testFileListOfPentads[0].useful == True
+    assert testFileListOfPentads[1].useful == True
+    assert testFileListOfPentads[2].useful == True
+    assert testFileListOfPentads[3].useful == True
+    assert testFileListOfPentads[4].useful == True
+    assert testFileListOfPentads[5].useful == True
+    assert testFileListOfPentads[6].useful == True
+    assert testFileListOfPentads[7].useful == True
+    assert testFileListOfPentads[8].useful == True
+    assert testFileListOfPentads[9].useful == True
+    assert testFileListOfPentads[10].useful == True
+    assert testFileListOfPentads[11].useful == True
+    assert testFileListOfPentads[12].useful == True
+
+def test_slice2():
+    os.chdir(os.getcwd())                                       
+    targetFileCompletePath = "./testfiles/testfileSlice2.c"
+    criterionVariable = 'a'
+    criterionLine = 9
+    result = mainLexicalAnalyser(targetFileCompletePath)
+    testFileListOfPentads = result[0]
+    testFileListOfPentads = mainSyntacticAnalyser(testFileListOfPentads)
+    testFileListOfPentads = mainSemanticalAnalyser(testFileListOfPentads, criterionVariable, criterionLine)
+    assert testFileListOfPentads[0].useful == True
+    assert testFileListOfPentads[1].useful == True
+    assert testFileListOfPentads[2].useful == True
+    assert testFileListOfPentads[3].useful == True
+    assert testFileListOfPentads[4].useful == True
+    assert testFileListOfPentads[5].useful == False
+    assert testFileListOfPentads[6].useful == False
+    assert testFileListOfPentads[7].useful == False
+    assert testFileListOfPentads[8].useful == False
+    assert testFileListOfPentads[9].useful == True
+    assert testFileListOfPentads[10].useful == True
+    assert testFileListOfPentads[11].useful == True
+    assert testFileListOfPentads[12].useful == True
+
+def test_slice3():
+    os.chdir(os.getcwd())                                       
+    targetFileCompletePath = "./testfiles/testfileSlice3.c"
+    criterionVariable = 'a'
+    criterionLine = 9
+    result = mainLexicalAnalyser(targetFileCompletePath)
+    testFileListOfPentads = result[0]
+    testFileListOfPentads = mainSyntacticAnalyser(testFileListOfPentads)
+    testFileListOfPentads = mainSemanticalAnalyser(testFileListOfPentads, criterionVariable, criterionLine)
+    assert testFileListOfPentads[0].useful == True
+    assert testFileListOfPentads[1].useful == True
+    assert testFileListOfPentads[2].useful == True
+    assert testFileListOfPentads[3].useful == True
+    assert testFileListOfPentads[4].useful == True
+    assert testFileListOfPentads[5].useful == True
+    assert testFileListOfPentads[6].useful == True
+    assert testFileListOfPentads[7].useful == True
+    assert testFileListOfPentads[8].useful == True
+    assert testFileListOfPentads[9].useful == True
+    assert testFileListOfPentads[10].useful == True
+    assert testFileListOfPentads[11].useful == True
+    assert testFileListOfPentads[12].useful == True
+
+def test_slice4():
+    os.chdir(os.getcwd())                                       
+    targetFileCompletePath = "./testfiles/testfileSlice4.c"
+    criterionVariable = 'a'
+    criterionLine = 9
+    result = mainLexicalAnalyser(targetFileCompletePath)
+    testFileListOfPentads = result[0]
+    testFileListOfPentads = mainSyntacticAnalyser(testFileListOfPentads)
+    testFileListOfPentads = mainSemanticalAnalyser(testFileListOfPentads, criterionVariable, criterionLine)
+    assert testFileListOfPentads[0].useful == True
+    assert testFileListOfPentads[1].useful == True
+    assert testFileListOfPentads[2].useful == True
+    assert testFileListOfPentads[3].useful == True
+    assert testFileListOfPentads[4].useful == True
+    assert testFileListOfPentads[5].useful == True
+    assert testFileListOfPentads[6].useful == False
+    assert testFileListOfPentads[7].useful == False
+    assert testFileListOfPentads[8].useful == False
+    assert testFileListOfPentads[9].useful == False
+    assert testFileListOfPentads[10].useful == True
+    assert testFileListOfPentads[11].useful == True
+    assert testFileListOfPentads[12].useful == True
+
+
+def test_slice5():
+    os.chdir(os.getcwd())                                       
+    targetFileCompletePath = "./testfiles/testfileSlice5.c"
+    criterionVariable = 'a'
+    criterionLine = 14
+    result = mainLexicalAnalyser(targetFileCompletePath)
+    testFileListOfPentads = result[0]
+    testFileListOfPentads = mainSyntacticAnalyser(testFileListOfPentads)
+    testFileListOfPentads = mainSemanticalAnalyser(testFileListOfPentads, criterionVariable, criterionLine)
+    assert testFileListOfPentads[0].useful == True
+    assert testFileListOfPentads[1].useful == True
+    assert testFileListOfPentads[2].useful == True
+    assert testFileListOfPentads[3].useful == True
+    assert testFileListOfPentads[4].useful == True
+    assert testFileListOfPentads[5].useful == True
+    assert testFileListOfPentads[6].useful == True
+    assert testFileListOfPentads[7].useful == True
+    assert testFileListOfPentads[8].useful == True
+    assert testFileListOfPentads[9].useful == True
+    assert testFileListOfPentads[10].useful == True
+    assert testFileListOfPentads[11].useful == True
+    assert testFileListOfPentads[12].useful == True
+    assert testFileListOfPentads[13].useful == True
+    assert testFileListOfPentads[14].useful == True
+    assert testFileListOfPentads[15].useful == True
+    assert testFileListOfPentads[16].useful == True
+    assert testFileListOfPentads[17].useful == True
+    assert testFileListOfPentads[18].useful == True
+    assert testFileListOfPentads[19].useful == True
+    assert testFileListOfPentads[20].useful == True
+    assert testFileListOfPentads[21].useful == True
+    assert testFileListOfPentads[22].useful == True
+
+def test_slice6():
+    os.chdir(os.getcwd())                                       
+    targetFileCompletePath = "./testfiles/testfileSlice6.c"
+    criterionVariable = 'a'
+    criterionLine = 20
+    result = mainLexicalAnalyser(targetFileCompletePath)
+    testFileListOfPentads = result[0]
+    testFileListOfPentads = mainSyntacticAnalyser(testFileListOfPentads)
+    testFileListOfPentads = mainSemanticalAnalyser(testFileListOfPentads, criterionVariable, criterionLine)
+    assert testFileListOfPentads[0].useful == True
+    assert testFileListOfPentads[1].useful == True
+    assert testFileListOfPentads[2].useful == False
+    assert testFileListOfPentads[3].useful == True
+    assert testFileListOfPentads[4].useful == True
+    assert testFileListOfPentads[5].useful == False
+    assert testFileListOfPentads[6].useful == True
+    assert testFileListOfPentads[7].useful == False
+    assert testFileListOfPentads[8].useful == True
+    assert testFileListOfPentads[9].useful == True
+    assert testFileListOfPentads[10].useful == True
+    assert testFileListOfPentads[11].useful == True
+    assert testFileListOfPentads[12].useful == True
+    assert testFileListOfPentads[13].useful == False
+    assert testFileListOfPentads[14].useful == True
+    assert testFileListOfPentads[15].useful == True
+    assert testFileListOfPentads[16].useful == True
+    assert testFileListOfPentads[17].useful == True
+    assert testFileListOfPentads[18].useful == True
+    assert testFileListOfPentads[19].useful == True
+    assert testFileListOfPentads[20].useful == True
+    assert testFileListOfPentads[21].useful == True
+    assert testFileListOfPentads[22].useful == True
+    assert testFileListOfPentads[23].useful == True
+    assert testFileListOfPentads[24].useful == True
+    assert testFileListOfPentads[25].useful == True
+    assert testFileListOfPentads[26].useful == False
+    assert testFileListOfPentads[27].useful == False
+    assert testFileListOfPentads[28].useful == True
+    assert testFileListOfPentads[29].useful == True
+
+def test_slice7():
+    os.chdir(os.getcwd())                                       
+    targetFileCompletePath = "./testfiles/testfileSlice7.c"
+    criterionVariable = 'a'
+    criterionLine = 20
+    result = mainLexicalAnalyser(targetFileCompletePath)
+    testFileListOfPentads = result[0]
+    testFileListOfPentads = mainSyntacticAnalyser(testFileListOfPentads)
+    testFileListOfPentads = mainSemanticalAnalyser(testFileListOfPentads, criterionVariable, criterionLine)
+    assert testFileListOfPentads[0].useful == True
+    assert testFileListOfPentads[1].useful == True
+    assert testFileListOfPentads[2].useful == True
+    assert testFileListOfPentads[3].useful == True
+    assert testFileListOfPentads[4].useful == True
+    assert testFileListOfPentads[5].useful == False
+    assert testFileListOfPentads[6].useful == True
+    assert testFileListOfPentads[7].useful == True
+    assert testFileListOfPentads[8].useful == False
+    assert testFileListOfPentads[9].useful == False
+    assert testFileListOfPentads[10].useful == False
+    assert testFileListOfPentads[11].useful == False
+    assert testFileListOfPentads[12].useful == True
+    assert testFileListOfPentads[13].useful == False
+    assert testFileListOfPentads[14].useful == True
+    assert testFileListOfPentads[15].useful == False
+    assert testFileListOfPentads[16].useful == True
+    assert testFileListOfPentads[17].useful == True
+    assert testFileListOfPentads[18].useful == True
+    assert testFileListOfPentads[19].useful == False
+    assert testFileListOfPentads[20].useful == False
+    assert testFileListOfPentads[21].useful == False
+    assert testFileListOfPentads[22].useful == False
+    assert testFileListOfPentads[23].useful == False
+    assert testFileListOfPentads[24].useful == True
+    assert testFileListOfPentads[25].useful == True
+    assert testFileListOfPentads[26].useful == False
+    assert testFileListOfPentads[27].useful == False
+    assert testFileListOfPentads[28].useful == True
+    assert testFileListOfPentads[29].useful == True
+
+def test_slice8():
+    os.chdir(os.getcwd())                                       
+    targetFileCompletePath = "./testfiles/testfileSlice8.c" #empty file
+    criterionVariable = 'a'
+    criterionLine = 20
+    
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        mainLexicalAnalyser(targetFileCompletePath)
+    assert pytest_wrapped_e.type == SystemExit
+
+    #result = mainLexicalAnalyser(targetFileCompletePath)
+    #testFileListOfPentads = result[0]
+    #testFileListOfPentads = mainSyntacticAnalyser(testFileListOfPentads)
+    #testFileListOfPentads = mainSemanticalAnalyser(testFileListOfPentads, criterionVariable, criterionLine)
+
+
+def test_slice9():
+    os.chdir(os.getcwd())                                       
+    targetFileCompletePath = "./testfiles/testfileSlice9.c" #file that became empty (comments)
+    criterionVariable = 'a'
+    criterionLine = 20
+    with pytest.raises(SystemExit) as pytest_wrapped_e:
+        mainLexicalAnalyser(targetFileCompletePath)
+    assert pytest_wrapped_e.type == SystemExit
+    
