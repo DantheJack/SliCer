@@ -35,13 +35,25 @@ def mainLexicalAnalyser(fileCompletePath = "", debugMode = False):
     if(debugMode) : print("MAIN printing --> ", "******** doWhileConverter ********")
     pentadList = doWhileConverter(pentadList, debugMode)
     if(debugMode) : printAllWithRoles(pentadList)
+    if(len(pentadList) < 1):
+        if(debugMode) : sys.exit(1)
+        return [[], targetFileAllTextLines]
     if(debugMode) : print("MAIN printing --> ", "******** whileLoopConverter ********")
     pentadList = whileLoopConverter(pentadList, debugMode)
     if(debugMode) : printAllWithRoles(pentadList)
+    if(len(pentadList) < 1):
+        if(debugMode) : sys.exit(1)
+        return [[], targetFileAllTextLines]
     if(debugMode) : print("MAIN printing --> ", "******* semicolonBasedChopper *******")
     pentadList = semicolonBasedChopper(pentadList, debugMode)
+    if(len(pentadList) < 1):
+        if(debugMode) : sys.exit(1)
+        return [[], targetFileAllTextLines]
     if(debugMode) : printAllWithRoles(pentadList)
     if(debugMode) : print("MAIN printing --> ", "********** multiLineManager *********")
+    if(len(pentadList) < 1):
+        if(debugMode) : sys.exit(1)
+        return [[], targetFileAllTextLines]
     pentadList = multiLineManager(pentadList, debugMode)
     if(debugMode) : printAllWithRoles(pentadList)
     return [pentadList, targetFileAllTextLines]
@@ -65,7 +77,7 @@ def spaceNormalizer(listOfEveryPentads = [], debugMode = False):
         output.append(pentadStruct(listOfEveryPentads[i].lines, ""))
         if (stringStatement == "Nothing") :
             listOfEveryPentads[i].text = listOfEveryPentads[i].text.lstrip() #remove every space before the first character
-            if(debugMode) : print("lstrip output[" + str(i) + "].text = |" + output[i].text + "|")
+            #if(debugMode) : print("lstrip output[" + str(i) + "].text = |" + output[i].text + "|")
         for j in range (len(listOfEveryPentads[i].text)):
             ######################################
             #line = output[i].text
@@ -81,21 +93,15 @@ def spaceNormalizer(listOfEveryPentads = [], debugMode = False):
                 stringStatement = "Nothing"
             if (stringStatement == "Going" and presentChar != '\n') :
                 output[i].text += listOfEveryPentads[i].text[j]
-                if(debugMode) : print("output[" + str(i) + "].text = |" + output[i].text + "|")
+                #if(debugMode) : print("output[" + str(i) + "].text = |" + output[i].text + "|")
             elif (not (presentChar==" " and (nextChar == " " or nextChar == None or nextChar == "\n")) and presentChar != '\n'):
                 output[i].text += listOfEveryPentads[i].text[j]
-                if(debugMode) : print("output[" + str(i) + "].text = |" + output[i].text + "|")
+                #if(debugMode) : print("output[" + str(i) + "].text = |" + output[i].text + "|")
         if (stringStatement == "Nothing") :
             output[i].text.rstrip() #remove every space after the last character
-            if(debugMode) : print("rstrip output[" + str(i) + "].text = |" + output[i].text + "|")
+            #if(debugMode) : print("rstrip output[" + str(i) + "].text = |" + output[i].text + "|")
             for role in listOfEveryPentads[i].roles:
                 output[i].addRole(role.type, role.mainVar, role.otherVars)
-    if(len(listOfEveryPentads) < 1):
-        if(debugMode) : print("\n\n\t\tNo code left to analyse, unfortunately... Please, try with another code.\n") ###############################################
-        if(debugMode) : print("\n\t\tIf the problem persists, you are invited to report it in GitHub --> SliCer --> Issues.") #####################################
-        if(debugMode) : print("\n\t\tIt would be a rather easy way to participate to the development of this project. Thanks.\n\n") ###############################
-        sys.exit(1)
-        #output.append(pentadStruct([8], "int i = 0;"))
     return output
 
 def commentsEraser(listOfEveryPentads = [], debugMode = False):
@@ -166,7 +172,7 @@ def commentsEraser(listOfEveryPentads = [], debugMode = False):
             if(not singleLineCommentDetected and multiLineComment == "Nothing"):
                 output[i].text += listOfEveryPentads[i].text[j]
                 if(debugMode) : print("Add " + presentChar)
-    return spaceNormalizer(output)
+    return spaceNormalizer(output, debugMode)
 
 def stringReducer(listOfEveryPentads = [], debugMode = False):
     """ Takes the entire original code and replace every "string" by
@@ -211,7 +217,7 @@ def stringReducer(listOfEveryPentads = [], debugMode = False):
         output.append(pentadStruct([i, i], currentStatement))
         currentStatement = ""    
     #output.append(pentadStruct([startingLine, i], currentStatement))            
-    return spaceNormalizer(output)
+    return spaceNormalizer(output, debugMode)
 
 def semicolonBasedChopper(listOfEveryPentads = [], debugMode = False):
     """This function separates statement using ';' as a limitation point."""
@@ -344,7 +350,7 @@ def semicolonBasedChopper(listOfEveryPentads = [], debugMode = False):
                     currentStatement += presentChar
                     if(debugMode) : print("semiBC printing --> ", "char \'", presentChar, "\' added to", currentStatement)
 
-    return spaceNormalizer(output)
+    return spaceNormalizer(output, debugMode)
 
 
 
@@ -386,11 +392,13 @@ def multiLineManager(listOfEveryPentads = [], debugMode = False):
                 currentStatement = ""
     if(currentStatement != ""):
         output.append(pentadStruct([startingLine, i], currentStatement))            
-    return spaceNormalizer(output)
+    return spaceNormalizer(output, debugMode)
 
 
-def doWhileConverter(listOfEveryPentads = [], debugMode = False):
+def doWhileConverter(listOfEveryPentads = [], debugMode = False, executedManyTimes = 0):
     """The objective here is to convert do-while loops in for loops using regex."""
+    executedManyTimes = executedManyTimes + 1
+    if executedManyTimes == 100 : return []
     presentChar = 'a'
     firstChar = 'a'
     secondChar = 'a'
@@ -471,7 +479,7 @@ def doWhileConverter(listOfEveryPentads = [], debugMode = False):
             recursiveCase = True #we run the function one more time since we didnt analyse the entire code yet
             break
     if(recursiveCase):
-        return doWhileConverter(listOfEveryPentads)
+        return doWhileConverter(listOfEveryPentads, debugMode, executedManyTimes)
 
 
     return spaceNormalizer(listOfEveryPentads)

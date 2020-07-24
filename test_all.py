@@ -2,7 +2,7 @@ import os
 import pytest
 from pentadClass import pentadStruct
 from LexicalAnalyser import spaceNormalizer, commentsEraser, stringReducer, multiLineManager, semicolonBasedChopper, doWhileConverter, whileLoopConverter
-from SemanticAnalyser import *
+from CompleteAnalyser import mainCompleteAnalyser
 from LexicalAnalyser import mainLexicalAnalyser
 from SyntacticAnalyser import mainSyntacticAnalyser
 from SemanticAnalyser import mainSemanticalAnalyser
@@ -403,7 +403,7 @@ def test_slice1():
     assert testFileListOfPentads[9].useful == True
     assert testFileListOfPentads[10].useful == True
     assert testFileListOfPentads[11].useful == True
-    assert testFileListOfPentads[12].useful == True
+    assert testFileListOfPentads[12].useful == False
 
 def test_slice2():
     os.chdir(os.getcwd())                                       
@@ -426,7 +426,7 @@ def test_slice2():
     assert testFileListOfPentads[9].useful == True
     assert testFileListOfPentads[10].useful == True
     assert testFileListOfPentads[11].useful == True
-    assert testFileListOfPentads[12].useful == True
+    assert testFileListOfPentads[12].useful == False
 
 def test_slice3():
     os.chdir(os.getcwd())                                       
@@ -449,7 +449,7 @@ def test_slice3():
     assert testFileListOfPentads[9].useful == True
     assert testFileListOfPentads[10].useful == True
     assert testFileListOfPentads[11].useful == True
-    assert testFileListOfPentads[12].useful == True
+    assert testFileListOfPentads[12].useful == False
 
 def test_slice4():
     os.chdir(os.getcwd())                                       
@@ -472,7 +472,7 @@ def test_slice4():
     assert testFileListOfPentads[9].useful == False
     assert testFileListOfPentads[10].useful == True
     assert testFileListOfPentads[11].useful == True
-    assert testFileListOfPentads[12].useful == True
+    assert testFileListOfPentads[12].useful == False
 
 
 def test_slice5():
@@ -506,7 +506,7 @@ def test_slice5():
     assert testFileListOfPentads[19].useful == True
     assert testFileListOfPentads[20].useful == True
     assert testFileListOfPentads[21].useful == True
-    assert testFileListOfPentads[22].useful == True
+    assert testFileListOfPentads[22].useful == False
 
 def test_slice6():
     os.chdir(os.getcwd())                                       
@@ -546,7 +546,7 @@ def test_slice6():
     assert testFileListOfPentads[26].useful == False
     assert testFileListOfPentads[27].useful == False
     assert testFileListOfPentads[28].useful == True
-    assert testFileListOfPentads[29].useful == True
+    assert testFileListOfPentads[29].useful == False
 
 def test_slice7():
     os.chdir(os.getcwd())                                       
@@ -586,7 +586,7 @@ def test_slice7():
     assert testFileListOfPentads[26].useful == False
     assert testFileListOfPentads[27].useful == False
     assert testFileListOfPentads[28].useful == True
-    assert testFileListOfPentads[29].useful == True
+    assert testFileListOfPentads[29].useful == False
 
 def test_slice8():
     os.chdir(os.getcwd())                                       
@@ -595,7 +595,7 @@ def test_slice8():
     criterionLine = 20
     
     with pytest.raises(SystemExit) as pytest_wrapped_e:
-        mainLexicalAnalyser(targetFileCompletePath)
+        mainLexicalAnalyser(targetFileCompletePath, True)
     assert pytest_wrapped_e.type == SystemExit
 
     #result = mainLexicalAnalyser(targetFileCompletePath)
@@ -610,6 +610,6 @@ def test_slice9():
     criterionVariable = 'a'
     criterionLine = 20
     with pytest.raises(SystemExit) as pytest_wrapped_e:
-        mainLexicalAnalyser(targetFileCompletePath)
+        mainLexicalAnalyser(targetFileCompletePath, True)
     assert pytest_wrapped_e.type == SystemExit
     

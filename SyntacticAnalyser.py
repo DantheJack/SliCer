@@ -46,7 +46,7 @@ def forLoopRoleAssignment(listOfEveryPentads = None, debugMode = False):
         if(re.search(r'\}', listOfEveryPentads[i].text)):
             listOfEveryPentads[i].addRole("loopEnd", None, None)
     if(debugMode) : printAllLoopCondVariables(listOfEveryPentads)
-    return spaceNormalizer(listOfEveryPentads)
+    return spaceNormalizer(listOfEveryPentads, debugMode)
 
 def findVariablesInThatMush(string = None, debugMode = False):
     if(debugMode) : print("MUSH printing --> ", "received : ", string)
@@ -141,7 +141,7 @@ def varDecDetector(listOfEveryPentads = None, debugMode = False):
                     state = "Thats a function"
                     if(debugMode) : print(state)
 
-    return spaceNormalizer(listOfEveryPentads)
+    return spaceNormalizer(listOfEveryPentads, debugMode)
 
 def spacerForLoopConditions(text = None, debugMode = False):
     text = " " + text
@@ -302,35 +302,44 @@ def varDefDetector(listOfEveryPentads = None, debugMode = False):
                 listOfEveryPentads[i].text = re.sub(pattern1, mainVar + " = " + mainVar + affectop + " ( " + otherVars + " ) ", listOfEveryPentads[i].text)
 ###############################################################################################################
         pattern2 = re.compile(r"""
-            (?P<mainvar>      # - - - - - - - - - - - - #
-            (?:[a-zA-Z_][\w]*)                          #          # a variable name
-            )                 # - - - - - - - - - - - - #
-            (?:[\s]|[\\])*                                         # 0 or more spaces
-            (?<!=)                                                 # anything but an equal
-            (?:=)                                                  # an equal
-            (?!=)                                                  # anything but an equal
-            (?:[\s]|[\\])*                                         # 0 or more spaces
-            (?P<othervar>     # - - - - - - - - - - - - #
-            (?:                                              #-----------------------
-            (?:-|~)? (?:[\s]|[\\])*                     #    #     # symbol '-' or '~' or not, then 0 or more spaces
-            (?:                                              #  #--- EITHER ---
-            (?:[a-zA-Z_][\w]*)                          #    #  #  # a variable name or
-            | [\.\d]+                                        #  #  # one or more digits (floats included)
-            | \"\"                                      #    #  #  # a string
-            )                                                #  #--------------
-            )?                                          #    #-------- 0 or 1 ------
-            (?:                                              #----------------------
-            (?:[\s]|[\\])*                              #    #     # 0 or more spaces
-            (?:\+|\-|\*|\/|%|<<|>>|&|\||\^)+                 #     # 1 or more arithmetic operators
-            (?:[\s]|[\\])*                              #    #     # 0 or more spaces
-            (?:-|~)? (?:[\s]|[\\])*                          #     # symbol '-' or '~' or not, then 0 or more spaces
-            (?:                                         #    #  #--- EITHER ---
-            (?:[a-zA-Z_][\w]*)                               #  #  # a variable name or
-            | [\.\d]+                                   #    #  #  # one or more digits (floats included)
-            | \"\"                                           #  #  # a string
-            )                                           #    #  #--------------
-            )*                                               #------ 0 or more -----
-            )                 # - - - - - - - - - - - - #
+        (?P<mainvar>      # - - - - - - - - - - - - #
+        (?:[a-zA-Z_][\w]*)                          #          # a variable name
+        )                 # - - - - - - - - - - - - #
+        (?:[\s]|[\\])*                                         # 0 or more spaces
+        (?<!=)                                                 # anything but an equal
+        (?:=)                                                  # an equal
+        (?!=)                                                  # anything but an equal
+        (?:[\s]|[\\])*                                         # 0 or more spaces
+        (?P<othervar>     # - - - - - - - - - - - - #
+        (?:                                              #-----------------------
+        (?:[\s]|[\\])*                              #    #     # 0 or more spaces
+        (?:[\(]|[\)])*                              #    #     # 0 or more parenthesis
+        (?:[\s]|[\\])*                              #    #     # 0 or more spaces
+        (?:-|~)? (?:[\s]|[\\])*                     #    #     # symbol '-' or '~' or not, then 0 or more spaces
+        (?:                                              #  #--- EITHER ---
+        (?:[a-zA-Z_][\w]*)                          #    #  #  # a variable name or
+        | [\.\d]+                                        #  #  # one or more digits (floats included)
+        | \"\"                                      #    #  #  # a string
+        )                                                #  #--------------
+        )?                                          #    #-------- 0 or 1 ------
+        (?:                                              #----------------------
+        (?:[\s]|[\\])*                              #    #     # 0 or more spaces
+        (?:[\(]|[\)])*                              #    #     # 0 or more parenthesis
+        (?:[\s]|[\\])*                              #    #     # 0 or more spaces
+        (?:\+|\-|\*|\/|%|<<|>>|&|\||\^)+                 #     # 1 or more arithmetic operators
+        (?:[\s]|[\\])*                              #    #     # 0 or more spaces
+        (?:-|~)? (?:[\s]|[\\])*                          #     # symbol '-' or '~' or not, then 0 or more spaces
+        (?:[\(]|[\)])*                              #    #     # 0 or more parenthesis
+        (?:[\s]|[\\])*                              #    #     # 0 or more spaces
+        (?:                                         #    #  #--- EITHER ---
+        (?:[a-zA-Z_][\w]*)                               #  #  # a variable name or
+        | [\.\d]+                                   #    #  #  # one or more digits (floats included)
+        | \"\"                                           #  #  # a string
+        )                                           #    #  #--------------
+        (?:[\s]|[\\])*                              #    #     # 0 or more spaces
+        (?:[\(]|[\)])*                              #    #     # 0 or more parenthesis
+        )*                                               #------ 0 or more -----
+        )                 # - - - - - - - - - - - - #
         """, re.VERBOSE)
         if(re.search(pattern2, listOfEveryPentads[i].text)):
             found = re.findall(pattern2, listOfEveryPentads[i].text)
@@ -343,4 +352,4 @@ def varDefDetector(listOfEveryPentads = None, debugMode = False):
                 if(debugMode) : print("varDEF printing --> ", "tab = ", otherVars)
                 listOfEveryPentads[i].addRole("varDefine", mainVar, otherVars)
 
-    return spaceNormalizer(listOfEveryPentads)
+    return spaceNormalizer(listOfEveryPentads, debugMode)
