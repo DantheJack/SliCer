@@ -31,9 +31,9 @@ Getting the files
 
 ```
 Download a clone of the project to your computer.
+Lauch the executable.
+Do not move or remove anyfile from the original folder.
 ```
-
-End with an example of getting some data out of the system or using it for a little demo
 
 ## Running the tests
 
