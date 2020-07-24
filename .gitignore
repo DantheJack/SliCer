@@ -2,3 +2,5 @@
 others/
 testfiles/ULTIMATE/
 .pytest_cache/
+_config.yml
+build/
