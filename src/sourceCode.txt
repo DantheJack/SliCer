@@ -1,0 +1,23 @@
+
+Copy/Paste or type your source code here.
+
+
+
+Warning : If your C code contains syntax error, 
+the slicing will result in errors or inaccuracies.
+
+
+
+
+In this version, you are invited to use 
+variable definitions, comments, strings, variables declarations, 
+increment and decrement operators, while loops, do-while loops, 
+for loops, affectation operator and escaped newlines.
+
+However, pleace notice that IF/ELSE statements 
+and Defines / Macros are not implemented yet.
+
+
+I still do believe that this demo version offers 
+a satisfaying demonstration of the solution and its capabilities.
+

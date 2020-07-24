@@ -1,5 +1,5 @@
 
-
+int main(void){
 int a = 103 ;
 short b = 1, c = 0 ;
 do { c++ ;
@@ -9,3 +9,4 @@ a = 20 ;
 a = b - 1 ;
 b = a * 2 ;
 return a ;
+}
