@@ -3,4 +3,3 @@ others/
 testfiles/ULTIMATE/
 .pytest_cache/
 dist/
-build/
