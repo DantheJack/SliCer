@@ -67,7 +67,7 @@ def test_spaceNormalizer():
     assert testFileListOfPentads[42].text == "\"67\"  68  "
 
 def test_commentsEraser():
-    os.chdir("D:/Bureau/SliCer")
+    os.chdir(os.getcwd())
     myTemporaryTestFile = open("./testfiles/testfileComments.c", "r")
     testFileLines = myTemporaryTestFile.readlines()
     myTemporaryTestFile.close()
@@ -154,7 +154,7 @@ def test_commentsEraser():
 
 
 def test_stringReducer():
-    os.chdir("D:/Bureau/SliCer")
+    os.chdir(os.getcwd())
     myTemporaryTestFile = open("./testfiles/testfileStrings.c", "r")
     testFileLines = myTemporaryTestFile.readlines()
     myTemporaryTestFile.close()
@@ -190,7 +190,7 @@ def test_stringReducer():
 
 def test_doWhileConverter():
     #assuming stringReducer and spaceNormalizer work nicely
-    os.chdir("D:/Bureau/SliCer")
+    os.chdir(os.getcwd())
     myTemporaryTestFile = open("./testfiles/testfileDoWhiles.c", "r")
     testFileLines = myTemporaryTestFile.readlines()
     myTemporaryTestFile.close()
@@ -263,7 +263,7 @@ def test_doWhileConverter():
 
 
 def test_WhileLoopConverter():
-    os.chdir("D:/Bureau/SliCer")
+    os.chdir(os.getcwd())
     myTemporaryTestFile = open("./testfiles/testfileWhiles.c", "r")
     testFileLines = myTemporaryTestFile.readlines()
     myTemporaryTestFile.close()
@@ -297,7 +297,7 @@ def test_WhileLoopConverter():
 def test_MultiLineManager():
     #assuming semiColonBasedChopper, doWhileConverter and spaceNormalizer work nicely
     #it should be since they are all tested before test_SpaceSemiMultiManager.
-    os.chdir("D:/Bureau/SliCer")
+    os.chdir(os.getcwd())
     myTemporaryTestFile = open("./testfiles/testfileMultiLines.c", "r")
     testFileLines = myTemporaryTestFile.readlines()
     myTemporaryTestFile.close()
