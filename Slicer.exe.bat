@@ -1,0 +1,1 @@
+START "Console Command of SliCer" /D ".\src\build\exe.win32-3.7" SliCer.exe
