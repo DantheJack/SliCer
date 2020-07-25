@@ -12,13 +12,13 @@ from tkinter import messagebox
 #cls & pytest -rA -s -v
 
 ########################################################################################################
-def mainCompleteAnalyser(sourceCodeScrolledText = None, resultTextArea=None, criterionVariable = 'a', criterionLine = 20, eraser = False):
-
-    file = open('src/sourceCode.txt','w')
+def mainCompleteAnalyser(sourceCodeScrolledText = None, resultTextArea=None, criterionVariable = None, criterionLine = 10000, eraser = False):
+    if(not criterionVariable): return False
+    file = open('sourceCode.txt','w')
     file.write(sourceCodeScrolledText.get("1.0", tk.END))
     file.close()
     os.chdir(os.getcwd())                                       
-    targetFileCompletePath = "./src/sourceCode.txt"
+    targetFileCompletePath = "./sourceCode.txt"
     #targetFileCompletePath = "./testfiles/testfileSlice13.c"
     print()
     debugMode = False

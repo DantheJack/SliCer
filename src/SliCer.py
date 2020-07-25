@@ -1,6 +1,14 @@
 from CompleteAnalyser import mainCompleteAnalyser
 import tkinter as tk
 from tkinter.scrolledtext import ScrolledText
+import os
+
+#print(os.path.basename(os.getcwd()))
+while ((os.path.basename(os.getcwd())) != "src") :
+    os.chdir(os.path.dirname(os.getcwd()))
+    #print(" - ")
+
+#print("src =", os.path.basename(os.getcwd()))
 
 mainWindow = tk.Tk()
 mainWindow['bg']='light blue'
