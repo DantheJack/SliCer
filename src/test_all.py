@@ -591,9 +591,6 @@ def test_slice7():
 def test_slice8():
     os.chdir(os.getcwd())                                       
     targetFileCompletePath = "./testfiles/testfileSlice8.c" #empty file
-    criterionVariable = 'a'
-    criterionLine = 20
-    
     with pytest.raises(SystemExit) as pytest_wrapped_e:
         mainLexicalAnalyser(targetFileCompletePath, True)
     assert pytest_wrapped_e.type == SystemExit
@@ -607,8 +604,6 @@ def test_slice8():
 def test_slice9():
     os.chdir(os.getcwd())                                       
     targetFileCompletePath = "./testfiles/testfileSlice9.c" #file that became empty (comments)
-    criterionVariable = 'a'
-    criterionLine = 20
     with pytest.raises(SystemExit) as pytest_wrapped_e:
         mainLexicalAnalyser(targetFileCompletePath, True)
     assert pytest_wrapped_e.type == SystemExit

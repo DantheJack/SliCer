@@ -23,6 +23,7 @@ What you need to run this program on your personal computer:
 - Windows would be desirable, since I cannot guarantee the proper functioning of the programs under another operating system.
 - A recent version of [Python](https://www.python.org/downloads/) is required (version 3.5 or higher is recommended). 
 
+*To check if a current version of Python is currently installed on your device, open Powershell and type `python --version`.*
 
 
 ### Installing
@@ -30,40 +31,65 @@ What you need to run this program on your personal computer:
 Getting the files
 
 ```
-Download a clone of the project to your computer.
-Lauch the executable.
-Do not move or remove anyfile from the original folder.
+Download a clone of the project to your computer (~ 9 MB).
+Extract the files.
+Do not move nor remove any file from the deepest SliCer-master folder.
 ```
 
 ## Running the tests
 
+Prior to any trial of the demo version, I suggest you to run the automated tests that I developped along this project.
 This is how to run the automated tests for this system: 
 
-### Break down into end to end tests
+### Using CLI
 
-Explain what these tests test and why
+1. Open Powershell directly in the deepest SliCer-master folder (or, if you renamed it, the folder that contains the README file)
+or move to this folder using `cd` command. Warning : you will need Admin rights into this command-line interface.
 
+2. If you want to run the tests, you will need to download the pytest framework. To download it, run the following command in your CLI :
+`pip install -U pytest`, then confirm the proper installation of pytest by typing `pytest --version`.
+
+3. Execute the following command : `python -u ".\src\testLauncher.py"`, then press Enter.
+
+4. You should see the following message :
+
+```diff
++ 15 passed in ... seconds
 ```
-Give an example
-```
 
-### And coding style tests
+If you see that message, you can then proceed to the next step. Otherwise, I strongly advise you to report to me this problem 
+along with the error messages you get (or screenshots) so I can improve my software and solve the issue.
 
-Explain what these tests test and why
+5. If you want to uninstall pytest, simply use the command `pip uninstall pytest`.
 
-```
-Give an example
-```
+## Demo version
 
-## Deployment
+### Running the demo
 
-Add additional notes about how to deploy this on a live system
+#### Windows-only solution
+
+If you are running this solution on Windows, you can simply double-left-click on Slicer.bat file.
+It contains a one-line program that serves as a shortcut to launch the executable.
+
+#### Multi-platform solution
+
+Manualy move to the folder src\build\exe.win32-3.7 then use the executable file directly. You can also create a shortcut of
+this .exe file and place it anywhere you want to your conveniance.
+
+#### CLI-only solution
+
+Open Powershell directly in the deepest SliCer-master folder (or, if you renamed it, the folder that contains the README file)
+or move to this folder using `cd` command. Then executes the following command : `python -u ".\src\SliCer.py"`
+
+### Understanding the demo
+
+
 
 ## Built With
 
 * [Python](https://www.python.org/downloads/) - Python/Downloads
-* [Maven](https://maven.apache.org/) - Dependency Management
-* [ROME](https://rometools.github.io/rome/) - Used to generate RSS Feeds
+* [cx-Freeze](https://cx-freeze.readthedocs.io/en/latest/#) - Creation of executable
+* [Tkinter](https://wiki.python.org/moin/TkInter) - Used to generate the Graphical User Interface
 
 ## Contributing
 
@@ -75,17 +101,15 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
-
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+* **Dan Lipskier** - *Thesis MSc Computing Sciences*
 
 ## License
 
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
+~~This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details~~
 
 ## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+* Dr. Klaas-Jan Stol, for tutoring this project and guiding me with valuable advice.
+* Louis-Paul Gausi, for his cyber-security skills and for giving me hope when all seemed lost.
+
 
