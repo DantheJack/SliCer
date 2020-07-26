@@ -79,21 +79,25 @@ this **SliCer.exe file and place it** anywhere you want to your conveniance.
 
 ### Understanding the demo
 
+Once the program is launched, you should be presented with a window containing the main user interface of the system. To the left of this interface is the place to write (or copy and paste) the code you want to slice.
 
+*Don't forget to specify the line and variable you want as slicing criterion in the top right corner of the window!*
+
+Once you click on "**Slice!**", the same code will appear in the right tab. If you have checked the option at the top left of the window, the code will appear in black, with the lines that contain elements belonging to the slice in red. Otherwise, only the relevant lines will appear.
+
+Warning: The lines will be highlighted **ALL IN FULL**. This means that if you code your entire program on one line, the whole line will appear in red.
+
+Highlighted lines are those that **contain elements** of the requested slice. It's up to you not to write everything on one line, or else to know how to differentiate the significant elements from the others.
+
+Finally, the best way to learn how to use this tool is to write a few lines of code in C (*remember not to use IF/ELSE in this demo version!*) and test it by yourself.
+
+Good Luck, and do not hesitate to contact me if you're encountering a problem with SliCer!
 
 ## Built With
 
 * [Python](https://www.python.org/downloads/) - Python/Downloads
 * [cx-Freeze](https://cx-freeze.readthedocs.io/en/latest/#) - Creation of executable
 * [Tkinter](https://wiki.python.org/moin/TkInter) - Used to generate the Graphical User Interface
-
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
-## Versioning
-
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
 
 ## Authors
 
