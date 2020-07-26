@@ -51,7 +51,7 @@ or move to this folder using `cd` command. *Warning : you will need Admin rights
 4. You should see the following message :
 
 ```diff
-+ 15 passed in ... seconds
++ 16 passed in ... seconds
 ```
 
 If you see that message, you can then proceed to the next step. Otherwise, I strongly advise you to report to me this problem 

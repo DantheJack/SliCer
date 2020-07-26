@@ -1,10 +1,12 @@
 int main(void)
 {
+char name[10], other[15][5], lastname[23];
+int num;
+int den;
+double result;
 char c;
 FILE *fp;
 fp = fopen("file.txt", "r");
-char name[10], other[15][5], lastname[23];
-double result;
 char buffer[80];
 int c2d_4 = 0;
 
@@ -41,5 +43,21 @@ if( c == '!' ) {
   ungetc(c, fp);
 }
 int end = 0;
-return end = c +  buf + c3d + name + lastname + bif;
+
+/*
+ungetc ('+', fp);*/
+
+char buffer[80];
+    
+printf("Enter your name : " );
+scanf("%c", name);
+printf("Enter your description : " );
+scanf("%[^\n]", buffer);
+printf( "Enter a division [num/den] : " );
+scanf( "[%d/%d]", &num, &den );
+printf("%c", name);
+result = num / den;
+
+return end = c +  buf + c3d + name + lastname + bif + result ;
+
 }

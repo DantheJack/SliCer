@@ -620,24 +620,24 @@ def test_scanf():
     assert testFileListOfPentads[0].useful == False
     assert testFileListOfPentads[1].useful == False
     assert testFileListOfPentads[2].useful == True
-    assert testFileListOfPentads[3].useful == False
-    assert testFileListOfPentads[4].useful == False
+    assert testFileListOfPentads[3].useful == True
+    assert testFileListOfPentads[4].useful == True
     assert testFileListOfPentads[5].useful == True
-    assert testFileListOfPentads[6].useful == False
+    assert testFileListOfPentads[6].useful == True
     assert testFileListOfPentads[7].useful == False
     assert testFileListOfPentads[8].useful == False
     assert testFileListOfPentads[9].useful == False
     assert testFileListOfPentads[10].useful == False
     assert testFileListOfPentads[11].useful == False
     assert testFileListOfPentads[12].useful == False
-    assert testFileListOfPentads[13].useful == True
+    assert testFileListOfPentads[13].useful == False
     assert testFileListOfPentads[14].useful == False
     assert testFileListOfPentads[15].useful == True
     assert testFileListOfPentads[16].useful == False
     assert testFileListOfPentads[17].useful == True
     assert testFileListOfPentads[18].useful == False
-    assert testFileListOfPentads[19].useful == False
-    assert testFileListOfPentads[20].useful == True
+    assert testFileListOfPentads[19].useful == True
+    assert testFileListOfPentads[20].useful == False
     assert testFileListOfPentads[21].useful == False
     assert testFileListOfPentads[22].useful == True
     assert testFileListOfPentads[23].useful == False
@@ -647,13 +647,24 @@ def test_scanf():
     assert testFileListOfPentads[27].useful == False
     assert testFileListOfPentads[28].useful == True
     assert testFileListOfPentads[29].useful == False
-    assert testFileListOfPentads[30].useful == False
+    assert testFileListOfPentads[30].useful == True
     assert testFileListOfPentads[31].useful == False
     assert testFileListOfPentads[32].useful == False
     assert testFileListOfPentads[33].useful == False
     assert testFileListOfPentads[34].useful == False
     assert testFileListOfPentads[35].useful == False
     assert testFileListOfPentads[36].useful == False
-    assert testFileListOfPentads[37].useful == True
-    assert testFileListOfPentads[38].useful == True
-    assert testFileListOfPentads[39].useful == False
+    assert testFileListOfPentads[37].useful == False
+    assert testFileListOfPentads[38].useful == False
+    assert testFileListOfPentads[39].useful == True
+    assert testFileListOfPentads[40].useful == False
+    assert testFileListOfPentads[41].useful == False
+    assert testFileListOfPentads[42].useful == True
+    assert testFileListOfPentads[43].useful == False
+    assert testFileListOfPentads[44].useful == False
+    assert testFileListOfPentads[45].useful == False
+    assert testFileListOfPentads[46].useful == True
+    assert testFileListOfPentads[47].useful == False
+    assert testFileListOfPentads[48].useful == True
+    assert testFileListOfPentads[49].useful == True
+    assert testFileListOfPentads[50].useful == False
