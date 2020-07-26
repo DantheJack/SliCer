@@ -15,13 +15,13 @@ from tkinter import messagebox
 def mainCompleteAnalyser(sourceCodeScrolledText = None, resultTextArea=None, criterionVariable = None, criterionLine = 10000, eraser = False):
     if(not criterionVariable): return False
     file = open('sourceCode.txt','w')
-    file.write(sourceCodeScrolledText.get("1.0", tk.END))
+    file.write(sourceCodeScrolledText.get("1.0", tk.END))     #for test purposes, comment this
     file.close()
     os.chdir(os.getcwd())                                       
-    targetFileCompletePath = "./sourceCode.txt"
-    #targetFileCompletePath = "./testfiles/testfileSlice13.c"
+    targetFileCompletePath = "./sourceCode.txt"               #for test purposes, comment this
+    #targetFileCompletePath = "./testfiles/testfileScanf.c"   #for test purposes, UNcomment this
     print()
-    debugMode = False
+    debugMode = True
     result = mainLexicalAnalyser(targetFileCompletePath, debugMode)
     pentadList = result[0]
     if pentadList == []:
@@ -61,7 +61,7 @@ def mainCompleteAnalyser(sourceCodeScrolledText = None, resultTextArea=None, cri
     resultTextArea.delete('0.0', tk.END)
 
 #  #  #  #
-    if(eraser == False):
+    if(eraser == True):
         for line in targetFileAllTextLines:
             x += 1
             utility = 0
@@ -77,7 +77,7 @@ def mainCompleteAnalyser(sourceCodeScrolledText = None, resultTextArea=None, cri
                 resultTextArea.insert(tk.END, line, 'out') 
         print()
 #  #  #  #
-    if(eraser == True):
+    if(eraser == False):
         for line in targetFileAllTextLines:
             x += 1
             utility = 0
@@ -102,4 +102,4 @@ def mainCompleteAnalyser(sourceCodeScrolledText = None, resultTextArea=None, cri
     ############
     ############
 
-
+#mainCompleteAnalyser(criterionVariable = "end", criterionLine = 10000)     #for test purposes, UNcomment this
