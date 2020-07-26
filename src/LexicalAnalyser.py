@@ -174,6 +174,76 @@ def commentsEraser(listOfEveryPentads = [], debugMode = False):
                 if(debugMode) : print("Add " + presentChar)
     return spaceNormalizer(output, debugMode)
 
+def commentsEraser(listOfEveryPentads = [], debugMode = False):
+    """ Takes the complete list of pentads and returns this list once all
+        comments have been removed.
+
+        Of course, the line count does not change. Comments, whether they
+        are multiline (/* */) or monoline (//), are removed in such a way
+        that it disrupts the structure of the executable code as little as
+        possible. This is the whole difference between a home-made function
+        and the work of the preprocessor. The current code also takes into
+        account the case of comment symbols that actually belong to strings.
+        Example: printf("/** _this should be printed_ **/ // _that too_"). 
+        
+        However, in C, if a monoline comment ends with \\, the next line is
+        considered as part of the actual line and is supposed to be part of
+        the comment as well. This case has not been implemented yet. """
+    output = []
+    multiLineComment = "Nothing"
+    stringStatement = "Nothing"
+    presentChar = 'a'
+    nextChar = 'a'
+    singleLineCommentDetected = False
+    i = 0
+    for i in range (len(listOfEveryPentads)):
+        ########### Variables #############
+        singleLineCommentDetected = False
+        output.append(pentadStruct([i,i], ""))
+        for j in range (len(listOfEveryPentads[i].text)):
+            presentChar = listOfEveryPentads[i].text[j]
+            if (j < len(listOfEveryPentads[i].text)-1) :
+                nextChar = listOfEveryPentads[i].text[j+1]
+            else:
+                nextChar = None
+        ##########################################
+            ########### String Management #############
+            if(not singleLineCommentDetected and (multiLineComment == "Nothing" or multiLineComment == "Ended")) : # We can be in a String but not having changed "Ended" to "Nothing" yet
+            #  #  #  #  #  #  #  #  #  #  #  #  #  #  # 
+                if stringStatement == "Started" : stringStatement = "Going"
+                if stringStatement == "Ended" : stringStatement = "Nothing"
+                if(presentChar == "\"") :
+                    if(stringStatement == "Going") :
+                        if(j == 0 ):
+                            stringStatement = "Ended"
+                            if(debugMode) : print("String ended line : " + str(i)) 
+                        elif(listOfEveryPentads[i].text[j-1] != '\\'):
+                            stringStatement = "Ended"
+                            if(debugMode) : print("String ended line : " + str(i)) 
+                    elif(stringStatement == "Nothing") :
+                        stringStatement = "Started"
+                        if(debugMode) : print("String started line : " + str(i))
+            ##########################################
+            ########### Multi Management #############
+            if(not singleLineCommentDetected and (stringStatement == "Nothing" or stringStatement == "Started")): # We can be IN THE STATE "Ended" but also in a String already
+            #  #  #  #  #  #  #  #  #  #  #  #  #  #  # 
+                if multiLineComment == "Almost started" : multiLineComment = "Started"
+                elif multiLineComment == "Started" : multiLineComment = "Going"
+                if multiLineComment == "Almost done" : multiLineComment = "Ended"
+                elif multiLineComment == "Ended" : multiLineComment = "Nothing" 
+                if multiLineComment == "Going" : #from "Going" we can immediatly be in "Almost done" if we have : /**/
+                    if(presentChar == "*" and nextChar != None) :
+                        if nextChar == "/" : multiLineComment = "Almost done"
+                ###################################
+                if(presentChar == "/" and nextChar and multiLineComment == "Nothing"):
+                    if nextChar == "/" : singleLineCommentDetected = True
+                    elif nextChar == "*" and not singleLineCommentDetected : multiLineComment = "Almost started"
+            ########### Last Line ############
+            if(not singleLineCommentDetected and multiLineComment == "Nothing"):
+                output[i].text += listOfEveryPentads[i].text[j]
+                if(debugMode) : print("Add " + presentChar)
+    return spaceNormalizer(output, debugMode)
+
 def stringReducer(listOfEveryPentads = [], debugMode = False):
     """ Takes the entire original code and replace every "string" by
     an empty string like that: "". This, because the content of the strings does not

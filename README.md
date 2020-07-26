@@ -25,14 +25,13 @@ What you need to run this program on your personal computer:
 
 *To check if a current version of Python is currently installed on your device, open Powershell and type `python --version`.*
 
-
 ### Installing
 
 Getting the files
 
 - Download a clone of the project to your computer (~ 9 MB).
 - Extract the files.
-- Do not move nor remove any file from the deepest SliCer-master folder.
+- Do not move nor remove any file from the deepest **SliCer-master** folder.
 
 ## Running the tests
 
@@ -41,7 +40,7 @@ This is how to run the automated tests for this system:
 
 ### Using CLI
 
-1. Open Powershell directly in the deepest SliCer-master folder (or, if you renamed it, the folder that contains the README file)
+1. Open Powershell directly in the deepest **SliCer-master** folder (or, if you renamed it, the folder that contains the **README.md** file)
 or move to this folder using `cd` command. *Warning : you will need Admin rights into this command-line interface.*
 
 2. If you want to run the tests, you will need to download the pytest framework. To download it, run the following command in your CLI :
@@ -64,22 +63,19 @@ along with the error messages you get (or screenshots) so I can improve my softw
 
 ### Running the demo
 
-
+If enabled, Windows Defender may have the intuition to warn you about the unknown source of this software. I would like to assure you
+that all precautions have been taken to ensure the reliability and harmlessness of this program to your device.
 
 ***Windows-only solution***
 
-If you are running this solution on Windows, you can simply double-left-click on Slicer.bat file.
+If you are running this solution on Windows, you can simply double-left-click on **Slicer.bat** file.
 It contains a one-line program that serves as a shortcut to launch the executable.
+If a message such as *"Windows protected your PC"* appears, you can decide to ignore it by clicking on `More info` then `Run anyway`.
 
-***Multi-platform solution***
+***Another solution***
 
-Manualy move to the folder src\build\exe.win32-3.7 then use the executable file directly. You can also create a shortcut of
-this .exe file and place it anywhere you want to your conveniance.
-
-***CLI-only solution***
-
-Open Powershell directly in the deepest SliCer-master folder (or, if you renamed it, the folder that contains the README file)
-or move to this folder using `cd` command. Then executes the following command : `python -u ".\src\SliCer.py"`
+Manualy move to the folder **src\build\exe.win32-3.7** then use the executable file directly. You can also create a shortcut of
+this **SliCer.exe file and place it** anywhere you want to your conveniance.
 
 ### Understanding the demo
 

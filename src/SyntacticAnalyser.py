@@ -26,14 +26,15 @@ def mainSyntacticAnalyser(pentadList = [], debugMode = False):
 
 def forLoopRoleAssignment(listOfEveryPentads = None, debugMode = False):
     i = 0
+    loopBracketsCounter = 0
     for i in range (len(listOfEveryPentads)):
         listOfEveryPentads[i].text = ' ' + listOfEveryPentads[i].text #for lines that start directly with "for"
-        pattern = re.compile(r'(?P<first>\W|\0|^)for\s*(?P<second>(\(|\\|\0|$))')
-        if(re.search(pattern, listOfEveryPentads[i].text)):
-            found = re.search(pattern, listOfEveryPentads[i].text)
+        patternCond = re.compile(r'(?P<first>\W|\0|^)for\s*(?P<second>(\(|\\|\0|$))')
+        if(re.search(patternCond, listOfEveryPentads[i].text)):
+            found = re.search(patternCond, listOfEveryPentads[i].text)
             if(debugMode) : print("FOR printing --> ", "first = ", found.group('first'), " second = ", found.group('second'))
             if(debugMode) : print("FOR printing --> ", "before = ", listOfEveryPentads[i].text)
-            listOfEveryPentads[i].text = re.sub(pattern, found.group('first') + " " + found.group('second'), listOfEveryPentads[i].text)
+            listOfEveryPentads[i].text = re.sub(patternCond, found.group('first') + " " + found.group('second'), listOfEveryPentads[i].text)
             if(debugMode) : print("FOR printing --> ", "after = ", listOfEveryPentads[i].text)
             condition = varDecChangedToInt(listOfEveryPentads[i].text) #because int i = 0 is possible in a for, surprisingly!
             variables = findVariablesInThatMush(condition)
@@ -41,10 +42,15 @@ def forLoopRoleAssignment(listOfEveryPentads = None, debugMode = False):
                 variables.remove("int")
             if(debugMode) : print("tab = ", variables)
             listOfEveryPentads[i].addRole("loopCondition", None, variables)
-        if(re.search(r'\{', listOfEveryPentads[i].text)):
-            listOfEveryPentads[i].addRole("loopBeg", None, None)
-        if(re.search(r'\}', listOfEveryPentads[i].text)):
+        if(i>0):
+            for role in listOfEveryPentads[i-1].roles :
+                if(role.type == "loopCondition"):
+                    if(re.search(r'\{', listOfEveryPentads[i].text)):
+                        listOfEveryPentads[i].addRole("loopBeg", None, None)
+                        loopBracketsCounter += 1
+        if(re.search(r'\}', listOfEveryPentads[i].text) and loopBracketsCounter > 0):
             listOfEveryPentads[i].addRole("loopEnd", None, None)
+            loopBracketsCounter -= 1
     if(debugMode) : printAllLoopCondVariables(listOfEveryPentads)
     return spaceNormalizer(listOfEveryPentads, debugMode)
 
@@ -84,6 +90,7 @@ def varDecDetector(listOfEveryPentads = None, debugMode = False):
     fourthChar = 'a'
     variableName = ""
     sequenceStartLine = 0
+    tabCounter = 0
     state = "Waiting for int"
     for i in range (len(listOfEveryPentads)):
         listOfEveryPentads[i].text = spacerForLoopConditions(listOfEveryPentads[i].text)
@@ -107,6 +114,15 @@ def varDecDetector(listOfEveryPentads = None, debugMode = False):
                 variableName = ""
                 sequenceStartLine = 0                
                 break
+            ########## Thats a tab ##########
+            if(state == "Thats a tab" and presentChar == ']'):
+                if(variableName != "") :
+                    for k in range (sequenceStartLine, i+1):
+                        listOfEveryPentads[k].addRole("varDeclar", variableName)
+                        if(debugMode) : print("I want to add role to line", k, " : varDec for ", variableName)
+                variableName = ""
+                if(firstChar == ' ' or firstChar == '\\' or firstChar == '=' or firstChar == ';' or firstChar == ','):
+                    state = "Is there another one ?"
             ######################################
             if(state == "Waiting for variable name" and (presentChar == ' ' or presentChar == '\\')): # we need to keep it before "if(firstChar and secondChar...)"
                 state = "Next valid char is variableName"                                             # because the real else condition is against " int\" and we
@@ -139,6 +155,11 @@ def varDecDetector(listOfEveryPentads = None, debugMode = False):
             if(state == "In variableName" and firstChar): # /!\ "int (a) = b" is a variable but "int a(b)" is a function /!\
                 if(firstChar == '('):
                     state = "Thats a function"
+                    if(debugMode) : print(state)
+            ######################################
+            if(state == "In variableName" and firstChar): # /!\ "int (a) = b" is a variable but "int a(b)" is a function /!\
+                if(firstChar == '['):
+                    state = "Thats a tab"
                     if(debugMode) : print(state)
 
     return spaceNormalizer(listOfEveryPentads, debugMode)
