@@ -62,9 +62,11 @@ sourceCodeScrolledText.insert(tk.END, "\n\n\n\nWarning : If your C code contains
 sourceCodeScrolledText.insert(tk.END, "\n\n\n\n\nIn this version, you are invited to use \
 \nvariable definitions, comments, strings, variables declarations, \
 \nincrement and decrement operators, while loops, do-while loops, \
-\nfor loops, affectation operator and escaped newlines.") 
+\nfor loops, affectation operator and escaped newlines. There are \
+\nothers features as well (like stdio.h user inputs or tab \
+\ndeclarations) that can be used though only with simple usecase.\n") 
 sourceCodeScrolledText.insert(tk.END, "\n\nHowever, pleace notice that IF/ELSE statements \
-\nand Defines / Macros are not implemented yet.") 
+\nand Defines / Macros are not implemented yet (eg. : no #include).") 
 sourceCodeScrolledText.insert(tk.END, "\n\n\nI still do believe that this demo version offers \
 \na satisfaying demonstration of the solution and its capabilities.\n") 
 
@@ -174,7 +176,7 @@ eraserCheckButton.pack()
 
 ########################################################################################################
 #
-buttonSlice = tk.Button(fourthUpFrame, text =" Slice ", padx=3, pady=3, font=('Arial', '12', 'bold'), \
+buttonSlice = tk.Button(fourthUpFrame, text =" Slice ! ", padx=3, pady=3, font=('Arial', '13', 'bold'), \
                         command = lambda: mainCompleteAnalyser(sourceCodeScrolledText, resultScrolledText, \
                             eraser = eraserCheckValue.get(), \
                             criterionVariable = entryCriterionVar.get(), criterionLine = int(entryCriterionLine.get())))
