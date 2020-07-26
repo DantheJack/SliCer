@@ -79,7 +79,7 @@ this **SliCer.exe file and place it** anywhere you want to your conveniance.
 
 ### Understanding the demo
 
-Once the program is launched, you should be presented with a window containing the main user interface of the system. To the left of this interface is the place to write (or copy and paste) the code you want to slice.
+Once the program is launched, you should be presented with a window containing the main user interface of the system. To the left of this interface is the place to write (or copy and paste) the code you want to slice. Be careful, the line count can be tricky if you don't pay minimal attention.
 
 *Don't forget to specify the line and variable you want as slicing criterion in the top right corner of the window!*
 
