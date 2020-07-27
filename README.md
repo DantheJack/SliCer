@@ -72,10 +72,14 @@ If you are running this solution on Windows, you can simply double-left-click on
 It contains a one-line program that serves as a shortcut to launch the executable.
 If a message such as *"Windows protected your PC"* appears, you can decide to ignore it by clicking on `More info` then `Run anyway`.
 
-***Another solution***
+***Another Windows-only solution***
 
 Manualy move to the folder **src\build\exe.win32-3.7** then use the executable file directly. You can also create a shortcut of
 this **SliCer.exe file and place it** anywhere you want to your conveniance.
+
+***Unix and Mac users***
+
+You should probably try running the python file instead of the executable. Open a python console (or an IDE) then run **SliCer.py**. The file is located inside the **/src/** folder.
 
 ### Understanding the demo
 
