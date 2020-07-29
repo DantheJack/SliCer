@@ -11,17 +11,24 @@ from tkinter import messagebox
 #print(platform.python_implementation()) --> CPython
 #cls & pytest -rA -s -v
 
+localDebug = True
+debugMode = True
+
 ########################################################################################################
 def mainCompleteAnalyser(sourceCodeScrolledText = None, resultTextArea=None, criterionVariable = None, criterionLine = 10000, eraser = False):
     if(not criterionVariable): return False
     file = open('sourceCode.txt','w')
-    file.write(sourceCodeScrolledText.get("1.0", tk.END))     #for test purposes, comment this
+    if(not localDebug):
+        file.write(sourceCodeScrolledText.get("1.0", tk.END))     #for test purposes, comment this
     file.close()
     os.chdir(os.getcwd())                                       
-    targetFileCompletePath = "./sourceCode.txt"               #for test purposes, comment this
-    #targetFileCompletePath = "./testfiles/testfileScanf.c"   #for test purposes, UNcomment this
+    if(not localDebug):
+        targetFileCompletePath = "./sourceCode.txt"               #for test purposes, comment this
+    if(localDebug):
+        targetFileCompletePath = "./testfiles/testfileIfElse.c"   #for test purposes, UNcomment this
     print()
-    debugMode = True
+
+
     result = mainLexicalAnalyser(targetFileCompletePath, debugMode)
     pentadList = result[0]
     if pentadList == []:
@@ -37,28 +44,27 @@ def mainCompleteAnalyser(sourceCodeScrolledText = None, resultTextArea=None, cri
 \n\nDemo_version : You can also send me an email directly at dan.lipskier@hotmail.fr")
         
     targetFileAllTextLines = result[1]
-    #for line in targetFileAllTextLines:           ###### A ENLEVER
-    #    sourceCodeScrolledText.insert(END, line)  ###### A ENLEVER
 
     print()
-    pentadList = mainSyntacticAnalyser(pentadList, debugMode)
+    #pentadList = mainSyntacticAnalyser(pentadList, debugMode)
     print()
-    pentadList = mainSemanticalAnalyser(pentadList, criterionVariable, criterionLine, debugMode)
+    #pentadList = mainSemanticalAnalyser(pentadList, criterionVariable, criterionLine, debugMode)
     print()
     print("—————————————————————————————————————————————————————————————————————————")
     print("———————————————————————————————— RESULTS ————————————————————————————————")
     print("—————————————————————————————————————————————————————————————————————————")
     print()
-    for pentadNumber in range (len(pentadList)):
-        if pentadList[pentadNumber].useful :
-            print(pentadList[pentadNumber].id, ".\t", "--> " + str(pentadList[pentadNumber].lines) + ".   " + pentadList[pentadNumber].text)
-        else :
-            print(pentadList[pentadNumber].id, ".\t", "    " + str(pentadList[pentadNumber].lines) + ".   " + pentadList[pentadNumber].text)
+    #for pentadNumber in range (len(pentadList)):
+    #    if pentadList[pentadNumber].useful :
+    #        print(pentadList[pentadNumber].id, ".\t", "--> " + str(pentadList[pentadNumber].lines) + ".   " + pentadList[pentadNumber].text)
+    #    else :
+    #        print(pentadList[pentadNumber].id, ".\t", "    " + str(pentadList[pentadNumber].lines) + ".   " + pentadList[pentadNumber].text)
     print()
     print("—————————————————————————————————————————————————————————————————————————")
     print()
     x = 0
-    resultTextArea.delete('0.0', tk.END)
+    if(not localDebug):
+        resultTextArea.delete('0.0', tk.END)     #for test purposes, comment this
 
 #  #  #  #
     if(eraser == True):
@@ -71,10 +77,12 @@ def mainCompleteAnalyser(sourceCodeScrolledText = None, resultTextArea=None, cri
                     utility = 1
             if (utility == 1):
                 print(" --> " + "[ " + str(x) + " ]\t" + line)
-                resultTextArea.insert(tk.END, line, 'in') 
+                if(not localDebug):
+                    resultTextArea.insert(tk.END, line, 'in') #for test purposes, comment this
             else :
                 print("     " + "[ " + str(x) + " ]\t" + line)
-                resultTextArea.insert(tk.END, line, 'out') 
+                if(not localDebug):
+                    resultTextArea.insert(tk.END, line, 'out') #for test purposes, comment this
         print()
 #  #  #  #
     if(eraser == False):
@@ -87,10 +95,12 @@ def mainCompleteAnalyser(sourceCodeScrolledText = None, resultTextArea=None, cri
                     utility = 1
             if (utility == 1):
                 print(" oo> " + "[ " + str(x) + " ]\t" + line)
-                resultTextArea.insert(tk.END, line) 
+                if(not localDebug):
+                    resultTextArea.insert(tk.END, line)     #for test purposes, comment this
             else :
                 print("     " + "[ " + str(x) + " ]\t" + line)
-                resultTextArea.insert(tk.END, "\n") 
+                if(not localDebug):
+                    resultTextArea.insert(tk.END, "\n")     #for test purposes, comment this
         print()
 #  #  #  #
 
@@ -102,4 +112,4 @@ def mainCompleteAnalyser(sourceCodeScrolledText = None, resultTextArea=None, cri
     ############
     ############
 
-#mainCompleteAnalyser(criterionVariable = "end", criterionLine = 10000)     #for test purposes, UNcomment this
+if(localDebug): mainCompleteAnalyser(criterionVariable = "end", criterionLine = 10000)     #for test purposes, UNcomment this

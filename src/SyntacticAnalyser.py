@@ -1,5 +1,5 @@
 from pentadClass import pentadStruct, printAllWithRoles, printAllVarDefVariables, printAllLoopCondVariables
-from LexicalAnalyser import spaceNormalizer
+from LexicalAnalyser import spaceNormalizer, spacerForConditions
 import re
 
 def mainSyntacticAnalyser(pentadList = [], debugMode = False):
@@ -93,10 +93,9 @@ def varDecDetector(pentadList = None, debugMode = False):
     fourthChar = 'a'
     variableName = ""
     sequenceStartLine = 0
-    tabCounter = 0
     state = "Waiting for int"
     for i in range (len(pentadList)):
-        pentadList[i].text = spacerForLoopConditions(pentadList[i].text)
+        pentadList[i].text = spacerForConditions(pentadList[i].text)
         pentadList[i].text = varDecChangedToInt(pentadList[i].text)
         if(debugMode) : print(pentadList[i].text)
         for j in range (len(pentadList[i].text)):
@@ -166,13 +165,6 @@ def varDecDetector(pentadList = None, debugMode = False):
                     if(debugMode) : print("varDEC printing --> ", state)
 
     return spaceNormalizer(pentadList, debugMode)
-
-def spacerForLoopConditions(text = None, debugMode = False):
-    text = " " + text
-    text = text.replace("(", " ( ")
-    text = text.replace(")", " ) ")
-    text = text.replace(";", " ; ")
-    return text
 
 def varDecChangedToInt(text = None, debugMode = False):
     text = " " + text #to avoid variables named "integer123" or "myfloatvalue"
