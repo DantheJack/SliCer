@@ -26,25 +26,32 @@ def mainLexicalAnalyser(fileCompletePath = "", debugMode = False):
     #pentadList = spaceNormalizer(spaceNormalizer(pentadList))
     if(debugMode) : printAll(pentadList)
     if(debugMode) : print("MAIN printing --> ", "********* commentsEraser *********")
-    pentadList = commentsEraser(pentadList, False)
+    pentadList = commentsEraser(pentadList, debugMode)
     if(debugMode) : printAll(pentadList)
+    empty = True
+    for i in pentadList:
+        if(len(i.text) > 1):
+            empty = False
+    if(debugMode) :
+        if (empty) : sys.exit(1)
+        return [[], targetFileAllTextLines]
     if(debugMode) : print("MAIN printing --> ", "********* stringReducer **********")
-    pentadList = stringReducer(pentadList, False)
+    pentadList = stringReducer(pentadList, debugMode)
     if(debugMode) : printAll(pentadList)
     if(debugMode) : print("MAIN printing --> ", "******** doWhileConverter ********")
-    pentadList = doWhileConverter(pentadList, False)
+    pentadList = doWhileConverter(pentadList, debugMode)
     if(debugMode) : printAllWithRoles(pentadList)
     if(len(pentadList) < 1):
         if(debugMode) : sys.exit(1)
         return [[], targetFileAllTextLines]
     if(debugMode) : print("MAIN printing --> ", "******** whileLoopConverter ********")
-    pentadList = whileLoopConverter(pentadList, False)
+    pentadList = whileLoopConverter(pentadList, debugMode)
     if(debugMode) : printAllWithRoles(pentadList)
     if(len(pentadList) < 1):
         if(debugMode) : sys.exit(1)
         return [[], targetFileAllTextLines]
     if(debugMode) : print("MAIN printing --> ", "******* semicolonBasedChopper *******")
-    pentadList = semicolonBasedChopper(pentadList, False)
+    pentadList = semicolonBasedChopper(pentadList, debugMode)
     if(len(pentadList) < 1):
         if(debugMode) : sys.exit(1)
         return [[], targetFileAllTextLines]
@@ -55,35 +62,19 @@ def mainLexicalAnalyser(fileCompletePath = "", debugMode = False):
         if(debugMode) : sys.exit(1)
         return [[], targetFileAllTextLines]
     if(debugMode) : printAllWithRoles(pentadList)
-    if(debugMode) : print("MAIN printing --> ", "******* semicolonBasedChopper (yes, again) *******")
-    pentadList = semicolonBasedChopper(pentadList, False)
-    if(len(pentadList) < 1):
-        if(debugMode) : sys.exit(1)
-        return [[], targetFileAllTextLines]
-    if(debugMode) : printAllWithRoles(pentadList)
     if(debugMode) : print("MAIN printing --> ", "******* elseNormalizer *******")
     pentadList = elseNormalizer(pentadList, debugMode)
     if(len(pentadList) < 1):
         if(debugMode) : sys.exit(1)
         return [[], targetFileAllTextLines]
     if(debugMode) : printAllWithRoles(pentadList)
-    if(debugMode) : print("MAIN printing --> ", "******* semicolonBasedChopper (a third time) *******")
-    pentadList = semicolonBasedChopper(pentadList, False)
-    if(len(pentadList) < 1):
-        if(debugMode) : sys.exit(1)
-        return [[], targetFileAllTextLines]
-    #if(debugMode) : printAllWithRoles(pentadList)
+
     if(debugMode) : print("MAIN printing --> ", "********** multiLineManager *********")
     if(len(pentadList) < 1):
         if(debugMode) : sys.exit(1)
         return [[], targetFileAllTextLines]
-    pentadList = multiLineManager(pentadList, False)
+    pentadList = multiLineManager(pentadList, debugMode)
     if(debugMode) : printAllWithRoles(pentadList)
-    print("**************Affichage des PENTADS*****************")
-    i = 0
-    for o in pentadList:
-        i = i  + 1
-        print(str(i) , ".   " , o.text)
 
     return [pentadList, targetFileAllTextLines]
 
@@ -585,7 +576,7 @@ def ifNormalizer(pentadList = [], debugMode = False):
                 if(debugMode) : print("\nIF printing --> ", "st before = ", pentadList[i].text)
                 pentadList[i].text = re.sub(pattern, h[0] + h[1] + ' { '+ h[2] +'; } ', pentadList[i].text)
                 if(debugMode) : print("\nIF printing --> ", "st after = ", pentadList[i].text)
-    return pentadList
+    return semicolonBasedChopper(pentadList, debugMode)
 
 
 def elseNormalizer(pentadList = [], debugMode = False, executedManyTimes = 0):
@@ -834,7 +825,7 @@ def elseNormalizer(pentadList = [], debugMode = False, executedManyTimes = 0):
         if(debugMode) : printAllWithRoles(pentadList)
         if(debugMode) : print("\n  __________________________________________________  \n")
         return elseNormalizer(pentadList, debugMode, executedManyTimes)
-    return pentadList
+    return semicolonBasedChopper(pentadList, debugMode)
 
 
     

@@ -1,19 +1,24 @@
-from pentadClass import pentadStruct, printAllWithRoles, printAllVarDefVariables, printAllLoopCondVariables
+from pentadClass import pentadStruct, printAllWithRoles, printAllVarDefVariables, printAllLoopCondVariables, printAllIfCondVariables
 from LexicalAnalyser import spaceNormalizer, spacerForConditions
 import re
 
 def mainSyntacticAnalyser(pentadList = [], debugMode = False):
     """This function calls every other functions in charge of the syntactic analyser and the syntactic
        transformations. It takes as arguments the list of PENTADS with the lines chopped into statements
-       and returns the PENTADs list with roles updated. It also changes the text of the PENTADs in such a
-       way that some useless informations are deleted."""
+       and returns the PENTADs list with roles updated."""
     if(debugMode) : print()
     if(debugMode) : print("——————————————————————————— SYNTACTIC ANALYSIS ——————————————————————————")
     if(debugMode) : print()
-    if(debugMode) : print("MAIN printing --> ", "****** forLoopRoleAssignment *******")
-    pentadList = forLoopRoleAssignment(pentadList, debugMode)
+    if(debugMode) : print("MAIN printing --> ", "****** loopRoleAssignment *******")
+    pentadList = loopRoleAssignment(pentadList, debugMode)
     if(debugMode) : printAllWithRoles(pentadList)
     #printAllLoopCondVariables(pentadList, debugMode)
+    if(debugMode) : print("MAIN printing --> ", "****** ifRoleAssignment *******")
+    pentadList = ifRoleAssignment(pentadList, debugMode)
+    if(debugMode) : printAllWithRoles(pentadList)
+    if(debugMode) : print("MAIN printing --> ", "****** elseRoleAssignment *******")
+    pentadList = elseRoleAssignment(pentadList, debugMode)
+    if(debugMode) : printAllWithRoles(pentadList)
     if(debugMode) : print("MAIN printing --> ", "********** varDefDetector **********")
     pentadList = varDefDetector(pentadList, debugMode)
     if(debugMode) : printAllWithRoles(pentadList)
@@ -27,35 +32,56 @@ def mainSyntacticAnalyser(pentadList = [], debugMode = False):
     if(debugMode) : print()
     return pentadList
 
-def forLoopRoleAssignment(pentadList = None, debugMode = False):
+def loopRoleAssignment(pentadList = None, debugMode = False, executedManyTimes = 0):
+    executedManyTimes = executedManyTimes + 1
+    if(executedManyTimes == 150) : return []
+    recursiveCase = False
     i = 0
-    loopBracketsCounter = 0
+    bracketsCounter = 0
+    listOfRoles = []
+    loopStarted = False
+    loopConditionStatementId = 0
     for i in range (len(pentadList)):
         pentadList[i].text = ' ' + pentadList[i].text #for lines that start directly with "for"
         patternCond = re.compile(r'(?P<first>\W|\0|^)for\s*(?P<second>(\(|\\|\0|$))')
         if(re.search(patternCond, pentadList[i].text)):
-            found = re.search(patternCond, pentadList[i].text)
-            if(debugMode) : print("FOR printing --> ", "first = ", found.group('first'), " second = ", found.group('second'))
-            if(debugMode) : print("FOR printing --> ", "before = ", pentadList[i].text)
-            pentadList[i].text = re.sub(patternCond, found.group('first') + " " + found.group('second'), pentadList[i].text)
-            if(debugMode) : print("FOR printing --> ", "after = ", pentadList[i].text)
-            condition = varDecChangedToInt(pentadList[i].text) #because int i = 0 is possible in a for, surprisingly!
-            variables = findVariablesInThatMush(condition, debugMode)
-            if "int" in variables:
-                variables.remove("int")
-            if(debugMode) : print("tab = ", variables)
-            pentadList[i].addRole("loopCondition", None, variables)
-        if(i>0):
-            for role in pentadList[i-1].roles :
-                if(role.type == "loopCondition"):
-                    if(re.search(r'\{', pentadList[i].text)):
-                        pentadList[i].addRole("loopBeg", None, None)
-                        loopBracketsCounter += 1
-        if(re.search(r'\}', pentadList[i].text) and loopBracketsCounter > 0):
-            pentadList[i].addRole("loopEnd", None, None)
-            loopBracketsCounter -= 1
-    if(debugMode) : printAllLoopCondVariables(pentadList)
+            if(loopStarted):
+                recursiveCase = True
+            else :
+                listOfRoles = []
+                for role in pentadList[i].roles :
+                    listOfRoles += [role.type]
+                if(debugMode) : print("FORrole printing --> ", "line", i, "already has roles :", listOfRoles)
+                if(not "loopCondition" in listOfRoles):
+                    variables = findVariablesInThatMush(pentadList[i].text, debugMode)
+                    if "for" in variables:
+                        variables.remove("for")
+                    if "int" in variables:
+                        variables.remove("int")
+                    pentadList[i].addRole("loopCondition", None, variables)
+                    listOfRoles += ["loopCondition"]
+                    loopStarted = True
+                    loopConditionStatementId = i
+        elif(loopStarted):
+            if("loopCondition" in listOfRoles):
+                pentadList[i].addRole("loopBeg", str(loopConditionStatementId), None)
+                bracketsCounter = 1        
+                listOfRoles = []
+            elif(re.search(r'\{', pentadList[i].text)):
+                bracketsCounter += 1 
+            if(re.search(r'\}', pentadList[i].text)):
+                bracketsCounter -= 1 
+                if(bracketsCounter == 0):
+                    loopStarted = False
+                    listOfRoles = []
+                    pentadList[i].addRole("loopEnd", str(loopConditionStatementId), None)
+    if(recursiveCase):
+        return loopRoleAssignment(spaceNormalizer(pentadList, False), debugMode, executedManyTimes)
+    if(debugMode) : printAllWithRoles(pentadList)
     return spaceNormalizer(pentadList, debugMode)
+
+
+
 
 def findVariablesInThatMush(string = None, debugMode = False):
     if(debugMode) : print("MUSH printing --> ", "received : ", string)
@@ -480,4 +506,93 @@ def scanVarDetector(pentadList = [], debugMode = False):
                                                                                       # int getc(FILE *stream);
                                                                                      # int fgetc(FILE *stream);
 ###############################################################################################################
+    return spaceNormalizer(pentadList, debugMode)
+
+def ifRoleAssignment(pentadList = None, debugMode = False, executedManyTimes = 0):
+    executedManyTimes = executedManyTimes + 1
+    if(executedManyTimes == 150) : return []
+    recursiveCase = False
+    i = 0
+    bracketsCounter = 0
+    listOfRoles = []
+    ifStarted = False
+    ifConditionStatementId = 0
+    for i in range (len(pentadList)):
+        pentadList[i].text = ' ' + pentadList[i].text #for lines that start directly with "for"
+        patternCond = re.compile(r'(?P<first>\W|\0|^)if\s*(?P<second>(\(|\\|\0|$))')
+        if(re.search(patternCond, pentadList[i].text)):
+            if(ifStarted):
+                recursiveCase = True
+            else :
+                listOfRoles = []
+                for role in pentadList[i].roles :
+                    listOfRoles += [role.type]
+                if(debugMode) : print("IFrole printing --> ", "line", i, "already has roles :", listOfRoles)
+                if(not "ifCondition" in listOfRoles):
+                    variables = findVariablesInThatMush(pentadList[i].text, debugMode)
+                    if "if" in variables:
+                        variables.remove("if")
+                    pentadList[i].addRole("ifCondition", None, variables)
+                    listOfRoles += ["ifCondition"]
+                    ifStarted = True
+                    ifConditionStatementId = i
+        elif(ifStarted):
+            if("ifCondition" in listOfRoles):
+                pentadList[i].addRole("ifBeg", str(ifConditionStatementId), None)
+                bracketsCounter = 1        
+                listOfRoles = []
+            elif(re.search(r'\{', pentadList[i].text)):
+                bracketsCounter += 1 
+            if(re.search(r'\}', pentadList[i].text)):
+                bracketsCounter -= 1 
+                if(bracketsCounter == 0):
+                    ifStarted = False
+                    listOfRoles = []
+                    pentadList[i].addRole("ifEnd", str(ifConditionStatementId), None)
+    if(recursiveCase):
+        return ifRoleAssignment(spaceNormalizer(pentadList, False), debugMode, executedManyTimes)
+    if(debugMode) : printAllWithRoles(pentadList)
+    return spaceNormalizer(pentadList, debugMode)
+
+def elseRoleAssignment(pentadList = None, debugMode = False, executedManyTimes = 0):
+    executedManyTimes = executedManyTimes + 1
+    if(executedManyTimes == 150) : return []
+    recursiveCase = False
+    i = 0
+    bracketsCounter = 0
+    listOfRoles = []
+    elseStarted = False
+    elseConditionStatementId = 0
+    for i in range (len(pentadList)):
+        pentadList[i].text = ' ' + pentadList[i].text #for lines that start directly with "for"
+        patternCond = re.compile(r'(\W|\0|^)else\s*(\\|\0|$)')
+        if(re.search(patternCond, pentadList[i].text)):
+            if(elseStarted):
+                recursiveCase = True
+            else :
+                listOfRoles = []
+                for role in pentadList[i].roles :
+                    listOfRoles += [role.type]
+                if(debugMode) : print("IFrole printing --> ", "line", i, "already has roles :", listOfRoles)
+                if(not "elseCondition" in listOfRoles):
+                    pentadList[i].addRole("elseCondition", None, None)
+                    listOfRoles += ["elseCondition"]
+                    elseStarted = True
+                    elseConditionStatementId = i
+        elif(elseStarted):
+            if("elseCondition" in listOfRoles):
+                pentadList[i].addRole("elseBeg", str(elseConditionStatementId), None)
+                bracketsCounter = 1        
+                listOfRoles = []
+            elif(re.search(r'\{', pentadList[i].text)):
+                bracketsCounter += 1 
+            if(re.search(r'\}', pentadList[i].text)):
+                bracketsCounter -= 1 
+                if(bracketsCounter == 0):
+                    elseStarted = False
+                    listOfRoles = []
+                    pentadList[i].addRole("elseEnd", str(elseConditionStatementId), None)
+    if(recursiveCase):
+        return elseRoleAssignment(spaceNormalizer(pentadList, False), debugMode, executedManyTimes)
+    if(debugMode) : printAllWithRoles(pentadList)
     return spaceNormalizer(pentadList, debugMode)

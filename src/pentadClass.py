@@ -21,8 +21,15 @@ class pentadStruct:
     def addRole(self, roleName, mainVar = None, otherVars = []):
         if(self.roles[0].type == "unknown"):
             del self.roles[:]
-        self.roles.append(roleStruct(roleName, mainVar, otherVars))
-        print("PENTAD printing --> ", "Role added : ", roleName, " for ", mainVar) if PENTADprinter and roleName != "unknown" else False
+        cancelAdding = False
+        for h in self.roles :
+            if(h.type == roleName and h.mainVar == mainVar and h.otherVars == otherVars):
+                cancelAdding = True
+        if(cancelAdding) :
+            print("PENTAD printing --> ", "Role : ", roleName, " for ", mainVar, "was already given to this statement.") if PENTADprinter and roleName != "unknown" else False
+        else :
+            self.roles.append(roleStruct(roleName, mainVar, otherVars))
+            print("PENTAD printing --> ", "Role added : ", roleName, " for ", mainVar) if PENTADprinter and roleName != "unknown" else False
         if(mainVar): return roleName + " of " + mainVar
         else: return roleName
 
@@ -152,7 +159,28 @@ def printAllLoopCondVariables(listOfEveryPentads = None):
                 for otherVar in o.roles[0].otherVars :
                     print(" --> " + otherVar )
                 print("")
+    print("")
 
+def printAllIfCondVariables(listOfEveryPentads = None):
+    print("")
+    for o in listOfEveryPentads:
+        if (len(o.roles) > 1):
+            if(o.roles[0].type == "ifCondition"):
+                print(o.printing() + " --- IfCondition :")
+                for otherVar in o.roles[0].otherVars :
+                    print(" --> " + otherVar )
+                print("")
+            elif(o.roles[1].type == "ifCondition"):
+                print(o.printing() + " --- IfCondition :")
+                for otherVar in o.roles[1].otherVars :
+                    print(" --> " + otherVar )
+                print("")
+        else :
+            if(o.roles[0].type == "ifCondition"):
+                print(o.printing() + " --- IfCondition :")
+                for otherVar in o.roles[0].otherVars :
+                    print(" --> " + otherVar )
+                print("")
     print("")
 
 def printAllVarDefVariables(listOfEveryPentads = None):
