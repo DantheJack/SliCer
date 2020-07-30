@@ -25,6 +25,7 @@ class pentadStruct:
         for h in self.roles :
             if(h.type == roleName and h.mainVar == mainVar and h.otherVars == otherVars):
                 cancelAdding = True
+                break
         if(cancelAdding) :
             print("PENTAD printing --> ", "Role : ", roleName, " for ", mainVar, "was already given to this statement.") if PENTADprinter and roleName != "unknown" else False
         else :
@@ -65,30 +66,52 @@ def printAll(listOfEveryPentads = None):
         print(o.printing())
     print("")
 
-def printAllWithRoles2(listOfEveryPentads = None):
+def printNothingButRoles(listOfEveryPentads = None):
     print("")
+    max_size = 0
+    for o in listOfEveryPentads:
+        if(len(o.printing()) > max_size) :
+            max_size = len(o.printing())
     for o in listOfEveryPentads:
         space = ""
-        length = 80-len(o.printing())
+        length = max_size + 5 -len(o.printing())
         if(o.lines[0] == o.lines[1] and o.lines[0] < 10): length = length - 1
         if(o.lines[0] != o.lines[1] and o.lines[0] < 10): length = length - 1
         if(o.lines[0] != o.lines[1] and o.lines[1] < 10): length = length - 1
         for char in range (length):
             space += " "
-        if (len(o.roles) > 1):
+        if (len(o.roles) >= 3):
+            if(not o.roles[2].mainVar and not o.roles[0].mainVar and not o.roles[1].mainVar):
+                print(o.roles[0].type + ", " + o.roles[1].type + ", " + o.roles[2].type)
+            if(not o.roles[2].mainVar and o.roles[0].mainVar and not o.roles[1].mainVar):
+                print(o.roles[0].type + " (" + o.roles[0].mainVar + ")" + ", " + o.roles[1].type + ", " + o.roles[2].type)
+            if(not o.roles[2].mainVar and not o.roles[0].mainVar and o.roles[1].mainVar):
+                print(o.roles[0].type + ", " + o.roles[1].type + " (" + o.roles[1].mainVar + ")" + ", " + o.roles[2].type)
+            if(not o.roles[2].mainVar and o.roles[0].mainVar and o.roles[1].mainVar):
+                print(o.roles[0].type + " (" + o.roles[0].mainVar + ")" ", " + o.roles[1].type + " (" + o.roles[1].mainVar + ")" + ", " + o.roles[2].type)
+            if(o.roles[2].mainVar and not o.roles[0].mainVar and not o.roles[1].mainVar):
+                print(o.roles[0].type + ", " + o.roles[1].type + ", " + o.roles[2].type + " (" + o.roles[2].mainVar + ")")
+            if(o.roles[2].mainVar and o.roles[0].mainVar and not o.roles[1].mainVar):
+                print(o.roles[0].type + " (" + o.roles[0].mainVar + ")" + ", " + o.roles[1].type + ", " + o.roles[2].type + " (" + o.roles[2].mainVar + ")")
+            if(o.roles[2].mainVar and not o.roles[0].mainVar and o.roles[1].mainVar):
+                print(o.roles[0].type + ", " + o.roles[1].type + " (" + o.roles[1].mainVar + ")" ", " + o.roles[2].type + " (" + o.roles[2].mainVar + ")")
+            if(o.roles[2].mainVar and o.roles[0].mainVar and o.roles[1].mainVar):
+                print(o.roles[0].type + " (" + o.roles[0].mainVar + ")" ", " + o.roles[1].type + " (" + o.roles[1].mainVar + ")" ", " + o.roles[2].type + " (" + o.roles[2].mainVar + ")")
+        
+        if (len(o.roles) == 2):
             if(not o.roles[0].mainVar and not o.roles[1].mainVar):
-                print(o.printing() + space + o.roles[0].type + ", " + o.roles[1].type)
+                print(o.roles[0].type + ", " + o.roles[1].type)
             if(o.roles[0].mainVar and not o.roles[1].mainVar):
-                print(o.printing() + space + o.roles[0].type + " (" + o.roles[0].mainVar + ")" + ", " + o.roles[1].type)
+                print(o.roles[0].type + " (" + o.roles[0].mainVar + ")" + ", " + o.roles[1].type)
             if(not o.roles[0].mainVar and o.roles[1].mainVar):
-                print(o.printing() + space + o.roles[0].type + ", " + o.roles[1].type + " (" + o.roles[1].mainVar + ")")
+                print(o.roles[0].type + ", " + o.roles[1].type + " (" + o.roles[1].mainVar + ")")
             if(o.roles[0].mainVar and o.roles[1].mainVar):
-                print(o.printing() + space + o.roles[0].type + " (" + o.roles[0].mainVar + ")" ", " + o.roles[1].type + " (" + o.roles[1].mainVar + ")")
-        else :
+                print(o.roles[0].type + " (" + o.roles[0].mainVar + ")" ", " + o.roles[1].type + " (" + o.roles[1].mainVar + ")")
+        if (len(o.roles) == 1):
             if(o.roles[0].mainVar):
-                print(o.printing() + space + o.roles[0].type + " (" + o.roles[0].mainVar + ")")
+                print(o.roles[0].type + " (" + o.roles[0].mainVar + ")")
             else:
-                print(o.printing() + space + o.roles[0].type)
+                print(o.roles[0].type)
     print("")
 
 def printAllWithRoles(listOfEveryPentads = None):

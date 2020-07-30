@@ -194,6 +194,7 @@ def varDecDetector(pentadList = None, debugMode = False):
 
 def varDecChangedToInt(text = None, debugMode = False):
     text = " " + text #to avoid variables named "integer123" or "myfloatvalue"
+    text = text.replace(",", " , ")
     text = text.replace(" FILE *", " int ")
     text = text.replace(" unsigned long long ", " int ")
     text = text.replace(" unsigned long long\\", " int\\")
