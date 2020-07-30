@@ -23,7 +23,7 @@ def mainLexicalAnalyser(fileCompletePath = "", debugMode = False):
         pentadList.append(newPentad)
     pentadList.append(pentadStruct([0], "//")) # because stringReducer (and maybe others) have troubles dealing with the very last PENTAD of the list
     if(debugMode) : print("MAIN printing --> ", "********* spaceNormalizer ********") 
-    #pentadList = spaceNormalizer(spaceNormalizer(pentadList))
+    pentadList = spaceNormalizer(spaceNormalizer(pentadList))
     if(debugMode) : printAll(pentadList)
     if(debugMode) : print("MAIN printing --> ", "********* commentsEraser *********")
     pentadList = commentsEraser(pentadList, debugMode)
@@ -32,8 +32,9 @@ def mainLexicalAnalyser(fileCompletePath = "", debugMode = False):
     for i in pentadList:
         if(len(i.text) > 1):
             empty = False
-    if(debugMode) :
-        if (empty) : sys.exit(1)
+    if (empty) :
+        if(debugMode) :
+            sys.exit(1)
         return [[], targetFileAllTextLines]
     if(debugMode) : print("MAIN printing --> ", "********* stringReducer **********")
     pentadList = stringReducer(pentadList, debugMode)
@@ -56,12 +57,16 @@ def mainLexicalAnalyser(fileCompletePath = "", debugMode = False):
         if(debugMode) : sys.exit(1)
         return [[], targetFileAllTextLines]
     if(debugMode) : printAllWithRoles(pentadList)
+    #to see line count : for i in range (len(pentadList)):
+    #to see line count :     print("st = ", i, " | lines = [", pentadList[i].lines[0], "," , pentadList[i].lines[1], "] | len = ", len(pentadList[i].text), " | read : " , pentadList[i].text)
     if(debugMode) : print("MAIN printing --> ", "******* ifNormalizer *******")
     pentadList = ifNormalizer(pentadList, debugMode)
     if(len(pentadList) < 1):
         if(debugMode) : sys.exit(1)
         return [[], targetFileAllTextLines]
     if(debugMode) : printAllWithRoles(pentadList)
+    #to see line count : for i in range (len(pentadList)):
+    #to see line count :     print("st = ", i, " | lines = [", pentadList[i].lines[0], "," , pentadList[i].lines[1], "] | len = ", len(pentadList[i].text), " | read : " , pentadList[i].text)
     if(debugMode) : print("MAIN printing --> ", "******* elseNormalizer *******")
     pentadList = elseNormalizer(pentadList, debugMode)
     if(len(pentadList) < 1):
@@ -96,20 +101,21 @@ def spaceNormalizer(pentadList = [], debugMode = False):
     syntactically correct to find a single space. To simplify
     the analysis of the code, we will remove all multiple spaces
     by reducing them to a single space. """
-    output = []
+    outputbefore = []
+    outputafter = []
     #line = ""
     presentChar = 'a'
     nextChar = 'a'
     stringStatement = "Nothing"
     for i in range (len(pentadList)):
-        output.append(pentadStruct(pentadList[i].lines, ""))
+        outputbefore.append(pentadStruct(pentadList[i].lines, ""))
         if (stringStatement == "Nothing") :
             spacerForConditions(pentadList[i].text, debugMode)
             pentadList[i].text = pentadList[i].text.lstrip() #remove every space before the first character
-            #if(debugMode) : print("lstrip output[" + str(i) + "].text = |" + output[i].text + "|")
+            if(debugMode) : print("lstrip outputbefore[" + str(i) + "].text = |" + outputbefore[i].text + "|")
         for j in range (len(pentadList[i].text)):
             ######################################
-            #line = output[i].text
+            #line = outputbefore[i].text
             presentChar = pentadList[i].text[j]
             if (j < len(pentadList[i].text)-1) :
                 nextChar = pentadList[i].text[j+1]
@@ -121,17 +127,20 @@ def spaceNormalizer(pentadList = [], debugMode = False):
             elif (stringStatement == "Going" and presentChar == "\"") :
                 stringStatement = "Nothing"
             if (stringStatement == "Going" and presentChar != '\n') :
-                output[i].text += pentadList[i].text[j]
-                #if(debugMode) : print("output[" + str(i) + "].text = |" + output[i].text + "|")
+                outputbefore[i].text += pentadList[i].text[j]
+                if(debugMode) : print("outputbefore[" + str(i) + "].text = |" + outputbefore[i].text + "|")
             elif (not (presentChar==" " and (nextChar == " " or nextChar == None or nextChar == "\n")) and presentChar != '\n'):
-                output[i].text += pentadList[i].text[j]
-                #if(debugMode) : print("output[" + str(i) + "].text = |" + output[i].text + "|")
+                outputbefore[i].text += pentadList[i].text[j]
+                if(debugMode) : print("outputbefore[" + str(i) + "].text = |" + outputbefore[i].text + "|")
         if (stringStatement == "Nothing") :
-            output[i].text.rstrip() #remove every space after the last character
-            #if(debugMode) : print("rstrip output[" + str(i) + "].text = |" + output[i].text + "|")
+            outputbefore[i].text.rstrip() #remove every space after the last character
+            if(debugMode) : print("rstrip outputbefore[" + str(i) + "].text = |" + outputbefore[i].text + "|")
             for role in pentadList[i].roles:
-                output[i].addRole(role.type, role.mainVar, role.otherVars)
-    return output
+                outputbefore[i].addRole(role.type, role.mainVar, role.otherVars)
+    for i in range (len(pentadList)):
+        if(len(pentadList[i].text) > 0):
+            outputafter.append(outputbefore[i])
+    return outputafter
 
 def commentsEraser(pentadList = [], debugMode = False):
     """ Takes the complete list of pentads and returns this list once all
@@ -200,7 +209,6 @@ def commentsEraser(pentadList = [], debugMode = False):
             ########### Last Line ############
             if(not singleLineCommentDetected and multiLineComment == "Nothing"):
                 output[i].text += pentadList[i].text[j]
-                if(debugMode) : print("Add " + presentChar)
     return spaceNormalizer(output, debugMode)
 
 def stringReducer(pentadList = [], debugMode = False):
@@ -250,6 +258,12 @@ def stringReducer(pentadList = [], debugMode = False):
 
 def semicolonBasedChopper(pentadList = [], debugMode = False):
     """This function separates statement using ';' as a limitation point."""
+    pentadList = spaceNormalizer(pentadList, False)
+    ### Always, no... ALWAYS ! ALWAYS KEEP RUN SPACENORMALIZER BEFORE CHOP-CHOP.   ALWAYS !!!!!!!!!
+    ## (because spaces in beginning and end of lines can cause ifs and elses to overspread)
+    # ...
+    # ALWAYS !!!
+    #
     output = []
     currentStatement = ""
     presentChar = 'a'
@@ -257,9 +271,9 @@ def semicolonBasedChopper(pentadList = [], debugMode = False):
     inLoopCondition = False
     i = 0
     nextChar = None
-
+    lineOfTheLastCharRead = 0
     for i in range (len(pentadList)):
-        if(debugMode) : print("line = ", i, " | len = ", len(pentadList[i].text), " | read : " , pentadList[i].text)
+        if(debugMode) : print("st = ", i, " | lines = [", pentadList[i].lines[0], "," , pentadList[i].lines[1], "] | len = ", len(pentadList[i].text), " | read : " , pentadList[i].text)
         pattern = re.compile(r'(?P<all>(\W|\0|^)for)(?=\()')
         found = re.search(pattern, pentadList[i].text)
         safetyBreakPoint = 0
@@ -283,7 +297,7 @@ def semicolonBasedChopper(pentadList = [], debugMode = False):
             else:
                 nextChar = None
             if(currentStatement == ""):
-                if(debugMode) : print("semiBC printing --> ", "No char yet in the buffer")
+                if(debugMode) : print("semiBC printing --> ", "No char yet in the buffer. --> startingLine = ", pentadList[i].lines[1])
                 startingLine = i
 ########################################################################################################################
             if(inLoopCondition and presentChar == ')'):
@@ -305,7 +319,6 @@ def semicolonBasedChopper(pentadList = [], debugMode = False):
                 parenthesisCounter = parenthesisCounter + 1
 ########################################################################################################################
             if(nextChar): #because we need to test the char before "for" and the one after it too! (but that way of doing thing requires the elif depending on InLoopCondition to be placed BEFORE... meh!)
-                if(debugMode) : print("semiBC printing --> ", "presentChar = ", presentChar, " and nextChar = ", nextChar)
                 if(not inLoopCondition and re.search(r'(?:\W|\0|^)for\s*?', pentadList[i].text[:j]) and re.match(r'(\(|\\|\0|$)', nextChar) and re.search(r'(?:\W|\0|^)for\s*?(?=(\(|\\|\0|$))', currentStatement)):
                     if(debugMode) : print("semiBC printing --> ", "begining of loop_cond detected.")
                     inLoopCondition = True
@@ -317,9 +330,9 @@ def semicolonBasedChopper(pentadList = [], debugMode = False):
                         parenthesisCounter = 0
 ########################################################################################################################
             if(presentChar == '{'):
-                if(debugMode) : print("semiBC printing --> ", "beg of loop detected.")
+                if(debugMode) : print("semiBC printing --> ", "beg of block detected.")
                 if(currentStatement != ""):
-                    newPentad = pentadStruct([pentadList[startingLine].lines[0], pentadList[i].lines[1]], currentStatement)  
+                    newPentad = pentadStruct([pentadList[startingLine].lines[0], pentadList[lineOfTheLastCharRead].lines[1]], currentStatement)  
                     for valuableLine in range(startingLine, i):
                         for existingRole in pentadList[valuableLine].roles:
                             newPentad.addRole(existingRole.type, existingRole.mainVar, existingRole.otherVars)
@@ -327,7 +340,7 @@ def semicolonBasedChopper(pentadList = [], debugMode = False):
                 currentStatement = "{"
                 if(debugMode) : print("semiBC printing --> ", "specific char \'", presentChar, "\' added to", currentStatement)
                 notAddedYet = False
-                newPentad = pentadStruct([pentadList[startingLine].lines[0], pentadList[i].lines[1]], currentStatement)  
+                newPentad = pentadStruct([pentadList[i].lines[0], pentadList[i].lines[1]], currentStatement)  
                 for valuableLine in range(startingLine, i):
                     for existingRole in pentadList[valuableLine].roles:
                         newPentad.addRole(existingRole.type, existingRole.mainVar, existingRole.otherVars)
@@ -335,9 +348,9 @@ def semicolonBasedChopper(pentadList = [], debugMode = False):
                 currentStatement = ""
 ########################################################################################################################
             if(presentChar == '}'):
-                if(debugMode) : print("semiBC printing --> ", "end of loop detected.")
+                if(debugMode) : print("semiBC printing --> ", "end of block detected.")
                 if(currentStatement != ""):
-                    newPentad = pentadStruct([pentadList[startingLine].lines[0], pentadList[i].lines[1]], currentStatement)  
+                    newPentad = pentadStruct([pentadList[startingLine].lines[0], pentadList[lineOfTheLastCharRead].lines[1]], currentStatement)  
                     for valuableLine in range(startingLine, i):
                         for existingRole in pentadList[valuableLine].roles:
                             newPentad.addRole(existingRole.type, existingRole.mainVar, existingRole.otherVars)
@@ -345,7 +358,7 @@ def semicolonBasedChopper(pentadList = [], debugMode = False):
                 currentStatement = "}"
                 if(debugMode) : print("semiBC printing --> ", "specific char \'", presentChar, "\' added to", currentStatement)
                 notAddedYet = False
-                newPentad = pentadStruct([pentadList[startingLine].lines[0], pentadList[i].lines[1]], currentStatement)  
+                newPentad = pentadStruct([pentadList[i].lines[0], pentadList[i].lines[1]], currentStatement)  
                 for existingRole in pentadList[i].roles:
                     newPentad.addRole(existingRole.type, existingRole.mainVar, existingRole.otherVars)
                 output.append(newPentad)
@@ -378,8 +391,8 @@ def semicolonBasedChopper(pentadList = [], debugMode = False):
                 if(not (presentChar == '\\' and currentStatement == "")): #that if is for "case 21}\[\n]22;" of testfileMultiLines 
                     currentStatement += presentChar
                     if(debugMode) : print("semiBC printing --> ", "char \'", presentChar, "\' added to", currentStatement)
-
-    return spaceNormalizer(output, debugMode)
+            lineOfTheLastCharRead = i
+    return spaceNormalizer(output, False)
 
 
 
@@ -437,8 +450,6 @@ def doWhileConverter(pentadList = [], debugMode = False, executedManyTimes = 0):
     doLine = 0
     doChar1 = 0
     doChar2 = 0
-    #opBracketLine = 0
-    #opBracketChar = 0
     endBracketLine = 0
     endBracketChar = 0
     doWhileCondition = ""
@@ -613,7 +624,6 @@ def elseNormalizer(pentadList = [], debugMode = False, executedManyTimes = 0):
             memory4 = memory5
             memory5 = presentChar
             presentChar = pentadList[i].text[j]
-            #if(debugMode) : print("ELSE printing --> ", "line = ", i, " | j =", j, " | len = ", len(pentadList[i].text), " | read : " , presentChar, " | in memory : " , memory1, memory2, memory3, memory4, memory5)
             if(debugMode) : print("ELSE printing --> ", "line = ", i, "| read : " , presentChar, " | in memory : " , memory1, memory2, memory3, memory4, memory5)
             ########### Let's start ####################
             if(mode == "nothing" or mode == "closingLastElse"):

@@ -1,6 +1,6 @@
 import os
 import pytest
-from pentadClass import pentadStruct
+from pentadClass import pentadStruct, printAllWithRoles
 from LexicalAnalyser import mainLexicalAnalyser, spaceNormalizer, commentsEraser, stringReducer, multiLineManager, semicolonBasedChopper, doWhileConverter, whileLoopConverter
 from SyntacticAnalyser import mainSyntacticAnalyser
 from SemanticAnalyser import mainSemanticalAnalyser
@@ -11,7 +11,7 @@ def test_spaceNormalizer():
     testFileLines = myTemporaryTestFile.readlines()
     myTemporaryTestFile.close()
     testFileListOfPentads = []
-    testFileListOfPentads.append(pentadStruct([0], "")) # just to start at testFileListOfPentads[1]
+    testFileListOfPentads.append(pentadStruct([0], "not relevant")) # just to start at testFileListOfPentads[1]
 
     for i in range (len(testFileLines)):
         testFileListOfPentads.append(pentadStruct([i+1], testFileLines[i]))
@@ -86,69 +86,40 @@ def test_commentsEraser():
         #print(testFileListOfPentads[i].text)
     #print("---")
     assert testFileListOfPentads[1].text == "/0/"
-    assert testFileListOfPentads[2].text == ""
-    assert testFileListOfPentads[3].text == ""
-    assert testFileListOfPentads[4].text == ""
-    assert testFileListOfPentads[5].text == ""
-    assert testFileListOfPentads[6].text == ""
-    assert testFileListOfPentads[7].text == ""
-    assert testFileListOfPentads[8].text == "/ /8"
-    assert testFileListOfPentads[9].text == "/"
-    assert testFileListOfPentads[10].text == ""
-    assert testFileListOfPentads[11].text == ""
-    assert testFileListOfPentads[12].text == ""
-    assert testFileListOfPentads[13].text == ""
-    assert testFileListOfPentads[14].text == ""
-    assert testFileListOfPentads[15].text == ""
-    assert testFileListOfPentads[16].text == ""
-    assert testFileListOfPentads[17].text == ""
-    assert testFileListOfPentads[18].text == ""
-    assert testFileListOfPentads[19].text == ""
-    assert testFileListOfPentads[20].text == ""
-    assert testFileListOfPentads[21].text == ""
-    assert testFileListOfPentads[22].text == "1718"
-    assert testFileListOfPentads[23].text == ""
-    assert testFileListOfPentads[24].text == "/20*"
-    assert testFileListOfPentads[25].text == ""
-    assert testFileListOfPentads[26].text == "24"
-    assert testFileListOfPentads[27].text == ""
-    assert testFileListOfPentads[28].text == "*/26"
-    assert testFileListOfPentads[29].text == "/27*/28"
-    assert testFileListOfPentads[30].text == "30"
-    assert testFileListOfPentads[31].text == ""
-    assert testFileListOfPentads[32].text == "**3335"
-    assert testFileListOfPentads[33].text == ""
-    assert testFileListOfPentads[34].text == "*/37"
-    assert testFileListOfPentads[35].text == "38*"
-    assert testFileListOfPentads[36].text == "/39"
-    assert testFileListOfPentads[37].text == "\"/*41*/\""
-    assert testFileListOfPentads[38].text == "\"//42\""
-    assert testFileListOfPentads[39].text == "\"43*///44\"45"
-    assert testFileListOfPentads[40].text == ""
-    assert testFileListOfPentads[41].text == ""
-    assert testFileListOfPentads[42].text == ""
-    assert testFileListOfPentads[43].text == "49\"/* 50 */\"51"
-    assert testFileListOfPentads[44].text == "\"//\"52"
-    assert testFileListOfPentads[45].text == "\"/*\"53\"*/\""
-    assert testFileListOfPentads[46].text == ""
-    assert testFileListOfPentads[47].text == "\"55*/\"56*/57"
-    assert testFileListOfPentads[48].text == "\" 58//\"/\"/\"*59"
-    assert testFileListOfPentads[49].text == "60*/"
-    assert testFileListOfPentads[50].text == "\"//*61*/*\""
-    assert testFileListOfPentads[51].text == ""
-    assert testFileListOfPentads[52].text == ""
-    assert testFileListOfPentads[53].text == "64"
-    assert testFileListOfPentads[54].text == "67\"//68\""
-    assert testFileListOfPentads[55].text == "\"70//"
-    assert testFileListOfPentads[56].text == "72\"\"\"71"
-    assert testFileListOfPentads[57].text == "73\"*/"
-    assert testFileListOfPentads[58].text == "75\""
-    assert testFileListOfPentads[59].text == "76\"\\\"77?//\\\\78;\";"
-    assert testFileListOfPentads[60].text == "79\"//80"
-    assert testFileListOfPentads[61].text == "\\\"/*81\"82\"\\"
-    assert testFileListOfPentads[62].text == "83*/ 84  //\"\\"
-    assert testFileListOfPentads[63].text == "87*/88\"89\"\\\"90/*"
-    assert testFileListOfPentads[64].text == "91\""
+    assert testFileListOfPentads[2].text == "/ /8"
+    assert testFileListOfPentads[3].text == "/"
+    assert testFileListOfPentads[4].text == "1718"
+    assert testFileListOfPentads[5].text == "/20*"
+    assert testFileListOfPentads[6].text == "24"
+    assert testFileListOfPentads[7].text == "*/26"
+    assert testFileListOfPentads[8].text == "/27*/28"
+    assert testFileListOfPentads[9].text == "30"
+    assert testFileListOfPentads[10].text == "**3335"
+    assert testFileListOfPentads[11].text == "*/37"
+    assert testFileListOfPentads[12].text == "38*"
+    assert testFileListOfPentads[13].text == "/39"
+    assert testFileListOfPentads[14].text == "\"/*41*/\""
+    assert testFileListOfPentads[15].text == "\"//42\""
+    assert testFileListOfPentads[16].text == "\"43*///44\"45"
+    assert testFileListOfPentads[17].text == "49\"/* 50 */\"51"
+    assert testFileListOfPentads[18].text == "\"//\"52"
+    assert testFileListOfPentads[19].text == "\"/*\"53\"*/\""
+    assert testFileListOfPentads[20].text == "\"55*/\"56*/57"
+    assert testFileListOfPentads[21].text == "\" 58//\"/\"/\"*59"
+    assert testFileListOfPentads[22].text == "60*/"
+    assert testFileListOfPentads[23].text == "\"//*61*/*\""
+    assert testFileListOfPentads[24].text == "64"
+    assert testFileListOfPentads[25].text == "67\"//68\""
+    assert testFileListOfPentads[26].text == "\"70//"
+    assert testFileListOfPentads[27].text == "72\"\"\"71"
+    assert testFileListOfPentads[28].text == "73\"*/"
+    assert testFileListOfPentads[29].text == "75\""
+    assert testFileListOfPentads[30].text == "76\"\\\"77?//\\\\78;\";"
+    assert testFileListOfPentads[31].text == "79\"//80"
+    assert testFileListOfPentads[32].text == "\\\"/*81\"82\"\\"
+    assert testFileListOfPentads[33].text == "83*/ 84  //\"\\"
+    assert testFileListOfPentads[34].text == "87*/88\"89\"\\\"90/*"
+    assert testFileListOfPentads[35].text == "91\""
 
 
 def test_stringReducer():
@@ -177,13 +148,11 @@ def test_stringReducer():
     assert testFileListOfPentads[8].text == "18\""
     assert testFileListOfPentads[9].text == "\"22\'\"\"\\\"\"23"
     assert testFileListOfPentads[10].text == "24\""
-    assert testFileListOfPentads[11].text == ""
-    assert testFileListOfPentads[12].text == "\""
-    assert testFileListOfPentads[13].text == "25\"\"\""
-    assert testFileListOfPentads[14].text == ""
-    assert testFileListOfPentads[15].text == "\"28"
-    assert testFileListOfPentads[16].text == "\"\""
-    assert testFileListOfPentads[17].text == "30 = \"\";"
+    assert testFileListOfPentads[11].text == "\""
+    assert testFileListOfPentads[12].text == "25\"\"\""
+    assert testFileListOfPentads[13].text == "\"28"
+    assert testFileListOfPentads[14].text == "\"\""
+    assert testFileListOfPentads[15].text == "30 = \"\";"
 
 
 def test_doWhileConverter():
@@ -213,14 +182,14 @@ def test_doWhileConverter():
     assert testFileListOfPentads[6].lines == [6, 6]
     assert testFileListOfPentads[6].roles[0].type == "while of do from line"
     assert testFileListOfPentads[6].roles[0].mainVar == str(1)
-    assert testFileListOfPentads[7].text == ""
+    assert testFileListOfPentads[7].text == "//while(1.5)"
     assert testFileListOfPentads[8].text == "int stupid=\"\";for (i=2; i <3.4 ; i++){"
     assert testFileListOfPentads[8].lines == [8, 8]
     assert testFileListOfPentads[9].text == "dosomething;"
     assert testFileListOfPentads[10].text == "formidable; }"
-    assert testFileListOfPentads[11].text == ""
+    assert testFileListOfPentads[11].text == "int whiler = 0;"
     assert testFileListOfPentads[12].text == "int compteur = 5;"
-    assert testFileListOfPentads[13].text == ""
+    assert testFileListOfPentads[13].text == "int do_while = whiler;"
     assert testFileListOfPentads[14].text == "for(6; 7>8.9;10++){"
     assert testFileListOfPentads[15].text == "for(11){;}"
     assert testFileListOfPentads[15].lines == [15, 15]
@@ -244,21 +213,19 @@ def test_doWhileConverter():
     assert testFileListOfPentads[24].roles[0].mainVar == str(21)
     assert testFileListOfPentads[24].roles[1].type == "while of do from line"
     assert testFileListOfPentads[24].roles[1].mainVar == str(23)
-    assert testFileListOfPentads[25].text == ""
+    assert testFileListOfPentads[25].text == "int whi_le = whiler;"
     assert testFileListOfPentads[25].lines == [25, 25]
     assert testFileListOfPentads[26].text == "}"
     assert testFileListOfPentads[26].lines == [26, 26]
     assert testFileListOfPentads[26].roles[0].type == "while of do from line"
     assert testFileListOfPentads[26].roles[0].mainVar == str(20)
-    assert testFileListOfPentads[27].text == ""
+    assert testFileListOfPentads[27].text == "whiler = do_while + whi_le;"
     assert testFileListOfPentads[28].text == "for(smthg)\\"
     assert testFileListOfPentads[29].text == "{"
     assert testFileListOfPentads[30].text == "for(2){;}(31)int a32 =\\"
     assert testFileListOfPentads[31].text == "33\\"
     assert testFileListOfPentads[32].text == ";}"
     assert testFileListOfPentads[33].text == "for(34){;}"
-
-
 
 def test_WhileLoopConverter():
     os.chdir(os.getcwd())
@@ -1293,11 +1260,26 @@ def test_IfElseRole():
     assert testFileListOfPentads[304].roles[0].type == "unknown"
 
 
-
-
-
-
-
+def test_RoleAttribution():
+    os.chdir(os.getcwd())                                       
+    targetFileCompletePath = "./testfiles/testfileRoleAttribution.c"
+    result = mainLexicalAnalyser(targetFileCompletePath)
+    testFileListOfPentads = []
+    testFileListOfPentads.append(pentadStruct([0], "not relevant;")) # just to start at testFileListOfPentads[1] 
+    testFileListOfPentads += result[0] 
+    testFileListOfPentads = mainSyntacticAnalyser(testFileListOfPentads)
+    testFileListOfPentads = mainSemanticalAnalyser(testFileListOfPentads, "bitter", 80)
+    #for p in testFileListOfPentads :
+    #    print()
+    #    if(len(p.roles)>3):
+    #        print(p.text, " \t--\t ", p.roles[0].type, p.roles[1].type, p.roles[2].type, p.roles[3].type)
+    #    elif(len(p.roles)>2):
+    #        print(p.text, " \t--\t ",p.roles[0].type, p.roles[1].type, p.roles[2].type)
+    #    elif(len(p.roles)>1):
+    #        print(p.text, " \t--\t ",p.roles[0].type, p.roles[1].type)
+    #    else:
+    #        print(p.text, " \t--\t ",p.roles[0].type)
+    printAllWithRoles(testFileListOfPentads)
 
 
 """ RESERVE D'ASSERT !!!

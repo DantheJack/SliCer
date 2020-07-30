@@ -1,12 +1,16 @@
 from pentadClass import pentadStruct
 from LexicalAnalyser import spaceNormalizer
 import re
+import sys
 
 def mainSemanticalAnalyser(pentadList = [], criterionVariable = 'a', criterionLine = 20, debugMode = False):
     """This function calls every other functions in charge of the semantical analyser and contains
        the algo that handles the rules of this analysis. It takes as arguments the fully transformed
        list of PENTADs as well as the original slicing criterion, and returns the PENTADs list with
        usefulness of statements that belongs in the final slice changed to True."""
+    if(len(pentadList) < 1):
+        if(debugMode) : sys.exit(1)
+        return [[], pentadList]
     if(debugMode) : print()
     if(debugMode) : print("——————————————————————————— SEMANTICAL ANALYSIS —————————————————————————")
     if(debugMode) : print()
