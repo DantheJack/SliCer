@@ -1259,8 +1259,7 @@ def test_IfElseRole():
     assert testFileListOfPentads[303].roles[0].type == "elseEnd"
     assert testFileListOfPentads[304].roles[0].type == "unknown"
 
-
-def test_RoleAttribution():
+def test_RoleAttribution1():
     os.chdir(os.getcwd())                                       
     targetFileCompletePath = "./testfiles/testfileRoleAttribution.c"
     result = mainLexicalAnalyser(targetFileCompletePath)
@@ -1271,6 +1270,7 @@ def test_RoleAttribution():
     testFileListOfPentads = mainSemanticalAnalyser(testFileListOfPentads, "bitter", 80)
     #printNothingButRoles(testFileListOfPentads)
     #printAllWithRoles(testFileListOfPentads)
+    #for h in testFileListOfPentads : print(h.id, " - ", h.text)
     assert testFileListOfPentads[3].roles[0].type == "varDeclar"
     assert testFileListOfPentads[4].roles[0].type == "varDeclar"
     assert testFileListOfPentads[4].roles[1].type == "varDeclar"
@@ -1421,12 +1421,158 @@ def test_RoleAttribution():
     assert testFileListOfPentads[132].roles[0].type == "varDefine"
     assert testFileListOfPentads[134].roles[0].type == "loopEnd"
     assert testFileListOfPentads[135].roles[0].type == "elseEnd"
-    assert testFileListOfPentads[136].roles[0].type == "varDefine"
+    assert testFileListOfPentads[136].roles[0].type == "elseEnd"
     assert testFileListOfPentads[137].roles[0].type == "varDefine"
-    assert testFileListOfPentads[139].roles[0].type == "varDefine"
+    assert testFileListOfPentads[138].roles[0].type == "varDefine"
+    assert testFileListOfPentads[139].roles[0].type == "unknown"
     assert testFileListOfPentads[140].roles[0].type == "varDefine"
     assert testFileListOfPentads[141].roles[0].type == "varDefine"
-    assert testFileListOfPentads[143].roles[0].type == "elseEnd"
+    assert testFileListOfPentads[142].roles[0].type == "varDefine"
+    assert testFileListOfPentads[143].roles[0].type == "unknown"
+    assert testFileListOfPentads[144].roles[0].type == "elseEnd"
+    assert testFileListOfPentads[145].roles[0].type == "unknown"
+
+def test_RoleAttribution2():
+    os.chdir(os.getcwd())                                       
+    targetFileCompletePath = "./testfiles/testfileSlice16.c"
+    result = mainLexicalAnalyser(targetFileCompletePath)
+    testFileListOfPentads = []
+    testFileListOfPentads.append(pentadStruct([0], "not relevant;")) # just to start at testFileListOfPentads[1] 
+    testFileListOfPentads += result[0] 
+    testFileListOfPentads = mainSyntacticAnalyser(testFileListOfPentads)
+    testFileListOfPentads = mainSemanticalAnalyser(testFileListOfPentads, "c", 30)
+    #printNothingButRoles(testFileListOfPentads)
+    #printAllWithRoles(testFileListOfPentads)
+    #for h in testFileListOfPentads : print(h.id, " - ", h.text)
+    assert testFileListOfPentads[1].roles[0].type == "varDefine"
+    assert testFileListOfPentads[2].roles[0].type == "varDefine"
+    assert testFileListOfPentads[3].roles[0].type == "varDefine"
+    assert testFileListOfPentads[4].roles[0].type == "varDefine"
+    assert testFileListOfPentads[5].roles[0].type == "varDefine"
+    assert testFileListOfPentads[6].roles[0].type == "varDefine"
+    assert testFileListOfPentads[7].roles[0].type == "ifCondition"
+    assert testFileListOfPentads[8].roles[0].type == "ifBeg"
+    assert testFileListOfPentads[9].roles[0].type == "varDefine"
+    assert testFileListOfPentads[10].roles[0].type == "ifEnd"
+    assert testFileListOfPentads[11].roles[0].type == "elseCondition"
+    assert testFileListOfPentads[12].roles[0].type == "elseBeg"
+    assert testFileListOfPentads[13].roles[0].type == "ifCondition"
+    assert testFileListOfPentads[14].roles[0].type == "ifBeg"
+    assert testFileListOfPentads[15].roles[0].type == "varDefine"
+    assert testFileListOfPentads[16].roles[0].type == "ifEnd"
+    assert testFileListOfPentads[17].roles[0].type == "elseCondition"
+    assert testFileListOfPentads[18].roles[0].type == "elseBeg"
+    assert testFileListOfPentads[19].roles[0].type == "varDefine"
+    assert testFileListOfPentads[20].roles[0].type == "ifCondition"
+    assert testFileListOfPentads[21].roles[0].type == "ifBeg"
+    assert testFileListOfPentads[22].roles[0].type == "varDefine"
+    assert testFileListOfPentads[23].roles[0].type == "ifEnd"
+    assert testFileListOfPentads[24].roles[0].type == "elseCondition"
+    assert testFileListOfPentads[25].roles[0].type == "elseBeg"
+    assert testFileListOfPentads[26].roles[0].type == "ifCondition"
+    assert testFileListOfPentads[27].roles[0].type == "ifBeg"
+    assert testFileListOfPentads[28].roles[0].type == "varDefine"
+    assert testFileListOfPentads[29].roles[0].type == "ifEnd"
+    assert testFileListOfPentads[30].roles[0].type == "elseCondition"
+    assert testFileListOfPentads[31].roles[0].type == "elseBeg"
+    assert testFileListOfPentads[32].roles[0].type == "varDefine"
+    assert testFileListOfPentads[33].roles[0].type == "elseEnd"
+    assert testFileListOfPentads[34].roles[0].type == "elseEnd"
+    assert testFileListOfPentads[35].roles[0].type == "elseEnd"
+    assert testFileListOfPentads[36].roles[0].type == "elseEnd"
+
+def test_slice16():
+    os.chdir(os.getcwd())                                       
+    targetFileCompletePath = "./testfiles/testfileSlice16.c"
+    criterionVariable = 'f'
+    criterionLine = 34
+    result = mainLexicalAnalyser(targetFileCompletePath)
+    testFileListOfPentads = result[0]
+    testFileListOfPentads = mainSyntacticAnalyser(testFileListOfPentads)
+    testFileListOfPentads = mainSemanticalAnalyser(testFileListOfPentads, criterionVariable, criterionLine, True)
+    assert testFileListOfPentads[0].useful == True
+    assert testFileListOfPentads[1].useful == True
+    assert testFileListOfPentads[2].useful == True
+    assert testFileListOfPentads[3].useful == True
+    assert testFileListOfPentads[4].useful == True
+    assert testFileListOfPentads[5].useful == True
+    assert testFileListOfPentads[6].useful == True
+    assert testFileListOfPentads[7].useful == True
+    assert testFileListOfPentads[8].useful == True
+    assert testFileListOfPentads[9].useful == True
+    assert testFileListOfPentads[10].useful == False
+    assert testFileListOfPentads[11].useful == True
+    assert testFileListOfPentads[12].useful == True
+    assert testFileListOfPentads[13].useful == True
+    assert testFileListOfPentads[14].useful == True
+    assert testFileListOfPentads[15].useful == True
+    assert testFileListOfPentads[16].useful == False
+    assert testFileListOfPentads[17].useful == True
+    assert testFileListOfPentads[18].useful == True
+    assert testFileListOfPentads[19].useful == True
+    assert testFileListOfPentads[20].useful == True
+    assert testFileListOfPentads[21].useful == True
+    assert testFileListOfPentads[22].useful == True
+    assert testFileListOfPentads[23].useful == False
+    assert testFileListOfPentads[24].useful == True
+    assert testFileListOfPentads[25].useful == True
+    assert testFileListOfPentads[26].useful == True
+    assert testFileListOfPentads[27].useful == True
+    assert testFileListOfPentads[28].useful == True
+    assert testFileListOfPentads[29].useful == False
+    assert testFileListOfPentads[30].useful == True
+    assert testFileListOfPentads[31].useful == True
+    assert testFileListOfPentads[32].useful == True
+    assert testFileListOfPentads[33].useful == True
+    assert testFileListOfPentads[34].useful == True
+    assert testFileListOfPentads[35].useful == False
+    assert testFileListOfPentads[36].useful == True
+    assert testFileListOfPentads[37].useful == True
+    assert testFileListOfPentads[38].useful == False
+
+
+"""
+def test_slice15():
+    os.chdir(os.getcwd())                                       
+    targetFileCompletePath = "./testfiles/testfileSlice15.c"
+    criterionVariable = 'var3'
+    criterionLine = 73
+    result = mainLexicalAnalyser(targetFileCompletePath)
+    testFileListOfPentads = result[0]
+    testFileListOfPentads = mainSyntacticAnalyser(testFileListOfPentads)
+    testFileListOfPentads = mainSemanticalAnalyser(testFileListOfPentads, criterionVariable, criterionLine, True)
+    assert testFileListOfPentads[0].useful == True
+    assert testFileListOfPentads[1].useful == False
+    assert testFileListOfPentads[2].useful == False
+    assert testFileListOfPentads[3].useful == False
+    assert testFileListOfPentads[4].useful == False
+    assert testFileListOfPentads[5].useful == False
+    assert testFileListOfPentads[6].useful == False
+    assert testFileListOfPentads[7].useful == False
+    assert testFileListOfPentads[8].useful == False
+    assert testFileListOfPentads[9].useful == False
+    assert testFileListOfPentads[10].useful == False
+    assert testFileListOfPentads[11].useful == False
+    assert testFileListOfPentads[12].useful == False
+    assert testFileListOfPentads[13].useful == False
+    assert testFileListOfPentads[14].useful == False
+    assert testFileListOfPentads[15].useful == False
+    assert testFileListOfPentads[16].useful == False
+    assert testFileListOfPentads[17].useful == False
+    assert testFileListOfPentads[18].useful == False
+    assert testFileListOfPentads[19].useful == False
+    assert testFileListOfPentads[20].useful == False
+    assert testFileListOfPentads[21].useful == False
+    assert testFileListOfPentads[22].useful == False
+    assert testFileListOfPentads[23].useful == False
+    assert testFileListOfPentads[24].useful == False
+    assert testFileListOfPentads[25].useful == False
+    assert testFileListOfPentads[26].useful == False
+    assert testFileListOfPentads[27].useful == False
+    assert testFileListOfPentads[28].useful == False
+    assert testFileListOfPentads[29].useful == False
+"""
+
 
 """ RESERVE D'ASSERT !!!
 

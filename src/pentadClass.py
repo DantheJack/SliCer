@@ -42,7 +42,7 @@ class pentadStruct:
             
     def searchForRole(self, roleToSearch):
         for role in self.roles:
-            if role.type == roleToSearch : return True
+            if role.type == roleToSearch : return role
         return False
 
 
@@ -218,3 +218,4 @@ def printAllVarDefVariables(listOfEveryPentads = None):
                     print("")
 
     print("")
+

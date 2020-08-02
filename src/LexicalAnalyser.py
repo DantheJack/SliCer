@@ -26,7 +26,7 @@ def mainLexicalAnalyser(fileCompletePath = "", debugMode = False):
     pentadList = spaceNormalizer(spaceNormalizer(pentadList))
     if(debugMode) : printAll(pentadList)
     if(debugMode) : print("MAIN printing --> ", "********* commentsEraser *********")
-    pentadList = commentsEraser(pentadList, debugMode)
+    pentadList = commentsEraser(pentadList, False)
     if(debugMode) : printAll(pentadList)
     empty = True
     for i in pentadList:
@@ -37,16 +37,16 @@ def mainLexicalAnalyser(fileCompletePath = "", debugMode = False):
             sys.exit(1)
         return [[], targetFileAllTextLines]
     if(debugMode) : print("MAIN printing --> ", "********* stringReducer **********")
-    pentadList = stringReducer(pentadList, debugMode)
+    pentadList = stringReducer(pentadList, False)
     if(debugMode) : printAll(pentadList)
     if(debugMode) : print("MAIN printing --> ", "******** doWhileConverter ********")
-    pentadList = doWhileConverter(pentadList, debugMode)
+    pentadList = doWhileConverter(pentadList, False)
     if(debugMode) : printAllWithRoles(pentadList)
     if(len(pentadList) < 1):
         if(debugMode) : sys.exit(1)
         return [[], targetFileAllTextLines]
     if(debugMode) : print("MAIN printing --> ", "******** whileLoopConverter ********")
-    pentadList = whileLoopConverter(pentadList, debugMode)
+    pentadList = whileLoopConverter(pentadList, False)
     if(debugMode) : printAllWithRoles(pentadList)
     if(len(pentadList) < 1):
         if(debugMode) : sys.exit(1)
@@ -608,6 +608,7 @@ def elseNormalizer(pentadList = [], debugMode = False, executedManyTimes = 0):
     j = 0
     recursiveCase = False
     elseExpected = False
+    doubt = "no doubt"
     if(debugMode) : print("\nELSE printing --> ", "Starting")
     while i < len(pentadList):
         if(i > 1500): break #safety in case of BS
@@ -648,13 +649,15 @@ def elseNormalizer(pentadList = [], debugMode = False, executedManyTimes = 0):
                             if(debugMode) : print("\nELSE printing --> ", "And this else has an opening bracket. So we just need to wait until the closing one, and we're done !")
                             if(debugMode) : print("\nELSE printing --> ", "We just need to find the closing one and to add another closing bracket directly after it. That's all.")
                             if(debugMode) : print("\nELSE printing --> ", "continuingInsideLastElse mode activated !\n")
+                            bracketCounter = 0
+                            paranthesisCounter = 0
                     else:
                         if(mode == "readElse"):
                             mode = "somethingElseAfterElse"
                             if(debugMode) : print("\nELSE printing --> ", "somethingElseAfterElse mode activated !\n")
                         if(mode == "readLastElse"):
                             mode = "somethingAfterLastElse"
-                            if(debugMode) : print("\nELSE printing --> ", "\nThat's a shame we can't take care of that now. We need to focus on our mission.")
+                            if(debugMode) : print("\nELSE printing --> ", "\nThat's a shame we can't take care of that now. We need to focus on closing the wrapping else.")
                             if(debugMode) : print("\nELSE printing --> ", "\nI guess we're good for another round once we're done.\n")
                             recursiveCase = True
                             if(debugMode) : print("\nELSE printing --> ", "somethingAfterLastElse mode activated !\n")
@@ -668,6 +671,15 @@ def elseNormalizer(pentadList = [], debugMode = False, executedManyTimes = 0):
                 lastElseFound = 0
                 elseExpected = False
             if(mode == "continuingInsideLastElse"):
+                if(recursiveCase == False and doubt == "no doubt" and (presentChar == ' ' and memory1 == ' ' and memory2 == 'e' and memory3 == 'l' and memory4 == 's' and memory5 == 'e')):
+                    doubt = "small doubt"
+                    memory5 = "/doubt/"
+                if(doubt == "small doubt"):
+                    if(memory1 == "/doubt/" or memory2 == "/doubt/" or memory3 == "/doubt/"):
+                        if((presentChar == ' ' or presentChar == '(') and (memory3 == ' ' or memory3 == '//' or memory3 == ';' or memory3 == '}') and memory4 == 'i' and memory5 == 'f'):
+                            if(debugMode) : print("\n\nELSE printing --> ", "That's official, we just found another if-else that needs to be handled !\n\n")
+                            recursiveCase = True
+                            doubt = "no doubt"
                 if(presentChar == '('): paranthesisCounter += 1
                 if(presentChar == ')'): paranthesisCounter -= 1
                 if(presentChar == '{'): bracketCounter += 1
@@ -768,7 +780,8 @@ def elseNormalizer(pentadList = [], debugMode = False, executedManyTimes = 0):
                     if(debugMode) : print("ELSE printing --> ", "(before finding an \"if\" expression at our level ofc.), then we will")
                     if(debugMode) : print("ELSE printing --> ", "came back to this block and insert a closing bracket at the end of it.")
                     if(debugMode) : print("\nELSE printing --> ", "And if we found a new \"else\" statement, we're just going to repeat that !")
-                    lastElseFound = i
+                    if(j > 1) : lastElseFound = i
+                    else : lastElseFound = i-1
                     mode = "isThereAnotherElse"
                     if(debugMode) : print("\nELSE printing --> ", "isThereAnotherElse mode activated !\n")
                     presentChar = "/else/"
@@ -820,7 +833,7 @@ def elseNormalizer(pentadList = [], debugMode = False, executedManyTimes = 0):
                     if(paranthesisCounter == 0 and bracketCounter == 0):
                         if(debugMode) : print("\nELSE printing --> ", "bracketCounter = 0 and paranthesisCounter = 0, so we're still waiting for an \"else\" or an \"if\"...\n")
             if(mode == "isThereAnotherElse" and i == len(pentadList)-1 and j == len(pentadList[i].text)-1):
-                if(debugMode) : print("\nELSE printing --> ", "\nAnd here we are, at the end of the list. And the last \"else\" we read was on line", lastElseFound,".\n")
+                if(debugMode) : print("\nELSE printing --> ", "And here we are, at the end of the list. And the last \"else\" we read was on line", lastElseFound,".\n")
                 if(debugMode) : print("\nELSE printing --> ", "closingLastElse mode activated !\n")
                 mode = "closingLastElse"
                 i = lastElseFound
