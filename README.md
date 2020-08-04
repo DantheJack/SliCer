@@ -40,7 +40,7 @@ This is how to run the automated tests for this system:
 
 ### Using CLI
 
-1. Open Powershell directly in the deepest **SliCer-master** folder (or, if you renamed it, the folder that contains the **README.md** file)
+1. Open Console/Powershell directly in the deepest **SliCer-master** folder (or, if you renamed it, the folder that contains the **README.md** file)
 or move to this folder using `cd` command. *Warning : you will need Admin rights into this command-line interface.*
 
 2. If you want to run the tests, you will need to download the pytest framework. To download it, run the following command in your CLI :
@@ -51,7 +51,7 @@ or move to this folder using `cd` command. *Warning : you will need Admin rights
 4. You should see the following message :
 
 ```diff
-+ 16 passed in ... seconds
++ 22 passed in ... seconds
 ```
 
 If you see that message, you can then proceed to the next step. Otherwise, I strongly advise you to report to me this problem 
