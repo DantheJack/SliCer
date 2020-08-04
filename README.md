@@ -23,7 +23,7 @@ What you need to run this program on your personal computer:
 - Windows would be desirable, since I cannot guarantee the proper functioning of the programs under another operating system.
 - A recent version of [Python](https://www.python.org/downloads/) is required (version 3.5 or higher is recommended). 
 
-*To check if a current version of Python is currently installed on your device, open Powershell and type `python --version`.*
+*To check if a current version of Python is currently installed on your device, if you're on Windows, simply open Powershell and type `python --version`.*
 
 ### Installing
 
@@ -74,8 +74,7 @@ If a message such as *"Windows protected your PC"* appears, you can decide to ig
 
 ***Another Windows-only solution***
 
-Manualy move to the folder **src\build\exe.win32-3.7** then use the executable file directly. You can also create a shortcut of
-this **SliCer.exe file and place it** anywhere you want to your conveniance.
+Manualy move to the folder **src\build\exe.win32-3.7** then use the executable file directly. You can also create a shortcut of this **SliCer.exe file and place it** anywhere you want to your conveniance.
 
 ***Unix and Mac users***
 
@@ -93,9 +92,13 @@ Warning: The lines will be highlighted **ALL IN FULL**. This means that if you c
 
 Highlighted lines are those that **contain elements** of the requested slice. It's up to you not to write everything on one line, or else to know how to differentiate the significant elements from the others.
 
-Finally, the best way to learn how to use this tool is to write a few lines of code in C (*remember not to use IF/ELSE in this demo version!*) and test it by yourself.
+Finally, the best way to learn how to use this tool is to write a few lines of code in C (*you can now use IF/ELSE in this demo version!*) and test it by yourself. You can try using the test files contained inside the **/testfiles/** folder (eg : **testfile15.c** is a good demonstration of the capabilities of the program) but I strongly recommend not editing them in anyway.
 
 Good Luck, and do not hesitate to contact me if you're encountering a problem with SliCer!
+
+## Future improvements 
+
+My next goal is to further develop the graphical interface in order to add a way for the user to understand why the SliCer chose to include a line in the final slice. The strength of a slicer using the semantics of the code is that it becomes possible to understand, in an instinctive and human way, the reasoning that pushed the algorithm to take such or such decision.
 
 ## Built With
 
