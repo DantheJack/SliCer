@@ -65,9 +65,13 @@ sourceCodeScrolledText.insert(tk.END, "\n\n\n\n\nIn this version, you are invite
 \nfor loops, affectation operator and escaped newlines. There are \
 \nothers features as well (like stdio.h user inputs or tab \
 \ndeclarations) that can be used though only with simple usecase.\n") 
-sourceCodeScrolledText.insert(tk.END, "\n\nHowever, pleace notice that IF/ELSE statements \
-\nand Defines / Macros are not implemented yet (eg. : no #include).") 
-sourceCodeScrolledText.insert(tk.END, "\n\n\nI still do believe that this demo version offers \
+sourceCodeScrolledText.insert(tk.END, "\n\nIn the current version, IF/ELSE statements \
+\nare implemented and can hopefully work without problems. If you \
+\nnotice any issue or bug when using these features, please do not \
+\nhesitate to contact me so I can improve my software, if necessary.") 
+sourceCodeScrolledText.insert(tk.END, "\n\n\nMacros are not implemented yet (eg. : no #include) \
+\nand there is a few other features that are currently being worked on. \
+\nHowever, I still do believe that this demo version offers \
 \na satisfaying demonstration of the solution and its capabilities.\n") 
 
 ##  ##  ##  ##  ##  ##  ##  ##  ##  ##  ##  ##  ##  ##  ##  ##  ##  ##  ##  ##  ##  ##  ##

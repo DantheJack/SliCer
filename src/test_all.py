@@ -1489,7 +1489,7 @@ def test_slice16():
     result = mainLexicalAnalyser(targetFileCompletePath)
     testFileListOfPentads = result[0]
     testFileListOfPentads = mainSyntacticAnalyser(testFileListOfPentads)
-    testFileListOfPentads = mainSemanticalAnalyser(testFileListOfPentads, criterionVariable, criterionLine, True)
+    testFileListOfPentads = mainSemanticalAnalyser(testFileListOfPentads, criterionVariable, criterionLine)
     assert testFileListOfPentads[0].useful == True
     assert testFileListOfPentads[1].useful == True
     assert testFileListOfPentads[2].useful == True
@@ -1498,66 +1498,79 @@ def test_slice16():
     assert testFileListOfPentads[5].useful == True
     assert testFileListOfPentads[6].useful == True
     assert testFileListOfPentads[7].useful == True
-    assert testFileListOfPentads[8].useful == True
+    assert testFileListOfPentads[8].useful == False
     assert testFileListOfPentads[9].useful == True
-    assert testFileListOfPentads[10].useful == False
+    assert testFileListOfPentads[10].useful == True
     assert testFileListOfPentads[11].useful == True
     assert testFileListOfPentads[12].useful == True
     assert testFileListOfPentads[13].useful == True
-    assert testFileListOfPentads[14].useful == True
+    assert testFileListOfPentads[14].useful == False
     assert testFileListOfPentads[15].useful == True
-    assert testFileListOfPentads[16].useful == False
+    assert testFileListOfPentads[16].useful == True
     assert testFileListOfPentads[17].useful == True
     assert testFileListOfPentads[18].useful == True
     assert testFileListOfPentads[19].useful == True
     assert testFileListOfPentads[20].useful == True
-    assert testFileListOfPentads[21].useful == True
+    assert testFileListOfPentads[21].useful == False
     assert testFileListOfPentads[22].useful == True
-    assert testFileListOfPentads[23].useful == False
+    assert testFileListOfPentads[23].useful == True
     assert testFileListOfPentads[24].useful == True
     assert testFileListOfPentads[25].useful == True
     assert testFileListOfPentads[26].useful == True
-    assert testFileListOfPentads[27].useful == True
+    assert testFileListOfPentads[27].useful == False
     assert testFileListOfPentads[28].useful == True
-    assert testFileListOfPentads[29].useful == False
+    assert testFileListOfPentads[29].useful == True
     assert testFileListOfPentads[30].useful == True
     assert testFileListOfPentads[31].useful == True
     assert testFileListOfPentads[32].useful == True
     assert testFileListOfPentads[33].useful == True
     assert testFileListOfPentads[34].useful == True
-    assert testFileListOfPentads[35].useful == False
-    assert testFileListOfPentads[36].useful == True
-    assert testFileListOfPentads[37].useful == True
-    assert testFileListOfPentads[38].useful == False
+    assert testFileListOfPentads[35].useful == True
+    assert testFileListOfPentads[36].useful == False
 
 
-"""
 def test_slice15():
     os.chdir(os.getcwd())                                       
     targetFileCompletePath = "./testfiles/testfileSlice15.c"
-    criterionVariable = 'var3'
-    criterionLine = 73
+    criterionVariable = 'ssq'
+    criterionLine = 74
     result = mainLexicalAnalyser(targetFileCompletePath)
-    testFileListOfPentads = result[0]
+    testFileListOfPentads = []
+    #testFileListOfPentads.append(pentadStruct([0], "not relevant;")) # just to start at testFileListOfPentads[1] 
+    testFileListOfPentads += result[0]
+    targetFileAllTextLines = result[1]
     testFileListOfPentads = mainSyntacticAnalyser(testFileListOfPentads)
-    testFileListOfPentads = mainSemanticalAnalyser(testFileListOfPentads, criterionVariable, criterionLine, True)
-    assert testFileListOfPentads[0].useful == True
+    testFileListOfPentads = mainSemanticalAnalyser(testFileListOfPentads, criterionVariable, criterionLine)
+    #x = 0
+    #for line in targetFileAllTextLines:
+    #    utility = 0
+    #    for o in range (len(testFileListOfPentads)):
+    #        if (testFileListOfPentads[o].useful and testFileListOfPentads[o].lines[0] <= x and x <= testFileListOfPentads[o].lines[1]):
+    #            utility = 1
+    #    if (utility == 1):
+    #        print(" --> " + "[ " + str(x) + " ]\t" + line)
+    #    else :
+    #        print("     " + "[ " + str(x) + " ]\t" + line)
+    #    x += 1
+    
+    assert testFileListOfPentads[0].text == "main ( )"
+    assert testFileListOfPentads[0].useful == False
     assert testFileListOfPentads[1].useful == False
-    assert testFileListOfPentads[2].useful == False
+    assert testFileListOfPentads[2].useful == True
     assert testFileListOfPentads[3].useful == False
-    assert testFileListOfPentads[4].useful == False
-    assert testFileListOfPentads[5].useful == False
-    assert testFileListOfPentads[6].useful == False
-    assert testFileListOfPentads[7].useful == False
-    assert testFileListOfPentads[8].useful == False
-    assert testFileListOfPentads[9].useful == False
-    assert testFileListOfPentads[10].useful == False
-    assert testFileListOfPentads[11].useful == False
+    assert testFileListOfPentads[4].useful == True
+    assert testFileListOfPentads[5].useful == True
+    assert testFileListOfPentads[6].useful == True
+    assert testFileListOfPentads[7].useful == True
+    assert testFileListOfPentads[8].useful == True
+    assert testFileListOfPentads[9].useful == True
+    assert testFileListOfPentads[10].useful == True
+    assert testFileListOfPentads[11].useful == True
     assert testFileListOfPentads[12].useful == False
-    assert testFileListOfPentads[13].useful == False
-    assert testFileListOfPentads[14].useful == False
-    assert testFileListOfPentads[15].useful == False
-    assert testFileListOfPentads[16].useful == False
+    assert testFileListOfPentads[13].useful == True
+    assert testFileListOfPentads[14].useful == True
+    assert testFileListOfPentads[15].useful == True
+    assert testFileListOfPentads[16].useful == True
     assert testFileListOfPentads[17].useful == False
     assert testFileListOfPentads[18].useful == False
     assert testFileListOfPentads[19].useful == False
@@ -1571,7 +1584,123 @@ def test_slice15():
     assert testFileListOfPentads[27].useful == False
     assert testFileListOfPentads[28].useful == False
     assert testFileListOfPentads[29].useful == False
-"""
+    assert testFileListOfPentads[30].useful == False  
+    assert testFileListOfPentads[31].useful == False 
+    assert testFileListOfPentads[32].useful == False
+    assert testFileListOfPentads[33].useful == False
+    assert testFileListOfPentads[34].useful == False
+    assert testFileListOfPentads[35].useful == False
+    assert testFileListOfPentads[36].useful == False
+    assert testFileListOfPentads[37].useful == False
+    assert testFileListOfPentads[38].useful == False
+    assert testFileListOfPentads[39].useful == False
+    assert testFileListOfPentads[40].useful == False
+    assert testFileListOfPentads[41].useful == False
+    assert testFileListOfPentads[42].useful == False
+    assert testFileListOfPentads[43].useful == False
+    assert testFileListOfPentads[44].useful == False
+    assert testFileListOfPentads[45].useful == False
+    assert testFileListOfPentads[46].useful == False
+    assert testFileListOfPentads[47].useful == False
+    assert testFileListOfPentads[48].useful == False
+    assert testFileListOfPentads[49].useful == False
+    assert testFileListOfPentads[50].useful == False
+    assert testFileListOfPentads[51].useful == False
+    assert testFileListOfPentads[52].useful == False
+    assert testFileListOfPentads[53].useful == False
+    assert testFileListOfPentads[54].useful == False
+    assert testFileListOfPentads[55].useful == False
+    assert testFileListOfPentads[56].useful == False
+    assert testFileListOfPentads[57].useful == False  
+    assert testFileListOfPentads[58].useful == False  
+    assert testFileListOfPentads[59].useful == False  
+    assert testFileListOfPentads[60].useful == False  
+    assert testFileListOfPentads[61].useful == False  
+    assert testFileListOfPentads[62].useful == False 
+    assert testFileListOfPentads[63].useful == False  
+    assert testFileListOfPentads[64].useful == False  
+    assert testFileListOfPentads[65].useful == False  
+    assert testFileListOfPentads[66].useful == False 
+    assert testFileListOfPentads[67].useful == False  
+    assert testFileListOfPentads[68].useful == False 
+    assert testFileListOfPentads[69].useful == False  
+    assert testFileListOfPentads[70].useful == False   
+    assert testFileListOfPentads[71].useful == False  
+    assert testFileListOfPentads[72].useful == False 
+    assert testFileListOfPentads[73].useful == False  
+    assert testFileListOfPentads[74].useful == True 
+    assert testFileListOfPentads[75].useful == True  
+    assert testFileListOfPentads[76].useful == True  
+    assert testFileListOfPentads[77].useful == True 
+    assert testFileListOfPentads[78].useful == True  
+    assert testFileListOfPentads[79].useful == True 
+    assert testFileListOfPentads[80].useful == False   
+    assert testFileListOfPentads[81].useful == True  
+    assert testFileListOfPentads[82].useful == False  
+    assert testFileListOfPentads[83].useful == False 
+    assert testFileListOfPentads[84].useful == False  
+    assert testFileListOfPentads[85].useful == True 
+    assert testFileListOfPentads[86].useful == True  
+    assert testFileListOfPentads[87].useful == True  
+    assert testFileListOfPentads[88].useful == True 
+    assert testFileListOfPentads[89].useful == True 
+    assert testFileListOfPentads[90].useful == True   
+    assert testFileListOfPentads[91].useful == True 
+    assert testFileListOfPentads[92].useful == True  
+    assert testFileListOfPentads[93].useful == True  
+    assert testFileListOfPentads[94].useful == True  
+    assert testFileListOfPentads[95].useful == True 
+    assert testFileListOfPentads[96].useful == True  
+    assert testFileListOfPentads[97].useful == True 
+    assert testFileListOfPentads[98].useful == True  
+    assert testFileListOfPentads[99].useful == True  
+    assert testFileListOfPentads[100].useful == True 
+    assert testFileListOfPentads[101].useful == True 
+    assert testFileListOfPentads[102].useful == True 
+    assert testFileListOfPentads[103].useful == True 
+    assert testFileListOfPentads[104].useful == True 
+    assert testFileListOfPentads[105].useful == True 
+    assert testFileListOfPentads[106].useful == False 
+    assert testFileListOfPentads[107].useful == False
+    assert testFileListOfPentads[108].useful == False 
+    assert testFileListOfPentads[109].useful == False 
+    assert testFileListOfPentads[110].useful == False 
+    assert testFileListOfPentads[111].useful == False 
+    assert testFileListOfPentads[112].useful == True  
+    assert testFileListOfPentads[113].useful == True
+    assert testFileListOfPentads[114].useful == True  
+    assert testFileListOfPentads[115].useful == True 
+    assert testFileListOfPentads[116].useful == True 
+    assert testFileListOfPentads[117].useful == True  
+    assert testFileListOfPentads[118].useful == True 
+    assert testFileListOfPentads[119].useful == True 
+    assert testFileListOfPentads[120].useful == True 
+    assert testFileListOfPentads[121].useful == True  
+    assert testFileListOfPentads[122].useful == True 
+    assert testFileListOfPentads[123].useful == False  
+    assert testFileListOfPentads[124].useful == True  
+    assert testFileListOfPentads[125].useful == True 
+    assert testFileListOfPentads[126].useful == True  
+    assert testFileListOfPentads[127].useful == True 
+    assert testFileListOfPentads[128].useful == True 
+    assert testFileListOfPentads[129].useful == True  
+    assert testFileListOfPentads[130].useful == True   
+    assert testFileListOfPentads[131].useful == True 
+    assert testFileListOfPentads[132].useful == False 
+    assert testFileListOfPentads[133].useful == False 
+    assert testFileListOfPentads[134].useful == False  
+    assert testFileListOfPentads[135].useful == True 
+    assert testFileListOfPentads[136].useful == True  
+    assert testFileListOfPentads[137].useful == True
+    assert testFileListOfPentads[138].useful == True  
+    assert testFileListOfPentads[139].useful == False 
+    assert testFileListOfPentads[140].useful == False
+    assert testFileListOfPentads[141].useful == False 
+    assert testFileListOfPentads[142].useful == True 
+    assert testFileListOfPentads[143].useful == True 
+    assert testFileListOfPentads[144].useful == False 
+    assert testFileListOfPentads[145].useful == True 
+    assert testFileListOfPentads[146].useful == False 
 
 
 """ RESERVE D'ASSERT !!!

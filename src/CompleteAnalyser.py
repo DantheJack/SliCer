@@ -11,8 +11,8 @@ from tkinter import messagebox
 #print(platform.python_implementation()) --> CPython
 #cls & pytest -rA -s -v
 
-localDebug = True
-debugMode = True
+localDebug = False
+debugMode = False
 
 ########################################################################################################
 def mainCompleteAnalyser(sourceCodeScrolledText = None, resultTextArea=None, criterionVariable = None, criterionLine = 10000, eraser = False):
@@ -25,9 +25,10 @@ def mainCompleteAnalyser(sourceCodeScrolledText = None, resultTextArea=None, cri
     if(not localDebug):
         targetFileCompletePath = "./sourceCode.txt"               #for test purposes, comment this
     if(localDebug):
-        targetFileCompletePath = "./testfiles/testfileIfElse.c"   #for test purposes, UNcomment this
+        targetFileCompletePath = "./testfiles/testfileSlice18.c"   #for test purposes, UNcomment this
+        criterionVariable = "ssq"
+        criterionLine = 80
     print()
-
 
     result = mainLexicalAnalyser(targetFileCompletePath, debugMode)
     pentadList = result[0]
@@ -46,9 +47,9 @@ def mainCompleteAnalyser(sourceCodeScrolledText = None, resultTextArea=None, cri
     targetFileAllTextLines = result[1]
 
     print()
-    #pentadList = mainSyntacticAnalyser(pentadList, debugMode)
+    pentadList = mainSyntacticAnalyser(pentadList, debugMode)
     print()
-    #pentadList = mainSemanticalAnalyser(pentadList, criterionVariable, criterionLine, debugMode)
+    pentadList = mainSemanticalAnalyser(pentadList, criterionVariable, criterionLine, debugMode)
     print()
     print("—————————————————————————————————————————————————————————————————————————")
     print("———————————————————————————————— RESULTS ————————————————————————————————")
@@ -69,10 +70,8 @@ def mainCompleteAnalyser(sourceCodeScrolledText = None, resultTextArea=None, cri
 #  #  #  #
     if(eraser == True):
         for line in targetFileAllTextLines:
-            x += 1
             utility = 0
             for o in range (len(pentadList)):
-                
                 if (pentadList[o].useful and pentadList[o].lines[0] <= x and x <= pentadList[o].lines[1]):
                     utility = 1
             if (utility == 1):
@@ -83,24 +82,24 @@ def mainCompleteAnalyser(sourceCodeScrolledText = None, resultTextArea=None, cri
                 print("     " + "[ " + str(x) + " ]\t" + line)
                 if(not localDebug):
                     resultTextArea.insert(tk.END, line, 'out') #for test purposes, comment this
+            x += 1
         print()
 #  #  #  #
     if(eraser == False):
         for line in targetFileAllTextLines:
-            x += 1
             utility = 0
             for o in range (len(pentadList)):
-                
                 if (pentadList[o].useful and pentadList[o].lines[0] <= x and x <= pentadList[o].lines[1]):
                     utility = 1
             if (utility == 1):
-                print(" oo> " + "[ " + str(x) + " ]\t" + line)
+                print(" ~~> " + "[ " + str(x) + " ]\t" + line)
                 if(not localDebug):
                     resultTextArea.insert(tk.END, line)     #for test purposes, comment this
             else :
                 print("     " + "[ " + str(x) + " ]\t" + line)
                 if(not localDebug):
                     resultTextArea.insert(tk.END, "\n")     #for test purposes, comment this
+            x += 1
         print()
 #  #  #  #
 
