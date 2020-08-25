@@ -37,7 +37,7 @@ def mainLexicalAnalyser(fileCompletePath = "", debugMode = False):
             sys.exit(1)
         return [[], targetFileAllTextLines]
     if(debugMode) : print("MAIN printing --> ", "********* stringReducer **********")
-    pentadList = stringReducer(pentadList, False)
+    pentadList = stringReducer(pentadList, True)
     if(debugMode) : printAll(pentadList)
     if(debugMode) : print("MAIN printing --> ", "******** doWhileConverter ********")
     pentadList = doWhileConverter(pentadList, False)
@@ -139,7 +139,7 @@ def spaceNormalizer(pentadList = [], debugMode = False):
                 outputbefore[i].addRole(role.type, role.mainVar, role.otherVars)
     for i in range (len(pentadList)):
         if(len(pentadList[i].text) > 0):
-            outputafter.append(outputbefore[i])
+            outputafter.append(outputbefore[i])   
     return outputafter
 
 def commentsEraser(pentadList = [], debugMode = False):
@@ -245,15 +245,15 @@ def stringReducer(pentadList = [], debugMode = False):
                 if(debugMode) : print("STRRED printing --> ", "char \' \" \' added to", currentStatement)
             elif(inAString):
                 if(debugMode) : print("STRRED printing --> ", "We're in a string, no char added")
-                if(presentChar == '\\' and nextChar != '\n' ):
+                if(presentChar == '\\' and nextChar != '\n'):
                     escapingChar = "Next one"
             else:
                 currentStatement += presentChar
                 if(debugMode) : print("STRRED printing --> ", "char \'", presentChar, "\' added to", currentStatement)
 
-        output.append(pentadStruct([i, i], currentStatement))
+        output.append(pentadStruct([pentadList[i].lines[0], pentadList[i].lines[1]], currentStatement))
         currentStatement = ""    
-    #output.append(pentadStruct([startingLine, i], currentStatement))            
+    #output.append(pentadStruct([startingLine, i], currentStatement))   
     return spaceNormalizer(output, debugMode)
 
 def semicolonBasedChopper(pentadList = [], debugMode = False):
