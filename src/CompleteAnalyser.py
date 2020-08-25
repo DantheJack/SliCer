@@ -25,8 +25,8 @@ def mainCompleteAnalyser(sourceCodeScrolledText = None, resultTextArea=None, cri
     if(not localDebug):
         targetFileCompletePath = "./sourceCode.txt"               #for test purposes, comment this
     if(localDebug):
-        targetFileCompletePath = "./testfiles/testfileSlice18.c"   #for test purposes, UNcomment this
-        criterionVariable = "ssq"
+        targetFileCompletePath = "./testfiles/testfileSliceUrgent.c"   #for test purposes, UNcomment this
+        criterionVariable = "mean"
         criterionLine = 80
     print()
 
@@ -55,11 +55,11 @@ def mainCompleteAnalyser(sourceCodeScrolledText = None, resultTextArea=None, cri
     print("———————————————————————————————— RESULTS ————————————————————————————————")
     print("—————————————————————————————————————————————————————————————————————————")
     print()
-    #for pentadNumber in range (len(pentadList)):
-    #    if pentadList[pentadNumber].useful :
-    #        print(pentadList[pentadNumber].id, ".\t", "--> " + str(pentadList[pentadNumber].lines) + ".   " + pentadList[pentadNumber].text)
-    #    else :
-    #        print(pentadList[pentadNumber].id, ".\t", "    " + str(pentadList[pentadNumber].lines) + ".   " + pentadList[pentadNumber].text)
+    for pentadNumber in range (len(pentadList)):
+        if pentadList[pentadNumber].useful :
+            print(pentadList[pentadNumber].id, ".\t", "--> " + str(pentadList[pentadNumber].lines) + ".   " + pentadList[pentadNumber].text)
+        else :
+            print(pentadList[pentadNumber].id, ".\t", "    " + str(pentadList[pentadNumber].lines) + ".   " + pentadList[pentadNumber].text)
     print()
     print("—————————————————————————————————————————————————————————————————————————")
     print()
